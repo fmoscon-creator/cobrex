@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cobrex — Your Global Assets Platform</title>
+<meta name="description" content="Cobrex — Your Global Assets Platform. Crypto, stocks, commodities and markets, in real time. Smart price alerts and analysis." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root { --gold:#CB9916; --gold-soft:#E0B43A; --bg:#0a0d12; --bg2:#10141c; --txt:#e9ecf2; --txt-dim:#9aa3b2; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:radial-gradient(ellipse at 50% 18%, #141a24 0%, var(--bg) 60%); color:var(--txt); min-height:100vh; display:flex; flex-direction:column; }
+  .wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px 20px; }
+  .logo { width:min(240px,62vw); height:auto; margin-bottom:8px; }
+  h1 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:clamp(28px,6vw,46px); letter-spacing:.5px; margin-top:10px; color:#fff; }
+  h1 .g { color:var(--gold-soft); }
+  .sub { font-size:clamp(13px,3.4vw,17px); color:var(--txt-dim); margin-top:14px; max-width:520px; line-height:1.6; font-weight:300; }
+  .chips { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:26px; }
+  .chip { border:1px solid rgba(203,153,22,.35); color:var(--gold-soft); border-radius:999px; padding:8px 16px; font-size:13px; letter-spacing:.5px; }
+  footer { border-top:1px solid rgba(255,255,255,.06); padding:22px 20px; text-align:center; font-size:12.5px; color:var(--txt-dim); }
+  footer a { color:var(--gold-soft); text-decoration:none; margin:0 8px; }
+  footer a:hover { text-decoration:underline; }
+  .legal { margin-top:8px; color:#6b7484; font-size:11.5px; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="logo" src="logo.png" alt="Cobrex" />
+    <h1>Your <span class="g">Global Assets</span> Platform</h1>
+    <p class="sub">Crypto, stocks, commodities and markets — in real time. Smart price alerts, analysis and your portfolio, all in one place.</p>
+    <div class="chips">
+      <span class="chip">📊 Markets</span>
+      <span class="chip">🔔 Alerts</span>
+      <span class="chip">📈 Portfolio</span>
+    </div>
+  </main>
+  <footer>
+    <div>
+      <a href="/privacy.html">Privacy Policy</a> ·
+      <a href="/terms.html">Terms of Use</a> ·
+      <a href="mailto:support@cobrex.io">support@cobrex.io</a>
+    </div>
+    <div class="legal">Cobrex analyzes markets — it does not operate or provide financial advice. © 2026 Cobrex.</div>
+  </footer>
+</body>
+</html>
