@@ -4279,6 +4279,49 @@ document.addEventListener("DOMContentLoaded", function(){
     return { ok: true };
   };
 
+  // === Gating por TIPO de alerta (paridad con app nativa) — enchufa checkPlanLimit('add_alert') ===
+  var ALERT_TIPO_MAP = {
+    'al_ia_cambio':'cambio_senal','al_ia_alta':'alta_conviccion_ia','al_ia_umbral':'umbral','al_ia_portfolio':'senal_portfolio',
+    'al_pulse_zona':'cambio_zona_pulse','al_pulse_cat':'por_categoria','al_pulse_thermo':'termometro_riesgo',
+    'al_precio_obj':'precio_objetivo','al_precio_var':'variacion_brusca','al_precio_maxmin':'max_min',
+    'al_ev_fomc_desc':'fed_fomc','al_ev_cpi_desc':'cpi_pbi','al_ev_apertura':'apertura','al_ev_earnings':'earnings','al_ev_gdelt':'geopolitica_gdelt'
+  };
+  window.applyAlertGating = function(){
+    var allowed = (window.aurexPlan && window.aurexPlan.limits && window.aurexPlan.limits.alertTypes) || PLAN_LIMITS_CLIENT.FREE.alertTypes;
+    document.querySelectorAll('.alert-item').forEach(function(item){
+      var tipo = null;
+      item.querySelectorAll('[data-i18n]').forEach(function(el){
+        var k = el.getAttribute('data-i18n'); if (ALERT_TIPO_MAP[k]) tipo = ALERT_TIPO_MAP[k];
+      });
+      if (!tipo) return;
+      item.setAttribute('data-tipo', tipo);
+      var input = item.querySelector('input[type="checkbox"]'); if (!input) return;
+      var locked = allowed.indexOf(tipo) === -1;
+      item.setAttribute('data-locked', locked ? '1' : '0');
+      var titleSpan = item.querySelector('div > span[data-i18n]') || item.querySelector('span');
+      var lk = item.querySelector('.alert-lock');
+      if (locked){
+        input.checked = false;
+        if (!lk && titleSpan){ var s = document.createElement('span'); s.className='alert-lock'; s.textContent=' 🔒'; s.style.cssText='font-size:11px;margin-left:4px'; titleSpan.appendChild(s); }
+      } else if (lk){ lk.remove(); }
+    });
+    if (typeof updateAlertCount === 'function'){ try{ updateAlertCount(); }catch(e){} }
+  };
+  if (window.applyPlanGating && !window._alertGatingHooked){
+    window._alertGatingHooked = true;
+    var _origAPG = window.applyPlanGating;
+    window.applyPlanGating = function(){ var r = _origAPG.apply(this, arguments); try{ window.applyAlertGating(); }catch(e){} return r; };
+  }
+  document.addEventListener('change', function(e){
+    var input = e.target; if (!input || !input.closest) return;
+    var item = input.closest('.alert-item'); if (!item || item.getAttribute('data-locked') !== '1') return;
+    if (input.checked){
+      input.checked = false;
+      window.showPaywall(window.checkPlanLimit('add_alert', item.getAttribute('data-tipo')));
+      if (typeof updateAlertCount === 'function'){ try{ updateAlertCount(); }catch(e){} }
+    }
+  });
+
   // Muestra un paywall simple cuando se intenta una accion bloqueada
   window.showPaywall = function(reason){
     var msg = reason && reason.message ? reason.message : 'Esta funcion requiere PRO o ELITE.';
