@@ -4410,6 +4410,40 @@ document.addEventListener("DOMContentLoaded", function(){
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMA); else initMA();
   })();
 
+  // === Filtro "Solo favoritos" en Mercados (paridad onlyFavs nativa) ===
+  window._onlyFavs = false;
+  function _esFav(ticker){ try { return (JSON.parse(localStorage.getItem('aurex_pins')||'[]')).indexOf(ticker) >= 0; } catch(e){ return false; } }
+  window._applyOnlyFavs = function(){
+    document.querySelectorAll('#cnt .item-row').forEach(function(el){
+      var ticker = el.id.replace('row-','');
+      el.style.display = (window._onlyFavs && !_esFav(ticker)) ? 'none' : '';
+    });
+  };
+  window.toggleOnlyFavs = function(){
+    window._onlyFavs = !window._onlyFavs;
+    var b = document.getElementById('only-favs-chip');
+    if (b){ b.style.background = window._onlyFavs ? 'var(--gold)' : 'var(--card)'; b.style.color = window._onlyFavs ? '#000' : 'var(--text)'; }
+    window._applyOnlyFavs();
+  };
+  (function(){
+    function initFav(){
+      var bar = document.getElementById('mkt-search-bar');
+      if (bar && !document.getElementById('only-favs-chip')){
+        var chip = document.createElement('div');
+        chip.id = 'only-favs-chip'; chip.onclick = window.toggleOnlyFavs;
+        chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;width:fit-content';
+        chip.innerHTML = '⭐ <span>Solo favoritos</span>';
+        bar.appendChild(chip);
+      }
+      var cnt = document.getElementById('cnt');
+      if (cnt && !window._favObserver){
+        window._favObserver = new MutationObserver(function(){ if (window._onlyFavs) window._applyOnlyFavs(); });
+        window._favObserver.observe(cnt, { childList:true });
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initFav); else initFav();
+  })();
+
   // Muestra un paywall simple cuando se intenta una accion bloqueada
   window.showPaywall = function(reason){
     var msg = reason && reason.message ? reason.message : 'Esta funcion requiere PRO o ELITE.';
