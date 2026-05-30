@@ -1,0 +1,31 @@
+{
+  "name": "Cobrex — Global Markets Terminal",
+  "short_name": "Cobrex",
+  "description": "Terminal de seguimiento de mercados globales con IA. 350 activos en 8 idiomas.",
+  "start_url": "/app/",
+  "scope": "/app/",
+  "display": "standalone",
+  "background_color": "#0D1117",
+  "theme_color": "#D4A017",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/icons/aurex-icon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/aurex-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/aurex-icon-1024x1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
