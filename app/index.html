@@ -4322,6 +4322,94 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   });
 
+  // === #4 Mis Alertas (historial de alertas disparadas) — paridad con MisAlertasScreen nativa ===
+  window._misAlertasData = [];
+  window.cargarMisAlertas = async function(){
+    var uid = window._currentUser && window._currentUser.id;
+    if (!uid || !window._supabase) return [];
+    try {
+      var res = await window._supabase.from('alertas_historial')
+        .select('id, simbolo, precio_disparado, created_at, leida, borrada, alertas!inner(user_id, direccion, valor_objetivo, tipo)')
+        .eq('alertas.user_id', uid).eq('borrada', false)
+        .order('created_at', { ascending: false }).limit(100);
+      window._misAlertasData = (res && res.data) ? res.data : [];
+    } catch(e){ window._misAlertasData = []; }
+    return window._misAlertasData;
+  };
+  window.actualizarBadgeMisAlertas = async function(){
+    var uid = window._currentUser && window._currentUser.id;
+    var badge = document.getElementById('mis-alertas-badge');
+    if (!uid || !window._supabase || !badge) return;
+    try {
+      var res = await window._supabase.from('alertas_historial')
+        .select('id, alertas!inner(user_id)', { count:'exact', head:true })
+        .eq('alertas.user_id', uid).eq('leida', false).eq('borrada', false);
+      var n = (res && typeof res.count === 'number') ? res.count : 0;
+      badge.textContent = n; badge.style.display = n > 0 ? 'inline-flex' : 'none';
+    } catch(e){}
+  };
+  window._misAlertasSel = function(){ return Array.from(document.querySelectorAll('#mis-alertas-body .ma-chk:checked')).map(function(c){ return c.getAttribute('data-id'); }); };
+  window.renderMisAlertas = function(){
+    var body = document.getElementById('mis-alertas-body'); if (!body) return;
+    var data = window._misAlertasData || [];
+    var hdr = document.getElementById('mis-alertas-hdr');
+    var unread = data.filter(function(a){ return !a.leida; }).length;
+    if (hdr) hdr.textContent = unread + ' sin leer · ' + data.length + ' en historial';
+    if (!data.length){ body.innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">No tenés alertas en el historial todavía.</div>'; return; }
+    body.innerHTML = data.map(function(a){
+      var al = a.alertas || {};
+      var fecha = a.created_at ? new Date(a.created_at).toLocaleString() : '';
+      var dir = (al.direccion==='subio'||al.direccion==='up') ? '▲' : ((al.direccion==='bajo'||al.direccion==='down') ? '▼' : '•');
+      return '<div style="display:flex;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border);background:'+(a.leida?'transparent':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.7':'1')+'">'
+        + '<input type="checkbox" class="ma-chk" data-id="'+a.id+'" style="margin-top:3px">'
+        + '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+dir+' '+(a.simbolo||'')+(a.precio_disparado!=null?' — '+a.precio_disparado:'')+'</div>'
+        + '<div style="font-size:10px;color:var(--textSec);margin-top:2px">'+(al.tipo||'')+' · '+fecha+'</div></div></div>';
+    }).join('');
+  };
+  window.abrirMisAlertas = async function(){
+    var ov = document.getElementById('mis-alertas-modal'); if (!ov) return;
+    ov.style.display = 'flex';
+    document.getElementById('mis-alertas-body').innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">Cargando…</div>';
+    await window.cargarMisAlertas(); window.renderMisAlertas();
+  };
+  window.cerrarMisAlertas = function(){ var ov = document.getElementById('mis-alertas-modal'); if (ov) ov.style.display='none'; };
+  window.marcarLeidasMisAlertas = async function(){
+    var ids = window._misAlertasSel(); if (!ids.length || !window._supabase) return;
+    try { await window._supabase.from('alertas_historial').update({ leida:true }).in('id', ids); } catch(e){}
+    await window.cargarMisAlertas(); window.renderMisAlertas(); window.actualizarBadgeMisAlertas();
+  };
+  window.borrarMisAlertas = async function(){
+    var ids = window._misAlertasSel(); if (!ids.length || !window._supabase) return;
+    if (!confirm('¿Borrar ' + ids.length + ' alerta(s) del historial?')) return;
+    try { await window._supabase.from('alertas_historial').update({ borrada:true }).in('id', ids); } catch(e){}
+    await window.cargarMisAlertas(); window.renderMisAlertas(); window.actualizarBadgeMisAlertas();
+  };
+  (function(){
+    function initMA(){
+      var cnt = document.getElementById('alertas-cnt');
+      if (cnt && !document.getElementById('mis-alertas-btn')){
+        var bar = document.createElement('div');
+        bar.id = 'mis-alertas-btn'; bar.onclick = window.abrirMisAlertas;
+        bar.style.cssText = 'display:flex;align-items:center;gap:10px;margin:10px 11px;background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border);cursor:pointer';
+        bar.innerHTML = '<span style="font-size:20px;position:relative;display:inline-block">🔔<span id="mis-alertas-badge" style="display:none;position:absolute;top:-6px;right:-8px;background:#EF4444;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px">0</span></span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Mis Alertas</div><div style="font-size:10px;color:var(--textSec)">Historial de alertas disparadas</div></div><span style="font-size:14px;color:var(--gold)">→</span>';
+        cnt.insertBefore(bar, cnt.firstChild);
+      }
+      if (!document.getElementById('mis-alertas-modal')){
+        var ov = document.createElement('div');
+        ov.id = 'mis-alertas-modal';
+        ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:flex-end;justify-content:center';
+        ov.onclick = function(e){ if (e.target === ov) window.cerrarMisAlertas(); };
+        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85vh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
+          + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 Mis Alertas</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
+          + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ Marcar leídas</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ Borrar</button></div>'
+          + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1"></div></div>';
+        document.body.appendChild(ov);
+      }
+      setTimeout(function(){ try{ window.actualizarBadgeMisAlertas(); }catch(e){} }, 1500);
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMA); else initMA();
+  })();
+
   // Muestra un paywall simple cuando se intenta una accion bloqueada
   window.showPaywall = function(reason){
     var msg = reason && reason.message ? reason.message : 'Esta funcion requiere PRO o ELITE.';
