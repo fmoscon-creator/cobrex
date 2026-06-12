@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobrex — Post to TikTok</title>
+<style>
+  :root { --gold:#D4A017; --gold2:#F7D060; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#0b0700; color:#F2ECE0;
+    min-height:100vh; display:flex; justify-content:center; padding:28px 16px; }
+  .card { width:100%; max-width:430px; background:#15100a; border:1px solid #2a2113; border-radius:18px;
+    padding:26px 24px; box-shadow:0 8px 40px rgba(0,0,0,.5); }
+  .brand { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+  .brand .em { width:34px; height:34px; border:2px solid var(--gold); border-radius:50%; display:flex;
+    align-items:center; justify-content:center; color:var(--gold2); font-weight:800; }
+  .brand b { font-size:20px; letter-spacing:3px;
+    background:linear-gradient(180deg,var(--gold2),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  h1 { font-size:21px; margin:14px 0 4px; }
+  .sub { color:#9a8f78; font-size:14px; margin-bottom:20px; }
+  .who { display:flex; align-items:center; gap:11px; background:#1d160c; border:1px solid #2a2113;
+    border-radius:12px; padding:11px 13px; margin-bottom:16px; }
+  .who img { width:42px; height:42px; border-radius:50%; background:#333; }
+  .who .n { font-weight:700; } .who .h { color:#9a8f78; font-size:13px; }
+  video, .vidph { width:100%; border-radius:12px; background:#000; margin-bottom:14px; aspect-ratio:16/9; }
+  label { display:block; font-size:13px; color:#C9Bfa9; margin:12px 0 6px; font-weight:600; }
+  textarea, select { width:100%; background:#1d160c; color:#F2ECE0; border:1px solid #2a2113;
+    border-radius:10px; padding:11px; font-size:15px; font-family:inherit; }
+  textarea { resize:none; height:64px; }
+  .disc { font-size:12px; color:#7d735f; margin:12px 0; line-height:1.5; }
+  button { width:100%; border:0; border-radius:12px; padding:15px; font-size:16px; font-weight:800;
+    cursor:pointer; margin-top:6px; }
+  .connect { background:#000; color:#fff; border:1.5px solid #555; }
+  .post { background:linear-gradient(180deg,var(--gold2),var(--gold)); color:#1a1300; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .msg { margin-top:14px; padding:12px; border-radius:10px; font-size:14px; display:none; }
+  .ok { background:#10300f; color:#7CFC9A; } .err { background:#3a1010; color:#FF9b9b; }
+  .hide { display:none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="brand"><span class="em">▲</span><b>COBREX</b></div>
+  <h1>Post to TikTok</h1>
+  <div class="sub">Share your Cobrex market video directly to your TikTok profile.</div>
+
+  <!-- Step 1: connect -->
+  <div id="step-connect">
+    <p style="color:#C9Bfa9;font-size:14px;margin-bottom:14px;">Connect your TikTok account to start posting.</p>
+    <button class="connect" onclick="location.href='https://aurex-app-production.up.railway.app/api/tiktok/start?demo=1'">Continue with TikTok</button>
+  </div>
+
+  <!-- Step 2: post -->
+  <div id="step-post" class="hide">
+    <div class="who">
+      <img id="avatar" alt="">
+      <div><div class="n" id="nick">Cobrex</div><div class="h" id="user">@cobrex.io</div></div>
+    </div>
+    <video id="preview" src="https://www.w3schools.com/html/mov_bbb.mp4" muted controls></video>
+    <label>Caption</label>
+    <textarea id="caption" maxlength="2200">Cobrex — your global assets platform. Crypto, stocks & markets in real-time. cobrex.io</textarea>
+    <label>Who can view this video</label>
+    <select id="privacy"></select>
+    <div class="disc">By posting, you agree to TikTok's <a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" style="color:var(--gold)">Music Usage Confirmation</a>. This content will be published to your TikTok profile (@cobrex.io) with the privacy you selected above.</div>
+    <button class="post" id="postBtn" onclick="doPost()">Post to TikTok</button>
+    <div class="msg ok" id="okMsg"></div>
+    <div class="msg err" id="errMsg"></div>
+  </div>
+</div>
+
+<script>
+const API = 'https://aurex-app-production.up.railway.app';
+const K = '1215827101606939';
+const VIDEO = 'https://www.w3schools.com/html/mov_bbb.mp4';
+const PRIV_LABEL = { 'PUBLIC_TO_EVERYONE':'Everyone (Public)', 'MUTUAL_FOLLOW_FRIENDS':'Friends', 'FOLLOWER_OF_CREATOR':'Followers', 'SELF_ONLY':'Only me (Private)' };
+
+async function init() {
+  try {
+    const r = await fetch(`${API}/api/tiktok/creator-info?k=${K}`).then(r=>r.json());
+    if (!r.ok) return; // queda en "connect"
+    const c = r.creator;
+    document.getElementById('step-connect').classList.add('hide');
+    document.getElementById('step-post').classList.remove('hide');
+    document.getElementById('nick').textContent = c.creator_nickname || 'Cobrex';
+    document.getElementById('user').textContent = '@' + (c.creator_username || 'cobrex.io');
+    if (c.creator_avatar_url) document.getElementById('avatar').src = c.creator_avatar_url;
+    const sel = document.getElementById('privacy');
+    (c.privacy_level_options||['SELF_ONLY']).forEach(p => {
+      const o = document.createElement('option'); o.value = p; o.textContent = PRIV_LABEL[p]||p; sel.appendChild(o);
+    });
+  } catch(e) {}
+}
+async function doPost() {
+  const btn = document.getElementById('postBtn');
+  const ok = document.getElementById('okMsg'), err = document.getElementById('errMsg');
+  ok.style.display = err.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Posting…';
+  const caption = encodeURIComponent(document.getElementById('caption').value);
+  const privacy = document.getElementById('privacy').value;
+  try {
+    const r = await fetch(`${API}/api/tiktok/direct-post?k=${K}&url=${encodeURIComponent(VIDEO)}&title=${caption}&privacy=${privacy}`).then(r=>r.json());
+    if (r.ok) { ok.textContent = '✅ Posted to TikTok! (publish id: ' + r.publish_id + ')'; ok.style.display='block'; }
+    else { err.textContent = '⚠️ ' + (typeof r.error==='string'?r.error:JSON.stringify(r.error)); err.style.display='block'; }
+  } catch(e) { err.textContent = '⚠️ ' + e.message; err.style.display='block'; }
+  btn.disabled = false; btn.textContent = 'Post to TikTok';
+}
+init();
+</script>
+</body>
+</html>
