@@ -40,7 +40,7 @@ function saveWANumero(n){USER_WA=n;localStorage.setItem('aurex_wa_numero',n);}
 var obPlan='FREE';
 function obSelectPlan(p){obPlan=p;var ids={'FREE':'obpf','PRO':'obpp','ELITE':'obpe'};Object.keys(ids).forEach(function(k){var el=document.getElementById(ids[k]);if(!el)return;el.style.border=k===p?'2px solid '+(k==='PRO'?'#A78BFA':'var(--gold)'):'1px solid #2E2E45';});}
 function obNext(s){['obs1','obs2','obs3','obs4'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});var el=document.getElementById('obs'+s);if(el)el.style.display='flex';}
-function obFinish(){var n=(document.getElementById('ob-nombre')||{}).value||'',w=(document.getElementById('ob-wa')||{}).value||'';if(n)localStorage.setItem('aurex_nombre',n);if(w){localStorage.setItem('aurex_wa_numero',w);saveWANumero(w);}localStorage.setItem('aurex_plan',obPlan);localStorage.setItem('aurex_onboarding_done','1');var ob=document.getElementById('onboarding');if(ob){ob.style.transition='opacity 0.4s';ob.style.opacity='0';setTimeout(function(){ob.style.display='none';var ph2=document.querySelector('.phone');if(ph2)ph2.style.display='flex';;},400);}setTimeout(function(){var b=document.createElement('div');b.style.cssText='position:fixed;top:60px;left:0;right:0;z-index:9999;margin:0 12px;background:linear-gradient(135deg,#16A34A,#22C55E);border-radius:12px;padding:14px 16px;color:white;font-size:14px;font-weight:600;text-align:center';b.textContent='Bienvenido'+(n?', '+n:'')+'! Cobrex esta listo.';document.body.appendChild(b);setTimeout(function(){b.remove();},4000);},500);}
+function obFinish(){var n=(document.getElementById('ob-nombre')||{}).value||'',w=(document.getElementById('ob-wa')||{}).value||'';if(n)localStorage.setItem('aurex_nombre',n);if(w){localStorage.setItem('aurex_wa_numero',w);saveWANumero(w);}localStorage.setItem('aurex_plan',obPlan);localStorage.setItem('aurex_onboarding_done','1');var ob=document.getElementById('onboarding');if(ob){ob.style.transition='opacity 0.4s';ob.style.opacity='0';setTimeout(function(){ob.style.display='none';var ph2=document.querySelector('.phone');if(ph2)ph2.style.display='flex';;},400);}setTimeout(function(){var b=document.createElement('div');b.style.cssText='position:fixed;top:60px;left:0;right:0;z-index:9999;margin:0 12px;background:linear-gradient(135deg,#16A34A,#22C55E);border-radius:12px;padding:14px 16px;color:white;font-size:14px;font-weight:600;text-align:center';b.textContent=(window._i18n?window._i18n.t('pw_bienvenido'):'Bienvenido')+(n?', '+n:'')+(window._i18n?window._i18n.t('pw_cobrex_listo'):'! Cobrex esta listo.');document.body.appendChild(b);setTimeout(function(){b.remove();},4000);},500);}
 function initOnboarding(){if(localStorage.getItem('aurex_onboarding_done'))return;var ob=document.getElementById('onboarding');if(!ob)return;ob.style.display='block';var ph=document.querySelector('.phone');if(ph)ph.style.display='none';;var w=document.getElementById('ob-wa');if(w&&localStorage.getItem('aurex_wa_numero'))w.value=localStorage.getItem('aurex_wa_numero');var nEl=document.getElementById('ob-nombre');if(nEl&&localStorage.getItem('aurex_nombre'))nEl.value=localStorage.getItem('aurex_nombre');}
 setTimeout(initOnboarding,800);
 function initConstellacion(){var container=document.getElementById('ob-stars');var svg=document.getElementById('ob-clines');if(!container||!svg)return;var W=container.offsetWidth||window.innerWidth;var H=container.offsetHeight||window.innerHeight;svg.setAttribute('viewBox','0 0 '+W+' '+H);var stars=[];for(var i=0;i<28;i++){var x=Math.random()*W;var y=Math.random()*H;var size=Math.random()*2+1;var delay=Math.random()*3;var dur=Math.random()*2+1.5;stars.push({x:x,y:y});var s=document.createElement('div');s.style.cssText='position:absolute;border-radius:50%;background:#F5C842;width:'+size+'px;height:'+size+'px;left:'+x+'px;top:'+y+'px;animation:starPulse '+dur+'s '+delay+'s ease-in-out infinite;opacity:0.6;';container.appendChild(s);}for(var a=0;a<stars.length;a++){for(var b=a+1;b<stars.length;b++){var dx=stars[a].x-stars[b].x;var dy=stars[a].y-stars[b].y;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<90){var op=(1-dist/90)*0.25;var l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',stars[a].x);l.setAttribute('y1',stars[a].y);l.setAttribute('x2',stars[b].x);l.setAttribute('y2',stars[b].y);l.setAttribute('stroke','var(--gold)');l.setAttribute('stroke-width','0.5');l.setAttribute('opacity',op);svg.appendChild(l);}}}};
@@ -278,7 +278,7 @@ function renderTab(tab, pais){
   arr.forEach(function(item){ _appendMktRow(cnt, item, tab); });
   window._editMode=false;
   var ebtn=document.getElementById('edit-btn'),ebanner=document.getElementById('edit-banner');
-  if(ebtn){ebtn.textContent=' Editar orden';ebtn.classList.remove('on');}
+  if(ebtn){ebtn.textContent=(window._i18n?window._i18n.t('pw_editar_orden'):' Editar orden');ebtn.classList.remove('on');}
   if(ebanner) ebanner.style.display='none';
   window._activeTf=window._activeTf||'24h';
   if(tab==='cripto'||tab==='stable') fetchBinance(tab);
@@ -387,7 +387,7 @@ function fetchYahoo(tab,pais,tf){
           var pct=prevClose>0?((price-prevClose)/prevClose*100):0;
           if(pel)pel.textContent=_fmt(price,'precio');
           if(cel){cel.textContent=_fmt(pct,'pct');cel.style.color=pct>=0?'var(--green)':'var(--red)';}
-          if(lbl){if(isClosed){lbl.textContent='Ult. cierre';lbl.style.display='inline';}else{lbl.style.display='none';}}
+          if(lbl){if(isClosed){lbl.textContent=(window._i18n?window._i18n.t('pw_ult_cierre'):'Ult. cierre');lbl.style.display='inline';}else{lbl.style.display='none';}}
         }
         // Sparkline from Yahoo closes
         if(validCloses.length>=2){
@@ -487,8 +487,8 @@ window.stf=function(el,tf){
   document.querySelectorAll('.mkt-tf-btn').forEach(function(b){b.style.background=b.dataset.tf===tf?'var(--gold)':'var(--border)';b.style.color=b.dataset.tf===tf?'#111':'var(--textSec)';});
   var tfEl=document.getElementById('tf-time');
   if(tfEl){
-    var labels={'24h':'Act. ahora','7d':'Últimos 7d','1m':'Último mes','3m':'Últimos 3m','1a':'Último año'};
-    tfEl.textContent=labels[tf]||'Act. ahora';
+    var labels={'24h':(window._i18n?window._i18n.t('pw_act_ahora'):'Act. ahora'),'7d':(window._i18n?window._i18n.t('pw_ultimos_7d'):'Últimos 7d'),'1m':(window._i18n?window._i18n.t('pw_ultimo_mes'):'Último mes'),'3m':(window._i18n?window._i18n.t('pw_ultimos_3m'):'Últimos 3m'),'1a':(window._i18n?window._i18n.t('pw_ultimo_anio'):'Último año')};
+    tfEl.textContent=labels[tf]||(window._i18n?window._i18n.t('pw_act_ahora'):'Act. ahora');
   }
   if(_activeTab==='cripto'||_activeTab==='stable'){
     // Cripto: use Binance for 24h, Yahoo for historical
@@ -506,7 +506,7 @@ window.toggleEdit=function(){
   var btn=document.getElementById('edit-btn');
   var banner=document.getElementById('edit-banner');
   if(btn){
-    btn.textContent=window._editMode?' Listo':' Editar orden';
+    btn.textContent=window._editMode?(window._i18n?window._i18n.t('pw_listo'):' Listo'):(window._i18n?window._i18n.t('pw_editar_orden'):' Editar orden');
     btn.classList.toggle('on',window._editMode);
   }
   if(banner) banner.style.display=window._editMode?'flex':'none';
@@ -561,12 +561,12 @@ function yahooFinanceRT(){}
 renderTab(_activeTab||'cripto');setInterval(function(){ if(_activeTab==='cripto'||_activeTab==='stable') fetchBinance(_activeTab); else fetchYahoo(_activeTab,_activePais); },30000);
 var swReg=null;
 function initPushNotifications(){if(!('serviceWorker' in navigator))return;navigator.serviceWorker.register('/app/service-worker.js').then(function(r){swReg=r;if(Notification.permission==='granted')updateNotifButton(true);}).catch(function(){});}
-function requestPushPermission(){if(!('Notification' in window)){alert('Agrega Cobrex a pantalla de inicio desde Safari.');return;}if(Notification.permission==='granted'){showTestNotification();return;}Notification.requestPermission().then(function(p){if(p==='granted'){updateNotifButton(true);showTestNotification();}}).catch(function(){});}
-function showTestNotification(){if(swReg&&Notification.permission==='granted')swReg.showNotification('Cobrex - Alertas Activas',{body:'Recibirás alertas de precio.',icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-test'});}
-function showAlertNotification(s,p,o){if(swReg&&Notification.permission==='granted')swReg.showNotification('ALERTA - '+s,{body:'$'+p.toLocaleString('en')+' obj:$'+o.toLocaleString('en'),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-'+s,renotify:true});}
-function updateNotifButton(on){var b=document.getElementById('notif-btn');if(!b)return;b.style.background=on?'#16A34A':'var(--gold)';b.textContent=on?'Activas':'Activar';}
+function requestPushPermission(){if(!('Notification' in window)){alert((window._i18n?window._i18n.t('pw_safari_pwa'):'Agrega Cobrex a pantalla de inicio desde Safari.'));return;}if(Notification.permission==='granted'){showTestNotification();return;}Notification.requestPermission().then(function(p){if(p==='granted'){updateNotifButton(true);showTestNotification();}}).catch(function(){});}
+function showTestNotification(){if(swReg&&Notification.permission==='granted')swReg.showNotification((window._i18n?window._i18n.t('pw_alertas_activas_t'):'Cobrex - Alertas Activas'),{body:(window._i18n?window._i18n.t('pw_recibiras_alertas'):'Recibirás alertas de precio.'),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-test'});}
+function showAlertNotification(s,p,o){if(swReg&&Notification.permission==='granted')swReg.showNotification((window._i18n?window._i18n.t('pw_alerta_disp'):'ALERTA - ')+s,{body:'$'+p.toLocaleString('en')+' obj:$'+o.toLocaleString('en'),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-'+s,renotify:true});}
+function updateNotifButton(on){var b=document.getElementById('notif-btn');if(!b)return;b.style.background=on?'#16A34A':'var(--gold)';b.textContent=on?(window._i18n?window._i18n.t('pw_activas'):'Activas'):(window._i18n?window._i18n.t('pw_activar'):'Activar');}
 initPushNotifications();
-function checkAlertasLocal(){if(typeof ALERTAS==='undefined')return;ALERTAS.forEach(function(a){if(!a.activa)return;var actual=typeof getAlertActual==='function'?getAlertActual(a):null;if(!actual)return;if((a.cond==='mayor'&&actual>=a.precio)||(a.cond==='menor'&&actual<=a.precio)){if(!a._disparada){a._disparada=true;var b=document.createElement('div');b.style.cssText='position:fixed;top:60px;left:0;right:0;z-index:9999;margin:0 12px;background:#16A34A;border-radius:12px;padding:12px 16px;color:white;font-size:13px;font-weight:600';b.textContent='ALERTA - '+a.s;document.body.appendChild(b);setTimeout(function(){b.remove();},5000);if(typeof showAlertNotification==='function')showAlertNotification(a.s,actual,a.precio);}}});}
+function checkAlertasLocal(){if(typeof ALERTAS==='undefined')return;ALERTAS.forEach(function(a){if(!a.activa)return;var actual=typeof getAlertActual==='function'?getAlertActual(a):null;if(!actual)return;if((a.cond==='mayor'&&actual>=a.precio)||(a.cond==='menor'&&actual<=a.precio)){if(!a._disparada){a._disparada=true;var b=document.createElement('div');b.style.cssText='position:fixed;top:60px;left:0;right:0;z-index:9999;margin:0 12px;background:#16A34A;border-radius:12px;padding:12px 16px;color:white;font-size:13px;font-weight:600';b.textContent=(window._i18n?window._i18n.t('pw_alerta_disp'):'ALERTA - ')+a.s;document.body.appendChild(b);setTimeout(function(){b.remove();},5000);if(typeof showAlertNotification==='function')showAlertNotification(a.s,actual,a.precio);}}});}
 setInterval(checkAlertasLocal,30000);
 fetch(BACKEND_URL+'/').then(function(r){return r.json();}).then(function(d){if(d.status==='ok')console.log('Backend v'+d.version+' OK');}).catch(function(){});
 
@@ -593,7 +593,7 @@ window.closePortConvModal = function(){
 // Cargar precios reales desde Binance
 function pcLoadPrices(){
   var rateEl = document.getElementById('pc-rate');
-  if(rateEl) rateEl.textContent = 'Obteniendo precios...';
+  if(rateEl) rateEl.textContent = (window._i18n?window._i18n.t('pw_obteniendo_precios'):'Obteniendo precios...');
 
   // Binance: BTC, ETH, SOL, USDT en USDT (= USD)
   fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22%2C%22ETHUSDT%22%2C%22SOLUSDT%22%5D')
@@ -610,13 +610,13 @@ function pcLoadPrices(){
       window._pcPrices['ARS_OF'] = 1060;  // Oficial aprox
       window._pcPrices['EUR']    = 0.92;
       window._pcPrices['BRL']    = 5.70;
-      if(rateEl) rateEl.textContent = 'Precios en vivo via Binance';
+      if(rateEl) rateEl.textContent = (window._i18n?window._i18n.t('pw_precios_vivo'):'Precios en vivo via Binance');
       updatePortConv();
     })
     .catch(function(){
       // Fallback offline
       window._pcPrices = { BTC:66000, ETH:2000, SOL:83, USDT:1, USD:1, ARS:1195, ARS_OF:1060, EUR:0.92, BRL:5.70 };
-      if(rateEl) rateEl.textContent = 'Precios sin conexion (aprox)';
+      if(rateEl) rateEl.textContent = (window._i18n?window._i18n.t('pw_precios_offline'):'Precios sin conexion (aprox)');
       updatePortConv();
     });
 }
@@ -635,7 +635,7 @@ window.updatePortConv = function(){
   var from = fromEl.value;
   var to   = toEl.value;
   var p    = window._pcPrices;
-  if(!p[from] || !p[to]) { resEl.textContent = 'Cargando...'; return; }
+  if(!p[from] || !p[to]) { resEl.textContent = (window._i18n?window._i18n.t('pw_cargando'):'Cargando...'); return; }
 
   var FIAT  = ['USD','ARS','ARS_OF','EUR','BRL','USDT'];
   var isCrypto = function(s){ return FIAT.indexOf(s) === -1; };
@@ -1503,13 +1503,13 @@ window.savePortActivo = function(){
   var qtyInput = document.getElementById('pa-qty');
   var priceInput = document.getElementById('pa-price');
   var errEl = document.getElementById('pa-err');
-  if(!symInput || !symInput.value){ if(errEl){errEl.textContent='Seleccion\u00e1 un activo de la lista';errEl.style.display='block';} return; }
+  if(!symInput || !symInput.value){ if(errEl){errEl.textContent=(window._i18n?window._i18n.t('pw_sel_activo'):'Seleccion\u00e1 un activo de la lista');errEl.style.display='block';} return; }
   var parts = symInput.value.split('|');
   var sym = parts[0], nombre = parts[1] || parts[0], tipo = parts[2] || 'accion';
   var qty = parseFloat(qtyInput ? qtyInput.value : 0);
   var price = parseFloat(priceInput ? priceInput.value : 0);
-  if(!qty || qty <= 0){ if(errEl){errEl.textContent='Ingres\u00e1 una cantidad mayor a 0';errEl.style.display='block';} return; }
-  if(!price || price <= 0){ if(errEl){errEl.textContent='Ingres\u00e1 un precio de compra mayor a 0';errEl.style.display='block';} return; }
+  if(!qty || qty <= 0){ if(errEl){errEl.textContent=(window._i18n?window._i18n.t('pw_cantidad_0'):'Ingres\u00e1 una cantidad mayor a 0');errEl.style.display='block';} return; }
+  if(!price || price <= 0){ if(errEl){errEl.textContent=(window._i18n?window._i18n.t('pw_precio_0'):'Ingres\u00e1 un precio de compra mayor a 0');errEl.style.display='block';} return; }
   if(errEl) errEl.style.display='none';
   window.addPortfolioItem(sym, nombre, qty, price, tipo);
   window.closePortModal();

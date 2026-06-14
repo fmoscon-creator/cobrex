@@ -1165,8 +1165,8 @@ function updateUserUI(user) {
     if (userPanel) userPanel.style.display = 'block';
     if (guestPanel) guestPanel.style.display = 'none';
   } else {
-    if (nameEl) nameEl.textContent = 'Invitado';
-    if (emailEl) emailEl.textContent = 'Sin cuenta';
+    if (nameEl) nameEl.textContent = (window._i18n?window._i18n.t('pw_invitado'):'Invitado');
+    if (emailEl) emailEl.textContent = (window._i18n?window._i18n.t('pw_sin_cuenta'):'Sin cuenta');
     if (loginBtn) loginBtn.style.display = 'block';
     if (logoutBtn) logoutBtn.style.display = 'none';
     if (userPanel) userPanel.style.display = 'none';
@@ -1196,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div style="font-size:13px;color:var(--text);text-align:center;line-height:1.6;margin-bottom:28px;font-weight:500;">Senales de inversion con<br>probabilidad estadistica</div>
     <div style="display:flex;gap:10px;width:100%;justify-content:center;margin-bottom:20px;">
       <div style="flex:1;background:rgba(212,160,23,0.08);border:1px solid var(--gold20);border-radius:12px;padding:14px 8px;text-align:center;">
-        <div style="font-size:28px;font-weight:900;color:var(--gold);">304+</div>
+        <div style="font-size:28px;font-weight:900;color:var(--gold);">500+</div>
         <div style="font-size:9px;color:var(--textSec);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Activos<br>analizados</div>
       </div>
       <div style="flex:1;background:rgba(63,185,80,0.08);border:1px solid #3FB95030;border-radius:12px;padding:14px 8px;text-align:center;">
@@ -1364,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div style="margin-bottom:8px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="80" height="80"><defs><linearGradient id="gAo4" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#F7D060"/><stop offset="50%" stop-color="var(--gold)"/><stop offset="100%" stop-color="#8B6208"/></linearGradient><linearGradient id="gCo4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0C030"/><stop offset="100%" stop-color="#9A7010"/></linearGradient></defs><circle cx="150" cy="150" r="118" fill="none" stroke="url(#gCo4)" stroke-width="3.5"/><circle cx="150" cy="150" r="100" fill="none" stroke="url(#gCo4)" stroke-width="1.5"/><line x1="150" y1="78" x2="108" y2="168" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><line x1="150" y1="78" x2="192" y2="168" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><line x1="104" y1="123" x2="196" y2="123" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><polyline points="115,186 150,164 185,186" fill="none" stroke="url(#gAo4)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="164" r="5" fill="#F7D060"/></svg></div>
     <div style="font-size:22px;font-weight:900;color:var(--gold);letter-spacing:6px;text-align:center;margin-bottom:2px;">Cobrex</div>
     <div style="font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2.5px;text-align:center;margin-bottom:4px;opacity:0.8;">TERMINAL DE MERCADOS</div>
-    <div style="font-size:14px;font-weight:800;color:var(--text);text-align:center;margin-bottom:2px;">Elegí tu plan</div>
+    <div style="font-size:14px;font-weight:800;color:var(--text);text-align:center;margin-bottom:2px;">'+(window._i18n?window._i18n.t('pw_elegi_plan'):'Elegí tu plan')+'</div>
     <div style="font-size:10px;color:var(--textSec);text-align:center;margin-bottom:14px;">Empeza gratis, escala cuando quieras</div>
 
     <!-- FREE -->
@@ -1385,7 +1385,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- PRO -->
     <div style="width:100%;background:rgba(167,139,250,0.08);border:1px solid #A78BFA40;border-radius:12px;padding:16px;margin-bottom:10px;text-align:center;">
       <div style="font-size:20px;font-weight:900;color:#A78BFA;margin-bottom:2px;">PRO</div>
-      <div style="margin-bottom:8px;"><span style="font-size:22px;font-weight:900;color:#A78BFA;">$9.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
+      <div style="margin-bottom:8px;"><span data-px="PRO.mensual" style="font-size:22px;font-weight:900;color:#A78BFA;">$9.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">
         <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">50 activos portfolio</span>
         <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Senales IA completas</span>
@@ -1394,14 +1394,14 @@ document.addEventListener('DOMContentLoaded', function() {
         <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Comparador</span>
         <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Banners eventos</span>
       </div>
-      <div style="font-size:10px;color:var(--textSec);">Anual: <span style="color:#A78BFA;font-weight:700;">$89.99/año</span> (ahorra 25%)</div>
+      <div style="font-size:10px;color:var(--textSec);">Anual: <span data-px="PRO.anual.year" style="color:#A78BFA;font-weight:700;">$89.99/año</span> (ahorra 25%)</div>
     </div>
 
     <!-- ELITE -->
     <div style="width:100%;background:rgba(212,160,23,0.08);border:2px solid var(--gold40);border-radius:12px;padding:16px;margin-bottom:10px;text-align:center;position:relative;">
       <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--chipTextActive);font-size:9px;font-weight:800;padding:3px 12px;border-radius:6px;">RECOMENDADO</div>
       <div style="font-size:20px;font-weight:900;color:var(--gold);margin-bottom:2px;margin-top:4px;">ELITE</div>
-      <div style="margin-bottom:8px;"><span style="font-size:22px;font-weight:900;color:var(--gold);">$19.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
+      <div style="margin-bottom:8px;"><span data-px="ELITE.mensual" style="font-size:22px;font-weight:900;color:var(--gold);">$19.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">
         <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Activos ilimitados</span>
         <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Todo PRO incluido</span>
@@ -1411,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Soporte prioritario</span>
         <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">API acceso datos</span>
       </div>
-      <div style="font-size:10px;color:var(--textSec);">Anual: <span style="color:var(--gold);font-weight:700;">$179.99/año</span> (ahorra 25%)</div>
+      <div style="font-size:10px;color:var(--textSec);">Anual: <span data-px="ELITE.anual.year" style="color:var(--gold);font-weight:700;">$179.99/año</span> (ahorra 25%)</div>
     </div>
 
   </div>
@@ -1696,7 +1696,7 @@ function renderAssetList(assets){
       +'<div style="flex:1;"><div style="color:var(--text);font-size:14px;font-weight:700;">'+a.ticker+'</div><div style="color:var(--textDim);font-size:11px;">'+a.name+'</div></div>'
       +'</div>';
   });
-  document.getElementById('asset-list').innerHTML=html||'<div style="color:var(--textDim);text-align:center;padding:30px;">Sin resultados</div>';
+  document.getElementById('asset-list').innerHTML=html||'<div style="color:var(--textDim);text-align:center;padding:30px;">'+(window._i18n?window._i18n.t('pw_sin_resultados'):'Sin resultados')+'</div>';
 }
 function convLogoFallback(img){
   img.onerror=null;
@@ -1762,10 +1762,10 @@ function runConversion(){
   var rateEl=document.getElementById('pc-rate');
   if(!amountEl||!resultEl||!rateEl)return;
   var amount=parseFloat(amountEl.value)||1;
-  resultEl.textContent='...';rateEl.textContent='Obteniendo tasas...';
+  resultEl.textContent='...';rateEl.textContent=(window._i18n?window._i18n.t('pw_obteniendo_tasas'):'Obteniendo tasas...');
   Promise.all([getAssetPriceUSD(_convFrom),getAssetPriceUSD(_convTo)]).then(function(prices){
     var fromUSD=prices[0];var toUSD=prices[1];
-    if(!fromUSD||!toUSD){resultEl.textContent='N/D';rateEl.textContent='No se pudo obtener la tasa';return;}
+    if(!fromUSD||!toUSD){resultEl.textContent='N/D';rateEl.textContent=(window._i18n?window._i18n.t('pw_no_tasa'):'No se pudo obtener la tasa');return;}
     var rate=fromUSD/toUSD;var result=amount*rate;
     var fmt=function(n){return n>=1000?n.toLocaleString('es-AR',{maximumFractionDigits:2}):n>=0.01?n.toLocaleString('es-AR',{maximumFractionDigits:6}):n.toExponential(4);};
     resultEl.textContent=fmt(result)+' '+_convTo.ticker;
@@ -2093,6 +2093,15 @@ window._mktOpenDetail = function(idx){
 </div>
 
 <!-- Resumen — numeros grandes, clickeables -->
+<!-- Canal Telegram (paridad nativa: deep-link al bot) -->
+<div onclick="connectTelegram()" style="display:flex;align-items:center;gap:10px;margin:10px 11px;background:#0A2A3A;border-radius:10px;padding:10px;border:1px solid #2AABEE55;cursor:pointer">
+  <div style="font-size:22px">✈️</div>
+  <div style="flex:1">
+    <div style="font-size:12px;font-weight:700;color:#2AABEE" data-i18n="al_tg_title">Alertas por Telegram</div>
+    <div style="font-size:10px;color:var(--textSec);margin-top:2px" data-i18n="al_tg_desc">Conectá el bot para recibir tus alertas al instante</div>
+  </div>
+  <div style="font-size:11px;font-weight:800;color:#2AABEE;border:1px solid #2AABEE;border-radius:8px;padding:6px 10px" data-i18n="al_tg_btn">Conectar</div>
+</div>
 <div style="margin:10px 11px;background:var(--card);border-radius:12px;padding:14px;border:1.5px solid var(--gold)">
   <div style="display:flex;align-items:center">
     <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('alertas')"><div style="font-size:28px;font-weight:900;color:var(--green)" id="alert-active">15</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_alertas_on">ALERTAS ON</div></div>
@@ -3056,10 +3065,10 @@ display:flex;align-items:center;justify-content:space-between}
             margin-bottom:4px">
             <span style="font-size:22px;font-weight:800;color:#A78BFA">PRO</span>
             <div style="text-align:right">
-              <div style="font-size:20px;font-weight:800;color:var(--text)">$9,99
+              <div data-pxr="PRO.mensual" style="font-size:20px;font-weight:800;color:var(--text)">$9,99
                 <span style="font-size:12px;color:var(--textSec)" data-i18n="por_mes">/mes</span>
               </div>
-              <div style="font-size:11px;color:#A78BFA" data-i18n="pro_anual_desc">$7,79/mes si pagás anual</div>
+              <div data-pxr="PRO.anual.permes" style="font-size:11px;color:#A78BFA" data-i18n="pro_anual_desc">$7,79/mes si pagás anual</div>
             </div>
           </div>
           <div style="font-size:12px;color:var(--textSec);margin-bottom:16px">
@@ -3116,13 +3125,13 @@ display:flex;align-items:center;justify-content:space-between}
             </div>
           </div>
         </div>
-        <button id="btn-pro-monthly" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-pro-monthly" data-pxr="PRO.mensual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
           style="width:100%;background:linear-gradient(135deg,#7C3AED,#A78BFA);
           border:none;border-radius:10px;color:var(--text);
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="pro_mensual_btn">&#128640; PRO Mensual — $9,99/mes</span>
         </button>
-        <button id="btn-pro-annual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-pro-annual" data-pxr="PRO.anual.year" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
           style="width:100%;background:rgba(167,139,250,0.15);
           border:1.5px solid #A78BFA;border-radius:10px;color:#A78BFA;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
@@ -3136,10 +3145,10 @@ display:flex;align-items:center;justify-content:space-between}
             margin-bottom:4px">
             <span style="font-size:22px;font-weight:800;color:var(--gold)">ELITE</span>
             <div style="text-align:right">
-              <div style="font-size:20px;font-weight:800;color:var(--text)">$19,99
+              <div data-pxr="ELITE.mensual" style="font-size:20px;font-weight:800;color:var(--text)">$19,99
                 <span style="font-size:12px;color:var(--textSec)" data-i18n="por_mes">/mes</span>
               </div>
-              <div style="font-size:11px;color:#c9a84c" data-i18n="elite_anual_desc">$15,99/mes si pagás anual</div>
+              <div data-pxr="ELITE.anual.permes" style="font-size:11px;color:#c9a84c" data-i18n="elite_anual_desc">$15,99/mes si pagás anual</div>
             </div>
           </div>
           <div style="font-size:12px;color:var(--textSec);margin-bottom:16px">
@@ -3184,13 +3193,13 @@ display:flex;align-items:center;justify-content:space-between}
             </div>
           </div>
         </div>
-        <button id="btn-elite-monthly" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-elite-monthly" data-pxr="ELITE.mensual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
           style="width:100%;background:linear-gradient(135deg,#8B6208,#c9a84c);
           border:none;border-radius:10px;color:var(--chipTextActive);
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="elite_mensual_btn">&#128081; ELITE Mensual — $19,99/mes</span>
         </button>
-        <button id="btn-elite-annual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-elite-annual" data-pxr="ELITE.anual.year" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
           style="width:100%;background:rgba(201,168,76,0.15);
           border:1.5px solid #c9a84c;border-radius:10px;color:#c9a84c;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
@@ -3258,7 +3267,7 @@ function pacSaveNombre(){
   }
   sb.auth.updateUser({data:{nombre:nombre}}).then(function(res){
     if(res.error){
-      if(msg){msg.textContent='Error al guardar';msg.style.color='#e74c3c';}
+      if(msg){msg.textContent=(window._i18n?window._i18n.t('pw_error_guardar'):'Error al guardar');msg.style.color='#e74c3c';}
     } else {
       if(window._currentUser&&window._currentUser.user_metadata)
         window._currentUser.user_metadata.nombre=nombre;
@@ -3270,7 +3279,7 @@ function pacSaveNombre(){
         var _avImg2=document.getElementById('auth-avatar-img');
         if(_savedAv&&_avImg2){_avImg2.src=_savedAv;_avImg2.style.display='block';av.style.color='transparent';}
       }catch(e){}
-      if(msg){msg.textContent='Nombre actualizado';msg.style.color='#2ecc71';}
+      if(msg){msg.textContent=(window._i18n?window._i18n.t('pw_nombre_actualizado'):'Nombre actualizado');msg.style.color='#2ecc71';}
       setTimeout(function(){if(msg)msg.textContent='';},3000);
     }
   });
@@ -3288,7 +3297,7 @@ function pacSavePwd(){
     return;
   }
   if(v1!==v2){
-    if(msg){msg.textContent='Las contrase&#241;as no coinciden';msg.style.color='#e74c3c';}
+    if(msg){msg.textContent=(window._i18n?window._i18n.t('pw_pass_no_coinciden'):'Las contrase&#241;as no coinciden');msg.style.color='#e74c3c';}
     return;
   }
   sb.auth.updateUser({password:v1}).then(function(res){
@@ -3358,7 +3367,7 @@ function pacInitAlertas(){
   if(u&&ci){
     var cel=(u.user_metadata||{}).celular||'';
     ci.value=cel;
-    if(ct) ct.textContent=cel?cel:'Sin celular cargado';
+    if(ct) ct.textContent=cel?cel:(window._i18n?window._i18n.t('pw_sin_celular'):'Sin celular cargado');
   }
   pacInitCelB6();
 }
@@ -3380,7 +3389,7 @@ function authSaveCelularB6(){
   }
   sb.auth.updateUser({data:{celular:cel}}).then(function(r){
     if(r.error){
-      if(msg){msg.textContent='Error al guardar';msg.style.color='#e74c3c';}
+      if(msg){msg.textContent=(window._i18n?window._i18n.t('pw_error_guardar'):'Error al guardar');msg.style.color='#e74c3c';}
     } else {
       if(window._currentUser&&window._currentUser.user_metadata)
         window._currentUser.user_metadata.celular=cel;
@@ -3389,7 +3398,7 @@ function authSaveCelularB6(){
       var ct2=document.getElementById('auth-celular-txt');
       if(ct2) ct2.textContent=cel;
       if(ct) ct.textContent=cel;
-      if(msg){msg.textContent='Celular guardado';msg.style.color='#2ecc71';}
+      if(msg){msg.textContent=(window._i18n?window._i18n.t('pw_celular_guardado'):'Celular guardado');msg.style.color='#2ecc71';}
       setTimeout(function(){if(msg)msg.textContent='';},3000);
     }
   });
@@ -3530,7 +3539,7 @@ function pacAbrirFaq(){
     m.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;justify-content:center;align-items:center;padding:16px';
     m.onclick=function(e){if(e.target===m)m.style.display='none';};
     var faqs=[
-      {q:'¿Qué es Cobrex?',a:'Cobrex es una plataforma de inversión con inteligencia artificial que analiza 350+ activos globales en tiempo real (criptomonedas, acciones, ETFs, commodities, futuros y divisas). Nuestro motor IA v7 evalúa 10 variables por activo para generar señales de compra/venta con probabilidad.',qen:'What is Cobrex?',aen:'Cobrex is an AI-powered investment platform that analyzes 350+ global assets in real time (cryptocurrencies, stocks, ETFs, commodities, futures, and currencies). Our IA v7 engine evaluates 10 variables per asset to generate buy/sell signals with probability.'},
+      {q:'¿Qué es Cobrex?',a:'Cobrex es una plataforma de inversión con inteligencia artificial que analiza 500+ activos globales en tiempo real (criptomonedas, acciones, ETFs, commodities, futuros y divisas). Nuestro motor IA v7 evalúa 10 variables por activo para generar señales de compra/venta con probabilidad.',qen:'What is Cobrex?',aen:'Cobrex is an AI-powered investment platform that analyzes 500+ global assets in real time (cryptocurrencies, stocks, ETFs, commodities, futures, and currencies). Our IA v7 engine evaluates 10 variables per asset to generate buy/sell signals with probability.'},
       {q:'¿Cómo funciona el Motor IA?',a:'El Motor IA v7 analiza 10 variables en tiempo real: Tendencia 24h, RSI14, Volumen, Volatilidad, Correlación BTC/SPY, Oro/Petróleo, Macro FED, Earnings, MACD y Soporte/Resistencia. Genera una señal ALCISTA, BAJISTA o ALTA CONV-IA con probabilidad del 55% al 88%.',qen:'How does the AI Engine work?',aen:'The IA v7 Engine analyzes 10 real-time variables: 24h Trend, RSI14, Volume, Volatility, BTC/SPY Correlation, Gold/Oil, FED Macro, Earnings, MACD, and Support/Resistance. It generates BULLISH, BEARISH, or HIGH CONV-AI signals with 55% to 88% probability.'},
       {q:'¿Qué es Cobrex Pulse?',a:'Cobrex Pulse es nuestro índice de sentimiento de mercado con 14 variables ponderadas. Va de 0 (Miedo Extremo) a 100 (Codicia Extrema). Tiene 5 filtros: Global, Cripto, Acciones, Commodities y Futuros. Incluye 3 indicadores: Cobrex Pulse, BTC Sentiment y Crypto Fear & Greed.',qen:'What is Cobrex Pulse?',aen:'Cobrex Pulse is our market sentiment index with 14 weighted variables. It ranges from 0 (Extreme Fear) to 100 (Extreme Greed). It has 5 filters: Global, Crypto, Stocks, Commodities, and Futures. Includes 3 indicators: Cobrex Pulse, BTC Sentiment, and Crypto Fear & Greed.'},
       {q:'¿Qué planes hay disponibles?',a:'FREE: 5 activos, 3 señales/día, Pulse básico. PRO ($9.99/mes): activos ilimitados, señales ilimitadas, alertas push y Telegram en tiempo real. ELITE ($19.99/mes): todo lo de PRO + Pulse completo, análisis técnico avanzado (RSI/MACD) y alertas geopolíticas GDELT exclusivas.',qen:'What plans are available?',aen:'FREE: 5 assets, 3 signals/day, basic Pulse. PRO ($9.99/mo): unlimited assets, unlimited signals, push and Telegram alerts in real time. ELITE ($19.99/mo): everything in PRO + full Pulse, advanced technical analysis (RSI/MACD) and exclusive GDELT geopolitical alerts.'},
@@ -3555,41 +3564,42 @@ function pacAbrirFaq(){
   m.style.display='flex';
 }
 function pacCalificar(){
-  var m=document.getElementById('modal-rating-perfil');
-  if(!m){
-    m=document.createElement('div');
-    m.id='modal-rating-perfil';
-    m.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;justify-content:center;align-items:center;padding:16px';
-    m.onclick=function(e){if(e.target===m)m.style.display='none';};
-    m.innerHTML='<div style="background:var(--card);border-radius:20px;width:80%;max-width:340px;padding:24px;border:2px solid var(--gold);box-shadow:0 15px 40px rgba(0,0,0,0.5);text-align:center">'+
-      '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">Calificá Cobrex</div>'+
-      '<div style="font-size:12px;color:var(--textSec);margin-bottom:16px">Tu opinión nos ayuda a mejorar la app para vos</div>'+
-      '<div id="rating-stars" style="display:flex;gap:8px;justify-content:center;margin-bottom:20px"></div>'+
-      '<div id="rating-label" style="font-size:13px;color:var(--gold);font-weight:600;margin-bottom:12px;min-height:18px"></div>'+
-      '<button onclick="var l=document.getElementById(\'rating-label\');l.textContent=\'¡Gracias! Tu calificación fue enviada\';l.style.color=\'var(--green)\';setTimeout(function(){document.getElementById(\'modal-rating-perfil\').style.display=\'none\';l.textContent=\'\';},1500)" style="background:var(--gold);border:none;border-radius:10px;padding:12px 30px;font-size:14px;font-weight:700;color:#000;cursor:pointer">Enviar</button>'+
-      '<div onclick="document.getElementById(\'modal-rating-perfil\').style.display=\'none\'" style="margin-top:10px;font-size:12px;color:var(--textSec);cursor:pointer">Cancelar</div>'+
-      '</div>';
-    document.body.appendChild(m);
-    var starsDiv=m.querySelector('#rating-stars');
-    window._ratingVal=0;
-    for(var s=1;s<=5;s++){
-      (function(star){
-        var btn=document.createElement('span');
-        btn.style.cssText='font-size:32px;cursor:pointer';
-        btn.textContent='☆';
-        btn.dataset.star=star;
-        btn.onclick=function(){
-          window._ratingVal=star;
-          var all=starsDiv.querySelectorAll('span');
-          for(var j=0;j<all.length;j++) all[j].textContent=parseInt(all[j].dataset.star)<=star?'⭐':'☆';
-          var lbl=document.getElementById('rating-label');
-          if(lbl) lbl.textContent=star===5?'¡Excelente!':star>=4?'¡Muy buena!':star>=3?'Buena':'Gracias por tu feedback';
-        };
-        starsDiv.appendChild(btn);
-      })(s);
-    }
+  function T(k,f){ try{ if(window._i18n&&window._i18n.t){ var v=window._i18n.t(k); if(v) return v; } }catch(e){} return f; }
+  var dir=(window._i18n&&window._i18n.getLang&&window._i18n.getLang()==='ar')?'rtl':'ltr';
+  var old=document.getElementById('modal-rating-perfil'); if(old) old.remove();
+  var m=document.createElement('div');
+  m.id='modal-rating-perfil'; m.dir=dir;
+  m.style.cssText='display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;justify-content:center;align-items:center;padding:16px';
+  m.onclick=function(e){if(e.target===m)m.remove();};
+  m.innerHTML='<div style="background:var(--card);border-radius:20px;width:80%;max-width:340px;padding:24px;border:2px solid var(--gold);box-shadow:0 15px 40px rgba(0,0,0,0.5);text-align:center">'+
+    '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">'+T('calificar_titulo','Calificá Cobrex')+'</div>'+
+    '<div style="font-size:12px;color:var(--textSec);margin-bottom:16px">'+T('calificar_sub','Tu opinión nos ayuda a mejorar la app para vos')+'</div>'+
+    '<div id="rating-stars" style="display:flex;gap:8px;justify-content:center;margin-bottom:20px"></div>'+
+    '<div id="rating-label" style="font-size:13px;color:var(--gold);font-weight:600;margin-bottom:12px;min-height:18px"></div>'+
+    '<button id="rating-send" style="background:var(--gold);border:none;border-radius:10px;padding:12px 30px;font-size:14px;font-weight:700;color:#000;cursor:pointer">'+T('enviar','Enviar')+'</button>'+
+    '<div id="rating-cancel" style="margin-top:10px;font-size:12px;color:var(--textSec);cursor:pointer">'+T('cancelar','Cancelar')+'</div>'+
+    '</div>';
+  document.body.appendChild(m);
+  var starsDiv=m.querySelector('#rating-stars');
+  window._ratingVal=0;
+  for(var s=1;s<=5;s++){
+    (function(star){
+      var btn=document.createElement('span');
+      btn.style.cssText='font-size:32px;cursor:pointer';
+      btn.textContent='☆';
+      btn.dataset.star=star;
+      btn.onclick=function(){
+        window._ratingVal=star;
+        var all=starsDiv.querySelectorAll('span');
+        for(var j=0;j<all.length;j++) all[j].textContent=parseInt(all[j].dataset.star)<=star?'⭐':'☆';
+        var lbl=document.getElementById('rating-label');
+        if(lbl) lbl.textContent=star===5?T('rating_excelente','¡Excelente!'):star>=4?T('rating_muy_buena','¡Muy buena!'):star>=3?T('rating_buena','Buena'):T('rating_gracias_feedback','Gracias por tu feedback');
+      };
+      starsDiv.appendChild(btn);
+    })(s);
   }
-  m.style.display='flex';
+  m.querySelector('#rating-send').onclick=function(){ var l=document.getElementById('rating-label'); l.textContent=T('rating_enviada','¡Gracias! Tu calificación fue enviada'); l.style.color='var(--green)'; setTimeout(function(){m.remove();},1500); };
+  m.querySelector('#rating-cancel').onclick=function(){ m.remove(); };
 }
 function pacShowHoraPicker(){
   var horas=['06:00','07:00','08:00','09:00','10:00','12:00','14:00','18:00','20:00','22:00'];
@@ -3720,28 +3730,28 @@ window.authSwitchTab=function(tab){
   if(msg) msg.textContent='';
 };
 window.authDoLogin=function(){
-  var c=getSB(); if(!c){showAuthMsg('Servicio no disponible');return;}
+  var c=getSB(); if(!c){showAuthMsg((window._i18n?window._i18n.t('pw_servicio_no_disp'):'Servicio no disponible'));return;}
   var email=document.getElementById('auth-email').value.trim();
   var pass=document.getElementById('auth-pass').value;
-  if(!email||!pass){showAuthMsg('Completá todos los campos');return;}
-  showAuthMsg('Ingresando...');
+  if(!email||!pass){showAuthMsg((window._i18n?window._i18n.t('pw_completa_campos'):'Completá todos los campos'));return;}
+  showAuthMsg((window._i18n?window._i18n.t('pw_ingresando'):'Ingresando...'));
   c.auth.signInWithPassword({email:email,password:pass}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg('');}});
 };
 window.authDoRegister=function(){
-  var c=getSB(); if(!c){showAuthMsg('Servicio no disponible');return;}
+  var c=getSB(); if(!c){showAuthMsg((window._i18n?window._i18n.t('pw_servicio_no_disp'):'Servicio no disponible'));return;}
   var email=document.getElementById('reg-email').value.trim();
   var pass=document.getElementById('reg-pass').value;
   var cel=document.getElementById('reg-celular').value.trim();
-  if(!email||!pass){showAuthMsg('Completá email y contraseña');return;}
-  if(pass.length<6){showAuthMsg('La contraseña debe tener al menos 6 caracteres');return;}
-  showAuthMsg('Creando cuenta...');
-  c.auth.signUp({email:email,password:pass,options:{data:{celular:cel||''}}}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg('\u00a1Cuenta creada!');setTimeout(function(){document.getElementById('auth-msg').textContent='';},3000);}});
+  if(!email||!pass){showAuthMsg((window._i18n?window._i18n.t('pw_completa_email_pass'):'Completá email y contraseña'));return;}
+  if(pass.length<6){showAuthMsg((window._i18n?window._i18n.t('pw_pass_min6'):'La contraseña debe tener al menos 6 caracteres'));return;}
+  showAuthMsg((window._i18n?window._i18n.t('pw_creando_cuenta'):'Creando cuenta...'));
+  c.auth.signUp({email:email,password:pass,options:{data:{celular:cel||''}}}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg((window._i18n?window._i18n.t('pw_cuenta_creada'):'\u00a1Cuenta creada!'));setTimeout(function(){document.getElementById('auth-msg').textContent='';},3000);}});
 };
 window.authSaveCelular=function(){
   var c=getSB();
   var msgEl=document.getElementById('auth-msg');
   if(!c){
-    if(msgEl){msgEl.textContent='Error: sesión no iniciada';msgEl.style.color='#e74c3c';}
+    if(msgEl){msgEl.textContent=(window._i18n?window._i18n.t('pw_error_sesion'):'Error: sesión no iniciada');msgEl.style.color='#e74c3c';}
     return;
   }
   var celInput=document.getElementById('celular-input');
@@ -3762,7 +3772,7 @@ window.authSaveCelular=function(){
   }
   var el=document.getElementById('auth-celular-txt');
   if(el)el.textContent=cel;
-  if(msgEl){msgEl.textContent='Celular guardado';msgEl.style.color='#2ecc71';setTimeout(function(){if(msgEl)msgEl.textContent='';},3000);}
+  if(msgEl){msgEl.textContent=(window._i18n?window._i18n.t('pw_celular_guardado'):'Celular guardado');msgEl.style.color='#2ecc71';setTimeout(function(){if(msgEl)msgEl.textContent='';},3000);}
 });
 }
 window.syncCelularDisplay=function(){
@@ -3795,7 +3805,7 @@ window.updateUserUI=function(user){
       var _aImg=document.getElementById('auth-avatar-img');
       if(_sAv&&_aImg){_aImg.src=_sAv;_aImg.style.display='block';if(avatarEl)avatarEl.style.color='transparent';}
     }catch(e){}
-    if(celEl) celEl.textContent=cel?cel:'Sin celular cargado';
+    if(celEl) celEl.textContent=cel?cel:(window._i18n?window._i18n.t('pw_sin_celular'):'Sin celular cargado');
     var cinput=document.getElementById('celular-input');
     if(cinput) cinput.value=cel;
   } else {
@@ -3930,12 +3940,12 @@ setTimeout(function(){
         <div style="font-size:11px;color:var(--textSec)">Para el inversor activo</div>
       </div>
       <div class="plan-pricing">
-        <div class="plan-price" style="font-size:22px;color:var(--text)">$9.99</div>
+        <div class="plan-price" data-px="PRO.mensual" style="font-size:22px;color:var(--text)">$9.99</div>
         <div class="plan-period">/mes</div>
       </div>
     </div>
     <div style="background:#A78BFA15;border-radius:8px;padding:8px 10px;margin-bottom:10px;border:0.5px solid #A78BFA30">
-      <div style="font-size:10px;color:#A78BFA;font-weight:600;margin-bottom:4px"> ANUAL: $7.79/mes  Ahorrs $26/ao</div>
+      <div data-pxsave="PRO" style="font-size:10px;color:#A78BFA;font-weight:600;margin-bottom:4px"> ANUAL: $7.79/mes  Ahorrs $26/ao</div>
     </div>
     <div class="feats">
       <div class="feat ok">Portfolio ilimitado</div>
@@ -3946,8 +3956,8 @@ setTimeout(function(){
       <div class="feat ok">Soporte prioritario</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y')">PRO Mensual $9.99</button>
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA')">PRO Anual $89.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y')" data-pxr="PRO.mensual">PRO Mensual $9.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA')" data-pxr="PRO.anual">PRO Anual $89.99</button>
     </div>
   </div>
 
@@ -3960,12 +3970,12 @@ setTimeout(function(){
         <div style="font-size:11px;color:var(--textSec)">Para traders profesionales</div>
       </div>
       <div class="plan-pricing">
-        <div class="plan-price" style="font-size:22px;color:var(--gold)">$19.99</div>
+        <div class="plan-price" data-px="ELITE.mensual" style="font-size:22px;color:var(--gold)">$19.99</div>
         <div class="plan-period">/mes</div>
       </div>
     </div>
     <div style="background:var(--goldBg);border-radius:8px;padding:8px 10px;margin-bottom:10px;border:0.5px solid var(--gold20)">
-      <div style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:4px"> ANUAL: $15.99/mes  Ahorrs $48/ao</div>
+      <div data-pxsave="ELITE" style="font-size:10px;color:var(--gold);font-weight:600;margin-bottom:4px"> ANUAL: $15.99/mes  Ahorrs $48/ao</div>
     </div>
     <div class="feats">
       <div class="feat ok">Todo lo de PRO</div>
@@ -3976,8 +3986,8 @@ setTimeout(function(){
       <div class="feat ok">Acceso anticipado a funciones</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY')">ELITE Mensual $19.99</button>
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY')">ELITE Anual $179.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY')" data-pxr="ELITE.mensual">ELITE Mensual $19.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY')" data-pxr="ELITE.anual">ELITE Anual $179.99</button>
     </div>
   </div>
 
@@ -4130,10 +4140,11 @@ document.addEventListener("DOMContentLoaded", function(){
 <script>
 (function(){
   var BACKEND_URL = 'https://aurex-app-production.up.railway.app';
+  // Idéntico a la NATIVA (usePlan.js PLAN_ALERT_TYPES) + backend server.js PLAN_LIMITS (watchlist FREE = 1).
   var PLAN_LIMITS_CLIENT = {
-    FREE: { portfolioMax: 5, watchlistMax: 10, alertTypes: ['umbral','precio_objetivo','variacion_brusca','max_min','apertura'] },
-    PRO:  { portfolioMax: Infinity, watchlistMax: Infinity, alertTypes: ['umbral','precio_objetivo','variacion_brusca','max_min','apertura','alta_conviccion_ia','cambio_senal','senal_portfolio','cambio_zona_pulse','por_categoria','termometro_riesgo','fed_fomc','cpi_pbi','earnings'] },
-    ELITE:{ portfolioMax: Infinity, watchlistMax: Infinity, alertTypes: ['umbral','precio_objetivo','variacion_brusca','max_min','apertura','alta_conviccion_ia','cambio_senal','senal_portfolio','cambio_zona_pulse','por_categoria','termometro_riesgo','fed_fomc','cpi_pbi','earnings','geopolitica_gdelt'] },
+    FREE: { portfolioMax: 5, watchlistMax: 1, alertTypes: ['umbral','precio','porcentaje','precio_objetivo','variacion_brusca','max_min','apertura','rsi_extremo'] },
+    PRO:  { portfolioMax: Infinity, watchlistMax: Infinity, alertTypes: ['umbral','precio','porcentaje','precio_objetivo','variacion_brusca','max_min','apertura','alta_conviccion_ia','cambio_senal','senal_portfolio','cambio_zona_pulse','por_categoria','termometro_riesgo','fed_fomc','cpi_pbi','earnings','rsi_extremo'] },
+    ELITE:{ portfolioMax: Infinity, watchlistMax: Infinity, alertTypes: ['umbral','precio','porcentaje','precio_objetivo','variacion_brusca','max_min','apertura','alta_conviccion_ia','cambio_senal','senal_portfolio','cambio_zona_pulse','por_categoria','termometro_riesgo','fed_fomc','cpi_pbi','earnings','geopolitica_gdelt','rsi_extremo'] },
   };
 
   window.aurexPlan = { plan:'FREE', limits: PLAN_LIMITS_CLIENT.FREE, loadedAt: null };
@@ -4244,8 +4255,8 @@ document.addEventListener("DOMContentLoaded", function(){
         document.getElementById('upsell-icon').textContent = isFree ? '⚡' : '👑';
         document.getElementById('upsell-title').style.color = targetColor;
         document.getElementById('upsell-title').textContent = isFree
-          ? 'Pasate a PRO — $9,99/mes'
-          : 'Pasate a ELITE — $19,99/mes';
+          ? (window._i18n?window._i18n.t('pw_pasate_pro'):'Pasate a PRO')+' — ' + (window.__cobrexP?window.__cobrexP('PRO.mensual'):'$4.99') + '/mes'
+          : (window._i18n?window._i18n.t('pw_pasate_elite'):'Pasate a ELITE')+' — ' + (window.__cobrexP?window.__cobrexP('ELITE.mensual'):'$9.99') + '/mes';
         document.getElementById('upsell-sub').textContent = isFree
           ? 'Activos ilimitados · 14 tipos de alertas · Telegram en tiempo real'
           : 'Cobrex Pulse completo · RSI/MACD · Alertas geopolíticas GDELT';
@@ -4263,17 +4274,17 @@ document.addEventListener("DOMContentLoaded", function(){
     var P = window.aurexPlan.plan || 'FREE';
     if (action === 'add_portfolio') {
       if (L.portfolioMax === Infinity) return { ok: true };
-      if (currentCount >= L.portfolioMax) return { ok: false, plan: P, limit: L.portfolioMax, message: 'Tu plan ' + P + ' permite hasta ' + L.portfolioMax + ' activos en Portfolio. Pasate a PRO o ELITE para sumar mas.' };
+      if (currentCount >= L.portfolioMax) return { ok: false, plan: P, kind: 'portfolio', limit: L.portfolioMax };
       return { ok: true };
     }
     if (action === 'add_watchlist') {
       if (L.watchlistMax === Infinity) return { ok: true };
-      if (currentCount >= L.watchlistMax) return { ok: false, plan: P, limit: L.watchlistMax, message: 'Tu plan ' + P + ' permite hasta ' + L.watchlistMax + ' listas en Watchlist. Pasate a PRO o ELITE para crear mas.' };
+      if (currentCount >= L.watchlistMax) return { ok: false, plan: P, kind: 'watchlist', limit: L.watchlistMax };
       return { ok: true };
     }
     if (action === 'add_alert') {
       var tipo = (currentCount || '').toLowerCase();
-      if (L.alertTypes.indexOf(tipo) === -1) return { ok: false, plan: P, tipo_alerta: tipo, message: 'Tu plan ' + P + ' no incluye alertas tipo "' + tipo + '". Pasate a PRO o ELITE para activarlas.' };
+      if (L.alertTypes.indexOf(tipo) === -1) return { ok: false, plan: P, kind: 'alert', tipo_alerta: tipo };
       return { ok: true };
     }
     return { ok: true };
@@ -4380,7 +4391,7 @@ document.addEventListener("DOMContentLoaded", function(){
   };
   window.borrarMisAlertas = async function(){
     var ids = window._misAlertasSel(); if (!ids.length || !window._supabase) return;
-    if (!confirm('¿Borrar ' + ids.length + ' alerta(s) del historial?')) return;
+    if (!confirm((window._i18n?window._i18n.t('pw_borrar_alertas').replace('{n}',ids.length):('¿Borrar ' + ids.length + ' alerta(s) del historial?')))) return;
     try { await window._supabase.from('alertas_historial').update({ borrada:true }).in('id', ids); } catch(e){}
     await window.cargarMisAlertas(); window.renderMisAlertas(); window.actualizarBadgeMisAlertas();
   };
@@ -4445,14 +4456,48 @@ document.addEventListener("DOMContentLoaded", function(){
   })();
 
   // Muestra un paywall simple cuando se intenta una accion bloqueada
+  // Modal de límite (estructura del PlanLimitModal nativo) PERO TRADUCIDO en los 8 idiomas.
+  // En la nativa el título/botón están hardcodeados en español (bug) → acá va traducido automático.
+  var PW_STR = {
+    title:   { es:'Límite del plan {plan}', en:'{plan} plan limit', pt:'Limite do plano {plan}', zh:'{plan} 计划已达上限', fr:'Limite du forfait {plan}', it:'Limite del piano {plan}', hi:'{plan} प्लान की सीमा', ar:'حدّ خطة {plan}' },
+    upgrade: { es:'Pasate a {t}', en:'Upgrade to {t}', pt:'Mude para {t}', zh:'升级到 {t}', fr:'Passez à {t}', it:'Passa a {t}', hi:'{t} में अपग्रेड करें', ar:'الترقية إلى {t}' },
+    no:      { es:'Ahora no', en:'Not now', pt:'Agora não', zh:'以后再说', fr:'Plus tard', it:'Non ora', hi:'अभी नहीं', ar:'ليس الآن' },
+    portfolio:{ es:'Tu plan {plan} permite hasta {n} activos en Portfolio. Pasate a {t} para sumar más.', en:'Your {plan} plan allows up to {n} assets in Portfolio. Upgrade to {t} to add more.', pt:'Seu plano {plan} permite até {n} ativos no Portfólio. Mude para {t} para adicionar mais.', zh:'您的 {plan} 计划最多允许投资组合中有 {n} 项资产。升级到 {t} 以添加更多。', fr:'Votre forfait {plan} permet jusqu\'à {n} actifs dans le Portefeuille. Passez à {t} pour en ajouter.', it:'Il tuo piano {plan} consente fino a {n} asset nel Portfolio. Passa a {t} per aggiungerne altri.', hi:'आपका {plan} प्लान Portfolio में {n} एसेट तक की अनुमति देता है। और जोड़ने के लिए {t} में अपग्रेड करें।', ar:'تتيح خطتك {plan} حتى {n} أصول في المحفظة. الترقية إلى {t} لإضافة المزيد.' },
+    watchlist:{ es:'Tu plan {plan} permite hasta {n} listas en Watchlist. Pasate a {t} para crear más.', en:'Your {plan} plan allows up to {n} lists in Watchlist. Upgrade to {t} to create more.', pt:'Seu plano {plan} permite até {n} listas na Watchlist. Mude para {t} para criar mais.', zh:'您的 {plan} 计划最多允许 {n} 个自选清单。升级到 {t} 以创建更多。', fr:'Votre forfait {plan} permet jusqu\'à {n} listes dans la Watchlist. Passez à {t} pour en créer plus.', it:'Il tuo piano {plan} consente fino a {n} liste nella Watchlist. Passa a {t} per crearne altre.', hi:'आपका {plan} प्लान Watchlist में {n} सूचियों तक की अनुमति देता है। और बनाने के लिए {t} में अपग्रेड करें।', ar:'تتيح خطتك {plan} حتى {n} قوائم في قائمة المتابعة. الترقية إلى {t} لإنشاء المزيد.' },
+    alert:    { es:'Tu plan {plan} no incluye alertas tipo «{tipo}». Pasate a {t} para activarlas.', en:'Your {plan} plan doesn\'t include «{tipo}» alerts. Upgrade to {t} to enable them.', pt:'Seu plano {plan} não inclui alertas «{tipo}». Mude para {t} para ativá-los.', zh:'您的 {plan} 计划不包含「{tipo}」提醒。升级到 {t} 以启用。', fr:'Votre forfait {plan} n\'inclut pas les alertes «{tipo}». Passez à {t} pour les activer.', it:'Il tuo piano {plan} non include gli avvisi «{tipo}». Passa a {t} per attivarli.', hi:'आपके {plan} प्लान में «{tipo}» अलर्ट शामिल नहीं हैं। इन्हें सक्षम करने के लिए {t} में अपग्रेड करें।', ar:'لا تتضمن خطتك {plan} تنبيهات «{tipo}». الترقية إلى {t} لتفعيلها.' },
+    generic:  { es:'Esta función requiere {t}. Pasate a {t} para activarla.', en:'This feature requires {t}. Upgrade to {t} to enable it.', pt:'Este recurso requer {t}. Mude para {t} para ativá-lo.', zh:'此功能需要 {t}。升级到 {t} 以启用。', fr:'Cette fonctionnalité nécessite {t}. Passez à {t} pour l\'activer.', it:'Questa funzione richiede {t}. Passa a {t} per attivarla.', hi:'इस सुविधा के लिए {t} आवश्यक है। इसे सक्षम करने के लिए {t} में अपग्रेड करें।', ar:'تتطلب هذه الميزة {t}. الترقية إلى {t} لتفعيلها.' }
+  };
+  function _pwLang(){ try{ if(window._i18n&&window._i18n.getLang) return window._i18n.getLang(); }catch(e){} return 'en'; }
+  function _pwT(key, vars){ var l=_pwLang(); var s=(PW_STR[key]&&(PW_STR[key][l]||PW_STR[key].en))||''; vars=vars||{}; Object.keys(vars).forEach(function(k){ s=s.split('{'+k+'}').join(vars[k]); }); return s; }
   window.showPaywall = function(reason){
-    var msg = reason && reason.message ? reason.message : 'Esta funcion requiere PRO o ELITE.';
-    if (typeof abrirModalPlanes === 'function') {
-      alert(msg + '\n\nVamos a abrir los planes para que veas las opciones.');
-      try { abrirModalPlanes(); } catch(e){}
-    } else {
-      alert(msg + '\n\nAbri el modal de Planes para suscribirte.');
-    }
+    var plan = (reason && reason.plan) || (window.aurexPlan && window.aurexPlan.plan) || 'FREE';
+    var target = (reason && reason.requiredPlan) || (plan === 'PRO' ? 'ELITE' : 'PRO');
+    var color = target === 'ELITE' ? '#c9a84c' : '#A78BFA';
+    var msg;
+    if (reason && reason.kind === 'portfolio') msg = _pwT('portfolio', {plan:plan, n:reason.limit, t:target});
+    else if (reason && reason.kind === 'watchlist') msg = _pwT('watchlist', {plan:plan, n:reason.limit, t:target});
+    else if (reason && reason.kind === 'alert') msg = _pwT('alert', {plan:plan, tipo:(reason.tipo_alerta||''), t:target});
+    else if (reason && reason.message) msg = reason.message;
+    else msg = _pwT('generic', {t:target});
+    var ahoraNo = _pwT('no');
+    var old = document.getElementById('cobrex-planlimit-modal'); if (old) old.remove();
+    var ov = document.createElement('div'); ov.id = 'cobrex-planlimit-modal';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100060;display:flex;justify-content:center;align-items:center;padding:24px';
+    ov.innerHTML =
+      '<div style="position:relative;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:16px;width:100%;max-width:360px;padding:24px;text-align:center">' +
+        '<div id="cpl-x" style="position:absolute;top:6px;right:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;cursor:pointer">✕</div>' +
+        '<div style="font-size:48px;margin-bottom:12px">🔒</div>' +
+        '<div dir="auto" style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px">' + _pwT('title', {plan:plan}) + '</div>' +
+        '<div dir="auto" style="font-size:14px;color:#a0a0a0;line-height:20px;margin-bottom:20px">' + msg + '</div>' +
+        '<button id="cpl-up" dir="auto" style="width:100%;padding:14px;border:none;border-radius:10px;background:' + color + ';color:#000;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px">' + _pwT('upgrade', {t:target}) + '</button>' +
+        '<div id="cpl-no" style="padding:12px 24px;margin-top:4px;color:#fff;font-size:14px;font-weight:600;text-decoration:underline;cursor:pointer">' + ahoraNo + '</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    function close(){ ov.remove(); }
+    ov.onclick = function(e){ if (e.target === ov) close(); };
+    document.getElementById('cpl-x').onclick = close;
+    document.getElementById('cpl-no').onclick = close;
+    document.getElementById('cpl-up').onclick = function(){ close(); try { if (typeof abrirModalPlanes === 'function') abrirModalPlanes(); } catch(e){} };
   };
 
   // Detecta retorno desde PayPal (cuando vuelve con ?paypal=success o referrer paypal.com)
@@ -4468,7 +4513,7 @@ document.addEventListener("DOMContentLoaded", function(){
       document.body.appendChild(notif);
       setTimeout(function(){
         window.loadUserPlan().then(function(p){
-          notif.textContent = '✓ Tu plan ahora es: ' + p + ' — ¡bienvenido!';
+          notif.textContent = (window._i18n?window._i18n.t('pw_plan_ahora').replace('{p}',p):('✓ Tu plan ahora es: ' + p + ' — ¡bienvenido!'));
           setTimeout(function(){ notif.remove(); }, 5000);
         });
       }, 8000);
@@ -4498,6 +4543,207 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
+
+
+
+<script>
+/* COBREX — precios y plan_ids 100% dinamicos desde PayPal (/api/plans). Cero hardcode. */
+(function(){
+  var API='https://aurex-app-production.up.railway.app/api/plans';
+  var KNOWN={ // cualquier plan_id conocido (viejo AUREX / global / AR) -> [tier,period]
+    'P-64Y46051CU7251058NHMGG4Y':['PRO','mensual'],'P-3FG40467BU710103WNHMGJSA':['PRO','anual'],
+    'P-9T718444CV910321WNHMGOWY':['ELITE','mensual'],'P-1WB81912S68516031NHMGRPY':['ELITE','anual'],
+    'P-4JH161461V818874SNIW7UAA':['PRO','mensual'],'P-2N0098015C849324MNIW7UAI':['PRO','anual'],
+    'P-0AN884893H6644053NIW7UAQ':['ELITE','mensual'],'P-11266502KC039145PNIW7UAQ':['ELITE','anual'],
+    'P-6MT629485R3534414NIW7UAA':['PRO','mensual'],'P-8MU00004R95532325NIW7UAI':['PRO','anual'],
+    'P-5E555182VJ9980530NIW7UAQ':['ELITE','mensual'],'P-3RJ21860P6796451WNIW7UAY':['ELITE','anual'] };
+  var D=null, applying=false;
+  function isAR(){try{return /Argentina/i.test(Intl.DateTimeFormat().resolvedOptions().timeZone||'')||(navigator.language||'').toLowerCase()==='es-ar';}catch(e){return false;}}
+  function priceOf(key){ if(!D||!D.plans)return null; var a=key.split('.'); var t=D.plans[a[0]]&&D.plans[a[0]][a[1]]; if(!t||!t.price)return null;
+    var v=parseFloat(t.price); return a[2]==='permes' ? (v/12).toFixed(2) : t.price; }
+  window.__cobrexP=function(k){var v=priceOf(k);return v?('$'+v):'';};
+  // Trial de 7 días en mensuales (idéntico a la nativa, traducido en 8 idiomas).
+  var TRIAL_STR = {
+    cta:   { es:'Quiero probar gratis {d} días', en:'Try {d} days free', pt:'Quero testar {d} dias grátis', zh:'免费试用{d}天', fr:'Essayer {d} jours gratuits', it:'Prova {d} giorni gratis', hi:'{d} दिन मुफ़्त आज़माएं', ar:'جرّب {d} أيام مجاناً' },
+    after: { es:'Luego {p}/mes, cancelás cuando quieras', en:'Then {p}/mo, cancel anytime', pt:'Depois {p}/mês, cancele quando quiser', zh:'之后 {p}/月，随时取消', fr:'Puis {p}/mois, annulez quand vous voulez', it:'Poi {p}/mese, annulla quando vuoi', hi:'फिर {p}/माह, कभी भी रद्द करें', ar:'ثم {p}/شهر، ألغِ في أي وقت' }
+  };
+  function _plLang(){ try{ if(window._i18n&&window._i18n.getLang) return window._i18n.getLang(); }catch(e){} return 'en'; }
+  function _trialT(k,vars){ var l=_plLang(); var s=(TRIAL_STR[k]&&(TRIAL_STR[k][l]||TRIAL_STR[k].en))||''; vars=vars||{}; Object.keys(vars).forEach(function(x){s=s.split('{'+x+'}').join(vars[x]);}); return s; }
+  function trialPass(){
+    [['PRO','🚀','btn-pro-monthly'],['ELITE','👑','btn-elite-monthly']].forEach(function(row){
+      var tier=row[0], emoji=row[1], btn=document.getElementById(row[2]);
+      var m=D.plans[tier]&&D.plans[tier].mensual; if(!btn) return;
+      var note=document.getElementById(row[2]+'-trial');
+      if(m&&m.trial&&m.price){
+        var span=btn.querySelector('[data-i18n-html]')||btn;
+        span.textContent=emoji+' '+_trialT('cta',{d:7});
+        if(!note){ note=document.createElement('div'); note.id=row[2]+'-trial'; note.dir='auto';
+          note.style.cssText='font-size:11px;color:var(--textSec);text-align:center;margin-top:6px';
+          btn.parentNode.insertBefore(note, btn.nextSibling); }
+        note.textContent=_trialT('after',{p:'$'+m.price});
+      } else if(note){ note.remove(); }
+    });
+  }
+  function applyAll(){
+    if(!D)return; applying=true;
+    // plan_ids en botones/links: cualquier id conocido -> el de la region actual
+    document.querySelectorAll('[onclick],[href]').forEach(function(el){
+      ['onclick','href'].forEach(function(attr){ var v=el.getAttribute(attr); if(!v)return; var changed=false;
+        Object.keys(KNOWN).forEach(function(kid){ if(v.indexOf(kid)>-1){ var t=KNOWN[kid][0],p=KNOWN[kid][1]; var np=D.plans[t]&&D.plans[t][p];
+          if(np&&np.plan_id&&np.plan_id!==kid){ v=v.split(kid).join(np.plan_id); changed=true; } } });
+        if(changed)el.setAttribute(attr,v); });});
+    // data-px (solo precio)
+    document.querySelectorAll('[data-px]').forEach(function(el){var k=el.getAttribute('data-px');var v=priceOf(k);if(v==null)return;
+      var a=k.split('.'); var suf=a[2]==='year'?'/año':(a[2]==='permes'?'/mes':''); el.textContent='$'+v+suf;});
+    // data-pxsave (card anual: precio/mes + ahorro calculado real)
+    document.querySelectorAll('[data-pxsave]').forEach(function(el){var t=el.getAttribute('data-pxsave');
+      var m=D.plans[t]&&D.plans[t].mensual, a=D.plans[t]&&D.plans[t].anual; if(!m||!a||!m.price||!a.price)return;
+      var permes=(parseFloat(a.price)/12).toFixed(2); var save=Math.round(parseFloat(m.price)*12-parseFloat(a.price));
+      el.textContent=' ANUAL: $'+permes+'/mes · Ahorrás $'+save+'/año';});
+    // data-pxr (reemplaza el precio dentro del texto, conserva el resto)
+    document.querySelectorAll('[data-pxr]').forEach(function(el){var v=priceOf(el.getAttribute('data-pxr'));if(v==null)return;
+      var nt=el.textContent.replace(/\$\s?\d{1,3}([.,]\d{2})?/, '$'+v); if(nt!==el.textContent)el.textContent=nt;});
+    trialPass();
+    applying=false;
+  }
+  function load(){ fetch(API+(isAR()?'?country=AR':'')).then(function(r){return r.json();}).then(function(d){D=d;applyAll();}).catch(function(){}); }
+  // re-aplicar cuando el DOM cambie (ej. render de idioma) sin loop
+  var to=null; var obs=new MutationObserver(function(){ if(applying)return; if(to)clearTimeout(to); to=setTimeout(applyAll,150); });
+  function start(){ load(); try{obs.observe(document.body,{childList:true,subtree:true,characterData:true});}catch(e){} setTimeout(applyAll,1500); setTimeout(applyAll,3500); }
+  if(document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+</script>
+
+
+<script>
+/* COBREX — Pop de reseña automático (replica nativa Build 39: reviewPrompt.js + ReviewModal.js).
+   Gate: tras 2 días DISTINTOS de uso, sin haber calificado, máx 3 apariciones, re-pregunta a los 7 días.
+   "Calificar" abre la ficha de reseña del store según el dispositivo. Textos en los 8 idiomas. */
+(function(){
+  var K_DAYS='review_active_days', K_DONE='review_done', K_PROMPTS='review_prompts', K_LAST='review_last_prompt';
+  var APPSTORE='https://apps.apple.com/app/id6761672161?action=write-review';
+  var PLAY='https://play.google.com/store/apps/details?id=com.aurexapp';
+  var STR={
+    title:{es:'¿Te está siendo útil Cobrex?',en:'Is Cobrex helping you?',pt:'O Cobrex está te ajudando?',zh:'Cobrex 对你有帮助吗？',fr:'Cobrex vous est-il utile ?',it:'Cobrex ti sta aiutando?',hi:'क्या Cobrex आपके काम आ रहा है?',ar:'هل Cobrex مفيد لك؟'},
+    body:{es:'Si te gusta, tu opinión nos ayuda a crecer 🙏',en:'If you like it, your review helps us grow 🙏',pt:'Se você gosta, sua opinião nos ajuda a crescer 🙏',zh:'如果你喜欢，你的评价能帮助我们成长 🙏',fr:"Si vous l'aimez, votre avis nous aide à grandir 🙏",it:'Se ti piace, la tua opinione ci aiuta a crescere 🙏',hi:'अगर आपको पसंद है, तो आपकी समीक्षा हमें बढ़ने में मदद करती है 🙏',ar:'إذا أعجبك، تقييمك يساعدنا على النمو 🙏'},
+    cta:{es:'Calificar',en:'Rate',pt:'Avaliar',zh:'评价',fr:'Noter',it:'Valuta',hi:'रेट करें',ar:'قيّم'},
+    dismiss:{es:'Ahora no',en:'Not now',pt:'Agora não',zh:'以后再说',fr:'Plus tard',it:'Non ora',hi:'अभी नहीं',ar:'ليس الآن'}
+  };
+  function lang(){ try{ if(window._i18n&&window._i18n.getLang) return window._i18n.getLang(); }catch(e){} return 'en'; }
+  function L(k){ var l=lang(); return (STR[k]&&(STR[k][l]||STR[k].en))||''; }
+  function today(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function get(k){ try{return localStorage.getItem(k);}catch(e){return null;} }
+  function set(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+  function bumpActiveDay(){ try{ var days=JSON.parse(get(K_DAYS)||'[]'); var t=today(); if(days.indexOf(t)<0){days.push(t);set(K_DAYS,JSON.stringify(days));} }catch(e){} }
+  function maybeAsk(){ try{
+    if(get(K_DONE)==='1') return false;
+    var days=JSON.parse(get(K_DAYS)||'[]'); if(days.length<2) return false;
+    var prompts=parseInt(get(K_PROMPTS)||'0',10); if(prompts>=3) return false;
+    var last=get(K_LAST); if(last && (Date.now()-new Date(last).getTime())/86400000 < 7) return false;
+    set(K_PROMPTS,String(prompts+1)); set(K_LAST,new Date().toISOString()); return true;
+  }catch(e){return false;} }
+  function storeURL(){ var ua=(navigator.userAgent||''); if(/iPhone|iPad|iPod/i.test(ua)) return APPSTORE; if(/Android/i.test(ua)) return PLAY; return APPSTORE; }
+  function markDone(){ set(K_DONE,'1'); try{ window.open(storeURL(),'_blank'); }catch(e){} }
+  function show(){
+    if(document.getElementById('cobrex-review-modal')) return;
+    var dir = lang()==='ar' ? 'rtl' : 'ltr';
+    var ov=document.createElement('div'); ov.id='cobrex-review-modal'; ov.dir=dir;
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100050;display:flex;justify-content:center;align-items:center;padding:30px';
+    ov.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:22px;width:100%;max-width:340px;padding:26px 22px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.5)">'+
+      '<div style="width:56px;height:56px;border-radius:15px;background:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:30px">⭐</div>'+
+      '<div style="font-size:24px;letter-spacing:3px;margin-bottom:14px">⭐⭐⭐⭐⭐</div>'+
+      '<div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">'+L('title')+'</div>'+
+      '<div style="font-size:14px;line-height:20px;color:var(--textSec);margin-bottom:22px">'+L('body')+'</div>'+
+      '<button id="cobrex-review-rate" style="display:block;width:100%;background:var(--gold);border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;color:#1a1408;cursor:pointer;margin-bottom:6px">'+L('cta')+'</button>'+
+      '<div id="cobrex-review-dismiss" style="padding:8px 12px;font-size:14px;color:var(--textDim);cursor:pointer">'+L('dismiss')+'</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+    document.getElementById('cobrex-review-rate').onclick=function(){ markDone(); ov.remove(); };
+    document.getElementById('cobrex-review-dismiss').onclick=function(){ ov.remove(); };
+  }
+  function tick(){ bumpActiveDay(); if(maybeAsk()) setTimeout(show, 1200); }
+  function start(){ setTimeout(tick, 2500); document.addEventListener('visibilitychange', function(){ if(!document.hidden) tick(); }); }
+  if(document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded', start);
+  window.__cobrexReviewShow=show; // solo para test/preview manual
+})();
+</script>
+
+<script>
+window.connectTelegram=function(){
+  var uid=(window._currentUser&&window._currentUser.id)||null;
+  if(!uid){ if(window.showPaywall){} var m=(window._i18n&&window._i18n.t)?window._i18n.t('pw_error_sesion'):'Necesitás iniciar sesión'; alert(m); try{navTo('perfil');}catch(e){} return; }
+  window.open('https://t.me/Aurexalertas_bot?start='+uid,'_blank');
+};
+</script>
+
+<script>
+/* COBREX — Crear alerta de precio manual (paridad nativa AlertCreateModal). POST /api/alertas verificado. */
+(function(){
+  var BACK='https://aurex-app-production.up.railway.app';
+  function T(k,f){ try{ if(window._i18n&&window._i18n.t){var v=window._i18n.t(k); if(v) return v;} }catch(e){} return f; }
+  function curPrice(sym){ var p=(window._pcPrices||{})[sym]; if(!p){ try{ var sg=(typeof _getSignalForSym==='function')?_getSignalForSym(sym):null; p=sg?sg.precio:0; }catch(e){} } return parseFloat(p)||0; }
+  function tipoActivoDe(sym){ try{ var a=(window._IA_ACTIVOS||[]).find(function(x){return x.s===sym;}); if(a&&a.tab) return a.tab==='cripto'?'cripto':'accion'; }catch(e){} return 'accion'; }
+  function fmt(n){ if(!n) return '--'; if(n>=1000) return '$'+Math.round(n).toLocaleString('en-US'); if(n>=1) return '$'+n.toFixed(2); return '$'+n.toFixed(4); }
+  function toast(msg,ok){ var b=document.createElement('div'); b.style.cssText='position:fixed;top:60px;left:12px;right:12px;z-index:100090;background:'+(ok?'#16A34A':'#DC2626')+';border-radius:12px;padding:12px 16px;color:#fff;font-size:13px;font-weight:600;text-align:center'; b.textContent=msg; document.body.appendChild(b); setTimeout(function(){b.remove();},2500); }
+  window.openCreateAlert=function(sym, tipoOverride){
+    var uid=(window._currentUser&&window._currentUser.id)||null;
+    if(!uid){ toast(T('al_ca_login','Iniciá sesión para crear alertas'),false); try{navTo('perfil');}catch(e){} return; }
+    var tipoActivo = tipoOverride ? (String(tipoOverride).toLowerCase().indexOf('cripto')>-1?'cripto':'accion') : tipoActivoDe(sym);
+    var cur=curPrice(sym);
+    var dir='arriba', tipo='precio_objetivo';
+    var dirRtl=(window._i18n&&window._i18n.getLang&&window._i18n.getLang()==='ar')?'rtl':'ltr';
+    var old=document.getElementById('cobrex-ca-modal'); if(old) old.remove();
+    var ov=document.createElement('div'); ov.id='cobrex-ca-modal'; ov.dir=dirRtl;
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100080;display:flex;align-items:center;justify-content:center;padding:20px';
+    function seg(active){ return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid '+(active?'var(--gold)':'var(--border2)')+';background:'+(active?'var(--gold)':'var(--bg)')+';color:'+(active?'#000':'var(--text)'); }
+    function render(){
+      var pct = tipo==='variacion_brusca';
+      ov.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:360px;padding:22px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div style="font-size:17px;font-weight:800;color:var(--text)">'+T('al_ca_titulo','Nueva alerta')+' · '+sym+'</div><div id="ca-x" style="font-size:20px;color:var(--textDim);cursor:pointer">✕</div></div>'+
+        '<div style="font-size:11px;color:var(--textSec);margin-bottom:14px">'+T('al_ca_actual','Precio actual')+': '+fmt(cur)+'</div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:10px"><div id="ca-up" style="'+seg(dir==="arriba")+'">▲ '+T('al_ca_sube','Sube')+'</div><div id="ca-down" style="'+seg(dir==="abajo")+'">▼ '+T('al_ca_baja','Baja')+'</div></div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:12px"><div id="ca-tp" style="'+seg(!pct)+'">'+T('al_ca_precio_obj','Precio objetivo')+'</div><div id="ca-tv" style="'+seg(pct)+'">'+T('al_ca_variacion','Variación %')+'</div></div>'+
+        '<input id="ca-val" type="number" inputmode="decimal" placeholder="'+(pct?'%':'$')+'" style="width:100%;box-sizing:border-box;padding:13px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:16px;font-weight:700;margin-bottom:8px">'+
+        '<div id="ca-prev" style="font-size:11px;color:var(--gold);font-weight:600;min-height:16px;margin-bottom:14px"></div>'+
+        '<button id="ca-go" style="width:100%;padding:14px;border:none;border-radius:12px;background:var(--gold);color:#000;font-size:15px;font-weight:800;cursor:pointer">'+T('al_ca_crear','Crear alerta')+'</button>'+
+        '</div>';
+      wire();
+    }
+    function preview(){
+      var v=parseFloat(document.getElementById('ca-val').value); var pv=document.getElementById('ca-prev'); if(!v||v<=0){pv.textContent='';return;}
+      var target = tipo==='variacion_brusca' ? (dir==='arriba'?cur*(1+v/100):cur*(1-v/100)) : v;
+      pv.textContent=T('al_ca_objetivo','Se dispara en')+': '+fmt(target);
+    }
+    function wire(){
+      document.getElementById('ca-x').onclick=function(){ov.remove();};
+      ov.onclick=function(e){if(e.target===ov)ov.remove();};
+      document.getElementById('ca-up').onclick=function(){dir='arriba';render();};
+      document.getElementById('ca-down').onclick=function(){dir='abajo';render();};
+      document.getElementById('ca-tp').onclick=function(){tipo='precio_objetivo';render();};
+      document.getElementById('ca-tv').onclick=function(){tipo='variacion_brusca';render();};
+      document.getElementById('ca-val').oninput=preview;
+      document.getElementById('ca-go').onclick=submit;
+    }
+    function submit(){
+      var v=parseFloat(document.getElementById('ca-val').value);
+      if(!v||v<=0){ toast(T('al_ca_invalido','Ingresá un valor válido'),false); return; }
+      var valorBackend;
+      if(tipo==='precio_objetivo'){ valorBackend=+(v-cur).toFixed(8); }   // DELTA con signo (backend snapshotea precio_base)
+      else { valorBackend=+(dir==='arriba'?cur*(1+v/100):cur*(1-v/100)).toFixed(8); }  // variacion_brusca: precio absoluto
+      var btn=document.getElementById('ca-go'); btn.disabled=true; btn.textContent='...';
+      var body={user_id:uid,simbolo:sym,tipo_activo:tipoActivo,tipo:tipo,valor_objetivo:valorBackend,direccion:dir};
+      function send(tok){
+        fetch(BACK+'/api/alertas',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},tok?{'Authorization':'Bearer '+tok}:{}),body:JSON.stringify(body)})
+        .then(function(r){ if(r.status===403){ return r.json().then(function(e){ ov.remove(); if(window.showPaywall) window.showPaywall(e); }); }
+          if(!r.ok) throw new Error('HTTP '+r.status); return r.json().then(function(){ ov.remove(); toast(T('al_ca_creada','✓ Alerta creada'),true); }); })
+        .catch(function(){ btn.disabled=false; btn.textContent=T('al_ca_crear','Crear alerta'); toast('Error',false); });
+      }
+      try{ window._supabase.auth.getSession().then(function(r){ send(r&&r.data&&r.data.session?r.data.session.access_token:null); }); }catch(e){ send(null); }
+    }
+    document.body.appendChild(ov); render();
+  };
+})();
+</script>
 </body>
 </html>
 <!-- deploy 1775525028 -->

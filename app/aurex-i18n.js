@@ -6,7 +6,13 @@
 (function() {
   'use strict';
 
-  var _lang = localStorage.getItem('aurex_lang') || 'es';
+  // Idioma: preferencia guardada → si no, idioma del navegador (si es uno de los 8) → si no, EN
+  var _lang = localStorage.getItem('aurex_lang') || (function() {
+    try {
+      var l = (navigator.language || navigator.userLanguage || 'en').toLowerCase().slice(0, 2);
+      return ['es', 'en', 'pt', 'zh', 'fr', 'it', 'hi', 'ar'].indexOf(l) > -1 ? l : 'en';
+    } catch (e) { return 'en'; }
+  })();
   var _listeners = [];
 
   // ═══ TRADUCCIONES ═══
@@ -808,7 +814,71 @@
     ob_ver_planes: { es: 'Ver Planes', en: 'View Plans', pt: 'Ver Planos', zh: '查看方案', fr: 'Voir les Plans', it: 'Vedi Piani', hi: 'योजनाएँ देखें', ar: 'عرض الخطط' },
     ob_empezar_gratis: { es: 'Empezar gratis', en: 'Start free', pt: 'Começar grátis', zh: '免费开始', fr: 'Commencer gratuitement', it: 'Inizia gratis', hi: 'मुफ़्त में शुरू करें', ar: 'ابدأ مجاناً' },
     ob_crear_cuenta: { es: 'Crear cuenta gratis', en: 'Create free account', pt: 'Criar conta grátis', zh: '创建免费账户', fr: 'Créer un compte gratuit', it: 'Crea account gratuito', hi: 'मुफ़्त खाता बनाएँ', ar: 'إنشاء حساب مجاني' },
-    ob_ya_tengo_cuenta: { es: 'Ya tengo cuenta', en: 'I have an account', pt: 'Já tenho conta', zh: '我已有账户', fr: "J'ai déjà un compte", it: 'Ho già un account', hi: 'मेरा पहले से खाता है', ar: 'لديّ حساب بالفعل' }
+    ob_ya_tengo_cuenta: { es: 'Ya tengo cuenta', en: 'I have an account', pt: 'Já tenho conta', zh: '我已有账户', fr: "J'ai déjà un compte", it: 'Ho già un account', hi: 'मेरा पहले से खाता है', ar: 'لديّ حساب بالفعل' },
+    pw_bienvenido: { es: '¡Bienvenido', en: 'Welcome', pt: 'Bem-vindo', zh: '欢迎', fr: 'Bienvenue', it: 'Benvenuto', hi: 'स्वागत है', ar: 'مرحباً' },
+    pw_cobrex_listo: { es: '! Cobrex está listo.', en: '! Cobrex is ready.', pt: '! O Cobrex está pronto.', zh: '！Cobrex 已就绪。', fr: ' ! Cobrex est prêt.', it: '! Cobrex è pronto.', hi: '! Cobrex तैयार है।', ar: '! Cobrex جاهز.' },
+    pw_editar_orden: { es: ' Editar orden', en: ' Edit order', pt: ' Editar ordem', zh: ' 编辑顺序', fr: ' Modifier l\'ordre', it: ' Modifica ordine', hi: ' क्रम संपादित करें', ar: ' تعديل الترتيب' },
+    pw_listo: { es: ' Listo', en: ' Done', pt: ' Pronto', zh: ' 完成', fr: ' Terminé', it: ' Fatto', hi: ' पूर्ण', ar: ' تم' },
+    pw_ult_cierre: { es: 'Últ. cierre', en: 'Last close', pt: 'Últ. fech.', zh: '上次收盘', fr: 'Dernière clôture', it: 'Ultima chiusura', hi: 'अंतिम बंद', ar: 'آخر إغلاق' },
+    pw_act_ahora: { es: 'Act. ahora', en: 'Now', pt: 'Agora', zh: '现在', fr: 'Maintenant', it: 'Adesso', hi: 'अभी', ar: 'الآن' },
+    pw_ultimos_7d: { es: 'Últimos 7d', en: 'Last 7d', pt: 'Últimos 7d', zh: '近7天', fr: '7 derniers j', it: 'Ultimi 7g', hi: 'पिछले 7द', ar: 'آخر 7 أيام' },
+    pw_ultimo_mes: { es: 'Último mes', en: 'Last month', pt: 'Último mês', zh: '上个月', fr: 'Dernier mois', it: 'Ultimo mese', hi: 'पिछला महीना', ar: 'الشهر الماضي' },
+    pw_ultimos_3m: { es: 'Últimos 3m', en: 'Last 3mo', pt: 'Últimos 3m', zh: '近3月', fr: '3 derniers mois', it: 'Ultimi 3m', hi: 'पिछले 3मा', ar: 'آخر 3 أشهر' },
+    pw_ultimo_anio: { es: 'Último año', en: 'Last year', pt: 'Último ano', zh: '去年', fr: 'Dernière année', it: 'Ultimo anno', hi: 'पिछला साल', ar: 'العام الماضي' },
+    pw_safari_pwa: { es: 'Agregá Cobrex a la pantalla de inicio desde Safari.', en: 'Add Cobrex to your home screen from Safari.', pt: 'Adicione o Cobrex à tela inicial pelo Safari.', zh: '通过 Safari 将 Cobrex 添加到主屏幕。', fr: 'Ajoutez Cobrex à l\'écran d\'accueil depuis Safari.', it: 'Aggiungi Cobrex alla schermata Home da Safari.', hi: 'Safari से Cobrex को होम स्क्रीन पर जोड़ें।', ar: 'أضف Cobrex إلى الشاشة الرئيسية من Safari.' },
+    pw_alertas_activas_t: { es: 'Cobrex - Alertas Activas', en: 'Cobrex - Alerts Active', pt: 'Cobrex - Alertas Ativos', zh: 'Cobrex - 提醒已启用', fr: 'Cobrex - Alertes activées', it: 'Cobrex - Avvisi attivi', hi: 'Cobrex - अलर्ट सक्रिय', ar: 'Cobrex - التنبيهات مفعّلة' },
+    pw_recibiras_alertas: { es: 'Recibirás alertas de precio.', en: 'You\'ll receive price alerts.', pt: 'Você receberá alertas de preço.', zh: '您将收到价格提醒。', fr: 'Vous recevrez des alertes de prix.', it: 'Riceverai avvisi di prezzo.', hi: 'आपको मूल्य अलर्ट मिलेंगे।', ar: 'ستتلقى تنبيهات الأسعار.' },
+    pw_activas: { es: 'Activas', en: 'Active', pt: 'Ativas', zh: '已启用', fr: 'Activées', it: 'Attive', hi: 'सक्रिय', ar: 'مفعّلة' },
+    pw_activar: { es: 'Activar', en: 'Activate', pt: 'Ativar', zh: '启用', fr: 'Activer', it: 'Attiva', hi: 'सक्रिय करें', ar: 'تفعيل' },
+    pw_alerta_disp: { es: 'ALERTA - ', en: 'ALERT - ', pt: 'ALERTA - ', zh: '提醒 - ', fr: 'ALERTE - ', it: 'AVVISO - ', hi: 'अलर्ट - ', ar: 'تنبيه - ' },
+    pw_obteniendo_precios: { es: 'Obteniendo precios...', en: 'Fetching prices...', pt: 'Obtendo preços...', zh: '正在获取价格...', fr: 'Récupération des prix...', it: 'Recupero prezzi...', hi: 'मूल्य प्राप्त हो रहे हैं...', ar: 'جارٍ جلب الأسعار...' },
+    pw_precios_vivo: { es: 'Precios en vivo vía Binance', en: 'Live prices via Binance', pt: 'Preços ao vivo via Binance', zh: '通过 Binance 实时价格', fr: 'Prix en direct via Binance', it: 'Prezzi live via Binance', hi: 'Binance के माध्यम से लाइव मूल्य', ar: 'أسعار مباشرة عبر Binance' },
+    pw_precios_offline: { es: 'Precios sin conexión (aprox)', en: 'Offline prices (approx)', pt: 'Preços offline (aprox)', zh: '离线价格（约）', fr: 'Prix hors ligne (approx)', it: 'Prezzi offline (circa)', hi: 'ऑफ़लाइन मूल्य (लगभग)', ar: 'أسعار دون اتصال (تقريبية)' },
+    pw_cargando: { es: 'Cargando...', en: 'Loading...', pt: 'Carregando...', zh: '加载中...', fr: 'Chargement...', it: 'Caricamento...', hi: 'लोड हो रहा है...', ar: 'جارٍ التحميل...' },
+    pw_sel_activo: { es: 'Seleccioná un activo de la lista', en: 'Select an asset from the list', pt: 'Selecione um ativo da lista', zh: '从列表中选择一个资产', fr: 'Sélectionnez un actif dans la liste', it: 'Seleziona un asset dalla lista', hi: 'सूची से एक एसेट चुनें', ar: 'اختر أصلاً من القائمة' },
+    pw_cantidad_0: { es: 'Ingresá una cantidad mayor a 0', en: 'Enter an amount greater than 0', pt: 'Insira uma quantidade maior que 0', zh: '输入大于 0 的数量', fr: 'Entrez une quantité supérieure à 0', it: 'Inserisci una quantità maggiore di 0', hi: '0 से अधिक मात्रा दर्ज करें', ar: 'أدخل كمية أكبر من 0' },
+    pw_precio_0: { es: 'Ingresá un precio de compra mayor a 0', en: 'Enter a purchase price greater than 0', pt: 'Insira um preço de compra maior que 0', zh: '输入大于 0 的购买价格', fr: 'Entrez un prix d\'achat supérieur à 0', it: 'Inserisci un prezzo d\'acquisto maggiore di 0', hi: '0 से अधिक खरीद मूल्य दर्ज करें', ar: 'أدخل سعر شراء أكبر من 0' },
+    pw_ingresa_nombre: { es: 'Ingresá un nombre', en: 'Enter a name', pt: 'Insira um nome', zh: '输入名称', fr: 'Entrez un nom', it: 'Inserisci un nome', hi: 'एक नाम दर्ज करें', ar: 'أدخل اسماً' },
+    pw_copiado: { es: 'Copiado', en: 'Copied', pt: 'Copiado', zh: '已复制', fr: 'Copié', it: 'Copiato', hi: 'कॉपी किया गया', ar: 'تم النسخ' },
+    pw_quitar_lista: { es: '¿Quitar {x} de la lista?', en: 'Remove {x} from the list?', pt: 'Remover {x} da lista?', zh: '从列表中移除 {x}？', fr: 'Retirer {x} de la liste ?', it: 'Rimuovere {x} dalla lista?', hi: 'सूची से {x} हटाएं?', ar: 'إزالة {x} من القائمة؟' },
+    pw_completa_campos: { es: 'Completá todos los campos', en: 'Fill in all fields', pt: 'Preencha todos os campos', zh: '请填写所有字段', fr: 'Remplissez tous les champs', it: 'Compila tutti i campi', hi: 'सभी फ़ील्ड भरें', ar: 'املأ كل الحقول' },
+    pw_ingresando: { es: 'Ingresando...', en: 'Signing in...', pt: 'Entrando...', zh: '登录中...', fr: 'Connexion...', it: 'Accesso...', hi: 'साइन इन हो रहा है...', ar: 'جارٍ الدخول...' },
+    pw_creando_cuenta: { es: 'Creando cuenta...', en: 'Creating account...', pt: 'Criando conta...', zh: '正在创建账户...', fr: 'Création du compte...', it: 'Creazione account...', hi: 'खाता बन रहा है...', ar: 'جارٍ إنشاء الحساب...' },
+    pw_cuenta_creada: { es: '¡Cuenta creada!', en: 'Account created!', pt: 'Conta criada!', zh: '账户已创建！', fr: 'Compte créé !', it: 'Account creato!', hi: 'खाता बन गया!', ar: 'تم إنشاء الحساب!' },
+    pw_error_sesion: { es: 'Error: sesión no iniciada', en: 'Error: not signed in', pt: 'Erro: sessão não iniciada', zh: '错误：未登录', fr: 'Erreur : non connecté', it: 'Errore: sessione non avviata', hi: 'त्रुटि: साइन इन नहीं', ar: 'خطأ: لم يتم تسجيل الدخول' },
+    pw_servicio_no_disp: { es: 'Servicio no disponible', en: 'Service unavailable', pt: 'Serviço indisponível', zh: '服务不可用', fr: 'Service indisponible', it: 'Servizio non disponibile', hi: 'सेवा अनुपलब्ध', ar: 'الخدمة غير متاحة' },
+    pw_completa_email_pass: { es: 'Completá email y contraseña', en: 'Enter email and password', pt: 'Preencha email e senha', zh: '请输入邮箱和密码', fr: 'Saisissez email et mot de passe', it: 'Inserisci email e password', hi: 'ईमेल और पासवर्ड दर्ज करें', ar: 'أدخل البريد وكلمة المرور' },
+    pw_pass_min6: { es: 'La contraseña debe tener al menos 6 caracteres', en: 'Password must be at least 6 characters', pt: 'A senha deve ter pelo menos 6 caracteres', zh: '密码至少需 6 个字符', fr: 'Le mot de passe doit comporter au moins 6 caractères', it: 'La password deve avere almeno 6 caratteri', hi: 'पासवर्ड कम से कम 6 अक्षरों का हो', ar: 'يجب أن تكون كلمة المرور 6 أحرف على الأقل' },
+    pw_obteniendo_tasas: { es: 'Obteniendo tasas...', en: 'Fetching rates...', pt: 'Obtendo taxas...', zh: '正在获取汇率...', fr: 'Récupération des taux...', it: 'Recupero tassi...', hi: 'दरें प्राप्त हो रही हैं...', ar: 'جارٍ جلب الأسعار...' },
+    pw_no_tasa: { es: 'No se pudo obtener la tasa', en: 'Could not fetch the rate', pt: 'Não foi possível obter a taxa', zh: '无法获取汇率', fr: 'Impossible d\'obtenir le taux', it: 'Impossibile ottenere il tasso', hi: 'दर प्राप्त नहीं हो सकी', ar: 'تعذّر جلب السعر' },
+    pw_invitado: { es: 'Invitado', en: 'Guest', pt: 'Convidado', zh: '访客', fr: 'Invité', it: 'Ospite', hi: 'अतिथि', ar: 'ضيف' },
+    pw_sin_cuenta: { es: 'Sin cuenta', en: 'No account', pt: 'Sem conta', zh: '无账户', fr: 'Aucun compte', it: 'Nessun account', hi: 'कोई खाता नहीं', ar: 'لا يوجد حساب' },
+    pw_pass_no_coinciden: { es: 'Las contraseñas no coinciden', en: 'Passwords don\'t match', pt: 'As senhas não coincidem', zh: '密码不匹配', fr: 'Les mots de passe ne correspondent pas', it: 'Le password non coincidono', hi: 'पासवर्ड मेल नहीं खाते', ar: 'كلمتا المرور غير متطابقتين' },
+    pw_nombre_actualizado: { es: 'Nombre actualizado', en: 'Name updated', pt: 'Nome atualizado', zh: '名称已更新', fr: 'Nom mis à jour', it: 'Nome aggiornato', hi: 'नाम अपडेट किया गया', ar: 'تم تحديث الاسم' },
+    pw_error_guardar: { es: 'Error al guardar', en: 'Error saving', pt: 'Erro ao salvar', zh: '保存出错', fr: 'Erreur d\'enregistrement', it: 'Errore nel salvataggio', hi: 'सहेजने में त्रुटि', ar: 'خطأ في الحفظ' },
+    pw_celular_guardado: { es: 'Celular guardado', en: 'Phone saved', pt: 'Celular salvo', zh: '手机号已保存', fr: 'Téléphone enregistré', it: 'Telefono salvato', hi: 'फ़ोन सहेजा गया', ar: 'تم حفظ الهاتف' },
+    pw_sin_celular: { es: 'Sin celular cargado', en: 'No phone added', pt: 'Sem celular cadastrado', zh: '未添加手机号', fr: 'Aucun téléphone ajouté', it: 'Nessun telefono inserito', hi: 'कोई फ़ोन नहीं जोड़ा', ar: 'لا يوجد هاتف مُضاف' },
+    pw_borrar_alertas: { es: '¿Borrar {n} alerta(s) del historial?', en: 'Delete {n} alert(s) from history?', pt: 'Excluir {n} alerta(s) do histórico?', zh: '从历史中删除 {n} 条提醒？', fr: 'Supprimer {n} alerte(s) de l\'historique ?', it: 'Eliminare {n} avviso/i dalla cronologia?', hi: 'इतिहास से {n} अलर्ट हटाएं?', ar: 'حذف {n} تنبيه من السجل؟' },
+    pw_pasate_pro: { es: 'Pasate a PRO', en: 'Upgrade to PRO', pt: 'Mude para PRO', zh: '升级到 PRO', fr: 'Passez à PRO', it: 'Passa a PRO', hi: 'PRO में अपग्रेड करें', ar: 'الترقية إلى PRO' },
+    pw_pasate_elite: { es: 'Pasate a ELITE', en: 'Upgrade to ELITE', pt: 'Mude para ELITE', zh: '升级到 ELITE', fr: 'Passez à ELITE', it: 'Passa a ELITE', hi: 'ELITE में अपग्रेड करें', ar: 'الترقية إلى ELITE' },
+    pw_plan_ahora: { es: '✓ Tu plan ahora es: {p} — ¡bienvenido!', en: '✓ Your plan is now: {p} — welcome!', pt: '✓ Seu plano agora é: {p} — bem-vindo!', zh: '✓ 您的当前计划：{p} — 欢迎！', fr: '✓ Votre forfait est maintenant : {p} — bienvenue !', it: '✓ Il tuo piano ora è: {p} — benvenuto!', hi: '✓ आपका प्लान अब है: {p} — स्वागत है!', ar: '✓ خطتك الآن: {p} — مرحباً!' },
+    pw_elegi_plan: { es: 'Elegí tu plan', en: 'Choose your plan', pt: 'Escolha seu plano', zh: '选择您的计划', fr: 'Choisissez votre forfait', it: 'Scegli il tuo piano', hi: 'अपना प्लान चुनें', ar: 'اختر خطتك' },
+    pw_sin_resultados: { es: 'Sin resultados', en: 'No results', pt: 'Sem resultados', zh: '无结果', fr: 'Aucun résultat', it: 'Nessun risultato', hi: 'कोई परिणाम नहीं', ar: 'لا نتائج' },
+    al_tg_title: { es: 'Alertas por Telegram', en: 'Telegram alerts', pt: 'Alertas pelo Telegram', zh: 'Telegram 提醒', fr: 'Alertes Telegram', it: 'Avvisi Telegram', hi: 'Telegram अलर्ट', ar: 'تنبيهات Telegram' },
+    al_tg_desc: { es: 'Conectá el bot para recibir tus alertas al instante', en: 'Connect the bot to get your alerts instantly', pt: 'Conecte o bot para receber seus alertas na hora', zh: '连接机器人即时接收提醒', fr: 'Connectez le bot pour recevoir vos alertes instantanément', it: 'Collega il bot per ricevere gli avvisi all\'istante', hi: 'तुरंत अलर्ट पाने के लिए बॉट कनेक्ट करें', ar: 'اربط البوت لتصلك التنبيهات فوراً' },
+    al_tg_btn: { es: 'Conectar', en: 'Connect', pt: 'Conectar', zh: '连接', fr: 'Connecter', it: 'Collega', hi: 'कनेक्ट', ar: 'ربط' },
+    al_ca_titulo: { es: 'Nueva alerta', en: 'New alert', pt: 'Novo alerta', zh: '新建提醒', fr: 'Nouvelle alerte', it: 'Nuovo avviso', hi: 'नया अलर्ट', ar: 'تنبيه جديد' },
+    al_ca_sube: { es: 'Sube', en: 'Up', pt: 'Sobe', zh: '上涨', fr: 'Hausse', it: 'Sale', hi: 'ऊपर', ar: 'صعود' },
+    al_ca_baja: { es: 'Baja', en: 'Down', pt: 'Cai', zh: '下跌', fr: 'Baisse', it: 'Scende', hi: 'नीचे', ar: 'هبوط' },
+    al_ca_precio_obj: { es: 'Precio objetivo', en: 'Target price', pt: 'Preço-alvo', zh: '目标价', fr: 'Prix cible', it: 'Prezzo obiettivo', hi: 'लक्ष्य मूल्य', ar: 'السعر المستهدف' },
+    al_ca_variacion: { es: 'Variación %', en: 'Change %', pt: 'Variação %', zh: '变动 %', fr: 'Variation %', it: 'Variazione %', hi: 'परिवर्तन %', ar: 'تغيّر %' },
+    al_ca_actual: { es: 'Precio actual', en: 'Current price', pt: 'Preço atual', zh: '当前价', fr: 'Prix actuel', it: 'Prezzo attuale', hi: 'वर्तमान मूल्य', ar: 'السعر الحالي' },
+    al_ca_objetivo: { es: 'Se dispara en', en: 'Triggers at', pt: 'Dispara em', zh: '触发于', fr: 'Se déclenche à', it: 'Si attiva a', hi: 'इस पर ट्रिगर', ar: 'يُفعّل عند' },
+    al_ca_crear: { es: 'Crear alerta', en: 'Create alert', pt: 'Criar alerta', zh: '创建提醒', fr: 'Créer l\'alerte', it: 'Crea avviso', hi: 'अलर्ट बनाएं', ar: 'إنشاء تنبيه' },
+    al_ca_creada: { es: '✓ Alerta creada', en: '✓ Alert created', pt: '✓ Alerta criado', zh: '✓ 提醒已创建', fr: '✓ Alerte créée', it: '✓ Avviso creato', hi: '✓ अलर्ट बन गया', ar: '✓ تم إنشاء التنبيه' },
+    al_ca_login: { es: 'Iniciá sesión para crear alertas', en: 'Sign in to create alerts', pt: 'Entre para criar alertas', zh: '登录以创建提醒', fr: 'Connectez-vous pour créer des alertes', it: 'Accedi per creare avvisi', hi: 'अलर्ट बनाने के लिए साइन इन करें', ar: 'سجّل الدخول لإنشاء التنبيهات' },
+    al_ca_invalido: { es: 'Ingresá un valor válido', en: 'Enter a valid value', pt: 'Insira um valor válido', zh: '请输入有效值', fr: 'Entrez une valeur valide', it: 'Inserisci un valore valido', hi: 'मान्य मान दर्ज करें', ar: 'أدخل قيمة صحيحة' },
+    al_crear_alerta_menu: { es: 'Crear alerta de precio', en: 'Create price alert', pt: 'Criar alerta de preço', zh: '创建价格提醒', fr: 'Créer une alerte de prix', it: 'Crea avviso di prezzo', hi: 'मूल्य अलर्ट बनाएं', ar: 'إنشاء تنبيه سعر' },
   };
 
   // ═══ FUNCIONES PÚBLICAS ═══
