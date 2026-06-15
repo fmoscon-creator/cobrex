@@ -953,6 +953,16 @@
     al_ca_login: { es: 'Iniciá sesión para crear alertas', en: 'Sign in to create alerts', pt: 'Entre para criar alertas', zh: '登录以创建提醒', fr: 'Connectez-vous pour créer des alertes', it: 'Accedi per creare avvisi', hi: 'अलर्ट बनाने के लिए साइन इन करें', ar: 'سجّل الدخول لإنشاء التنبيهات' },
     al_ca_invalido: { es: 'Ingresá un valor válido', en: 'Enter a valid value', pt: 'Insira um valor válido', zh: '请输入有效值', fr: 'Entrez une valeur valide', it: 'Inserisci un valore valido', hi: 'मान्य मान दर्ज करें', ar: 'أدخل قيمة صحيحة' },
     al_crear_alerta_menu: { es: 'Crear alerta de precio', en: 'Create price alert', pt: 'Criar alerta de preço', zh: '创建价格提醒', fr: 'Créer une alerte de prix', it: 'Crea avviso di prezzo', hi: 'मूल्य अलर्ट बनाएं', ar: 'إنشاء تنبيه سعر' },
+    pulse_z_miedo_ext: { es: 'Miedo Extremo', en: 'Extreme Fear', pt: 'Medo Extremo', zh: '极度恐惧', fr: 'Peur extrême', it: 'Paura estrema', hi: 'अत्यधिक भय', ar: 'خوف شديد' },
+    pulse_z_miedo: { es: 'Miedo', en: 'Fear', pt: 'Medo', zh: '恐惧', fr: 'Peur', it: 'Paura', hi: 'भय', ar: 'خوف' },
+    pulse_z_neutral: { es: 'Neutral', en: 'Neutral', pt: 'Neutro', zh: '中性', fr: 'Neutre', it: 'Neutrale', hi: 'तटस्थ', ar: 'محايد' },
+    pulse_z_codicia: { es: 'Codicia', en: 'Greed', pt: 'Ganância', zh: '贪婪', fr: 'Avidité', it: 'Avidità', hi: 'लालच', ar: 'جشع' },
+    pulse_z_codicia_ext: { es: 'Codicia Extrema', en: 'Extreme Greed', pt: 'Ganância Extrema', zh: '极度贪婪', fr: 'Avidité extrême', it: 'Avidità estrema', hi: 'अत्यधिक लालच', ar: 'جشع شديد' },
+    mkt_tab_metales: { es: ' Metales', en: ' Metals', pt: ' Metais', zh: ' 金属', fr: ' Métaux', it: ' Metalli', hi: ' धातु', ar: ' معادن' },
+    pf_activa_senales: { es: 'Activá señales IA para estos activos', en: 'Enable AI signals for these assets', pt: 'Ative sinais IA para estes ativos', zh: '为这些资产启用AI信号', fr: 'Active les signaux IA pour ces actifs', it: 'Attiva i segnali IA per questi asset', hi: 'इन एसेट के लिए AI सिग्नल चालू करें', ar: 'فعّل إشارات AI لهذه الأصول' },
+    pf_activa_analisis: { es: 'Activá análisis técnico avanzado en tu portfolio', en: 'Enable advanced technical analysis in your portfolio', pt: 'Ative análise técnica avançada no seu portfolio', zh: '在您的投资组合中启用高级技术分析', fr: 'Active l\'analyse technique avancée dans ton portfolio', it: 'Attiva l\'analisi tecnica avanzata nel tuo portfolio', hi: 'अपने portfolio में उन्नत तकनीकी विश्लेषण चालू करें', ar: 'فعّل التحليل الفني المتقدم في Portfolio الخاص بك' },
+    disponible_en_pro: { es: 'Disponible en PRO', en: 'Available in PRO', pt: 'Disponível no PRO', zh: 'PRO 版可用', fr: 'Disponible en PRO', it: 'Disponibile in PRO', hi: 'PRO में उपलब्ध', ar: 'متاح في PRO' },
+    disponible_en_elite: { es: 'Disponible en ELITE', en: 'Available in ELITE', pt: 'Disponível no ELITE', zh: 'ELITE 版可用', fr: 'Disponible en ELITE', it: 'Disponibile in ELITE', hi: 'ELITE में उपलब्ध', ar: 'متاح في ELITE' },
   };
 
   // ═══ FUNCIONES PÚBLICAS ═══

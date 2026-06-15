@@ -487,7 +487,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     ph.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;';
     if(_done){
       onb.style.display='none';
-      setTimeout(function(){ if(window.navTo) window.navTo('portfolio'); },100);
+      setTimeout(function(){ if(window.navTo) window.navTo('mercados'); },100);
     }
   }
 
@@ -528,7 +528,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     var onb=document.getElementById('onboarding');
     if(onb) onb.style.display='none';
     _movePhone();
-    setTimeout(function(){ if(window.navTo) window.navTo('portfolio'); },100);
+    setTimeout(function(){ if(window.navTo) window.navTo('mercados'); },100);
   };
 
   // 5. Neutralizar initOnboarding del features.js
@@ -1089,6 +1089,9 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     _supabase.auth.onAuthStateChange(function(event, session) {
       _currentUser = session ? session.user : null;
       updateUserUI(_currentUser);
+      // C4 (paridad 1.3.45): cargar el plan SIEMPRE que haya sesión (login o restauración),
+      // no depender del poll de DOMContentLoaded que se rendía y dejaba FREE a usuarios PRO/ELITE.
+      if (session && session.user && window.loadUserPlan) { window.loadUserPlan(); }
       if (event === 'SIGNED_IN') {
         console.log('[Cobrex Auth] Usuario logueado:', _currentUser.email);
         upsertUserDB(_currentUser);
@@ -1340,6 +1343,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="port-fear-greed" style="display:none"></div>
 <!-- LISTA ACTIVOS -->
 <div id="port-thermo" style="padding:8px 14px 0;"></div>
+<!-- D3: banner upsell contextual de Portfolio (paridad PortfolioScreen.js:781) -->
+<div id="pf-upsell-banner" onclick="if(window.abrirModalPlanes)abrirModalPlanes()" style="display:none;align-items:center;gap:10px;margin:8px 11px 0;background:#A78BFA15;border:1px solid #A78BFA40;border-radius:12px;padding:11px 12px;cursor:pointer">
+  <div style="width:34px;height:34px;border-radius:17px;background:#A78BFA;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">⚡</div>
+  <div style="flex:1"><div class="pfb-title" style="font-size:12px;font-weight:800;color:#A78BFA"></div><div class="pfb-sub" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div>
+  <span style="font-size:16px;color:#A78BFA">›</span>
+</div>
 <div class="cnt" id="port-cnt"></div>
 
 <!-- MODAL AGREGAR / EDITAR ACTIVO -->
@@ -1635,13 +1644,14 @@ function runConversion(){
 
 <!-- TABS -->
 <div class="tabs">
-  <div class="tab on"  onclick="sw('cripto',this)" data-i18n="mkt_tab_cripto"> Cripto</div>
   <div class="tab"     onclick="sw('acciones',this)" data-i18n="mkt_tab_acciones"> Acciones</div>
-  <div class="tab"     onclick="sw('stable',this)" data-i18n="mkt_tab_stable"> Stable & DeFi</div>
+  <div class="tab on"  onclick="sw('cripto',this)" data-i18n="mkt_tab_cripto"> Cripto</div>
   <div class="tab"     onclick="sw('futuros',this)" data-i18n="mkt_tab_futuros"> Futuros</div>
+  <div class="tab"     onclick="sw('metales',this)" data-i18n="mkt_tab_metales"> Metales</div>
   <div class="tab"     onclick="sw('comm',this)" data-i18n="mkt_tab_commodities"> Commodities</div>
-  <div class="tab"     onclick="sw('divisas',this)" data-i18n="mkt_tab_divisas"> Divisas</div>
   <div class="tab"     onclick="sw('etf',this)" data-i18n="mkt_tab_etf"> ETF & Bonos</div>
+  <div class="tab"     onclick="sw('divisas',this)" data-i18n="mkt_tab_divisas"> Divisas</div>
+  <div class="tab"     onclick="sw('stable',this)" data-i18n="mkt_tab_stable"> Stable & DeFi</div>
 </div>
 
 <!-- FILTRO PASES -->
@@ -2638,7 +2648,7 @@ display:flex;align-items:center;justify-content:space-between}
       <div style="padding:14px 0 4px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:12px;color:var(--textDim)" data-i18n="version_app">Versión de la app</span>
-          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex v1.0 &#127775;</span>
+          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web 1.3 &#127775;</span>
         </div>
         <div style="display:flex;gap:16px">
           <span onclick="pacLegal('terminos')" style="font-size:11px;color:#58A6FF;cursor:pointer;text-decoration:underline" data-i18n="terminos_uso">Términos de uso</span>
@@ -3802,11 +3812,11 @@ setTimeout(function(){
 
   <!-- TAB-BAR NAVEGACIN -->
   <nav class="tab-bar" id="main-tab-bar">
-    <div class="tab-btn active" id="btn-portfolio" onclick="navTo('portfolio')">
+    <div class="tab-btn" id="btn-portfolio" onclick="navTo('portfolio')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
       <span>Portfolio</span>
     </div>
-    <div class="tab-btn" id="btn-mercados" onclick="navTo('mercados')">
+    <div class="tab-btn active" id="btn-mercados" onclick="navTo('mercados')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
       <span>Mercados</span>
     </div>
@@ -3865,8 +3875,8 @@ window.navTo = function(screen) {
 
 //  Selector de pas para telfono 
 
-// Init: mostrar portfolio por defecto
-navTo('portfolio');
+// Init: mostrar mercados por defecto (paridad 1.3.45)
+navTo('mercados');
 
 window.updatePhonePrefix = function(){
   var sel = document.getElementById('reg-pais');
@@ -3969,6 +3979,8 @@ document.addEventListener("DOMContentLoaded", function(){
       try { localStorage.setItem('aurex_plan', p); } catch(e){}
       console.log('[CobrexGating] Plan cargado:', p);
       window.applyPlanGating();
+      // C3 (paridad 1.3.45 App.js:251): usuario logueado FREE → auto-abrir el paywall (1 vez por sesión).
+      if (p === 'FREE') { try { if (!sessionStorage.getItem('cobrex_paywall_seen') && typeof abrirModalPlanes === 'function') { sessionStorage.setItem('cobrex_paywall_seen','1'); setTimeout(abrirModalPlanes, 1500); } } catch(e){} }
       return p;
     } catch(e) {
       console.error('[CobrexGating] error loadUserPlan:', e.message);
@@ -4559,6 +4571,121 @@ window.connectTelegram=function(){
   };
 })();
 </script>
+
+<script>
+/* C1 (paridad 1.3.45): campana de notificaciones en el header de las 6 pantallas → abre Mis Alertas, con badge de no-leídas. */
+(function(){
+  function bellHTML(){
+    return '<div class="cobrex-bell" title="Mis Alertas" onclick="if(window.abrirMisAlertas)window.abrirMisAlertas()" '+
+      'style="position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:1;flex-shrink:0;margin-left:8px">'+
+      '\u{1F514}'+
+      '<span class="cobrex-bell-badge" style="display:none;position:absolute;top:-6px;right:-7px;background:#EF4444;color:#fff;font-size:8px;font-weight:800;min-width:14px;height:14px;border-radius:7px;text-align:center;line-height:14px;padding:0 2px">0</span>'+
+      '</div>';
+  }
+  function headerOf(sName, scr){
+    if(sName==='ia'){ var a=scr.querySelector('[data-i18n="ia_senales_ia"]'); return a? a.closest('div[style*="space-between"]') : null; }
+    if(sName==='perfil'){ return scr.querySelector('.aurex-hdr-added') || null; } // C1: header de Perfil es JS-render (.aurex-hdr-added)
+    var live=scr.querySelector('.live'); if(live && live.parentElement) return live.parentElement;
+    // watchlist y otros con header flex propio
+    var roots=[scr]; var cnt=scr.querySelector('.cnt'); if(cnt) roots.push(cnt);
+    for(var r=0;r<roots.length;r++){
+      var ch=roots[r].children;
+      for(var i=0;i<ch.length && i<3;i++){
+        var st=(ch[i].getAttribute&&ch[i].getAttribute('style'))||'';
+        if(/space-between/.test(st) && ch[i].querySelector && ch[i].querySelector('span')) return ch[i];
+      }
+    }
+    return null;
+  }
+  window.injectHeaderBells=function(){
+    ['portfolio','mercados','watchlist','ia','alertas','perfil'].forEach(function(sName){
+      var scr=document.getElementById('screen-'+sName); if(!scr) return;
+      if(scr.querySelector('.cobrex-bell')) return;
+      if(sName==='alertas'){
+        var cnt=scr.querySelector('#alertas-cnt')||scr;
+        if(!cnt.querySelector('.cobrex-bell-row')){
+          var row=document.createElement('div'); row.className='cobrex-bell-row';
+          row.style.cssText='display:flex;align-items:center;justify-content:flex-end;padding:8px 14px 0';
+          row.innerHTML=bellHTML(); cnt.insertBefore(row, cnt.firstChild);
+        }
+        return;
+      }
+      var h=headerOf(sName, scr); if(!h) return;
+      var tmp=document.createElement('div'); tmp.innerHTML=bellHTML(); h.appendChild(tmp.firstChild);
+    });
+    window.updateBells();
+  };
+  window.updateBells=function(){
+    var n=(window._misAlertasData||[]).filter(function(a){return !a.leida;}).length;
+    document.querySelectorAll('.cobrex-bell-badge').forEach(function(b){ b.textContent=n>9?'9+':String(n); b.style.display=n>0?'inline-flex':'none'; });
+  };
+  function boot(){ try{ window.injectHeaderBells(); if(window.cargarMisAlertas){ window.cargarMisAlertas().then(function(){ window.updateBells(); }); } }catch(e){} }
+  if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
+  setTimeout(function(){ try{window.injectHeaderBells();}catch(e){} }, 1500);
+  setTimeout(function(){ try{window.injectHeaderBells();}catch(e){} }, 3500);
+  // re-inyectar al cambiar de pantalla por si alguna renderiza tarde
+  var _nav=window.navTo; if(typeof _nav==='function'){ window.navTo=function(){ var r=_nav.apply(this,arguments); setTimeout(function(){try{window.injectHeaderBells();}catch(e){}},150); return r; }; }
+})();
+</script>
+
+
+<script>
+/* P1 (paridad 1.3.45): en Portfolio el LIVE va en la barra del Sort (no en el header). PortfolioScreen.js:867 "Build 16 BUG A: LIVE movido". */
+(function(){
+  window.movePortfolioLive=function(){
+    var scr=document.getElementById('screen-portfolio'); if(!scr) return;
+    var sortBtn=document.getElementById('portfolio-sort-btn'); if(!sortBtn||!sortBtn.parentElement) return;
+    var bar=sortBtn.parentElement;
+    if(bar.querySelector('.live')) return; // ya movido
+    var live=scr.querySelector('.live'); if(!live) return;
+    bar.style.display='flex'; bar.style.alignItems='center'; bar.style.justifyContent='space-between';
+    bar.insertBefore(live, bar.firstChild);
+  };
+  function boot(){ setTimeout(window.movePortfolioLive,1500); setTimeout(window.movePortfolioLive,3500); }
+  if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
+  var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); if(arguments[0]==='portfolio') setTimeout(window.movePortfolioLive,300); return r; }; }
+})();
+</script>
+
+
+<script>
+/* D3: banner upsell de Portfolio plan-aware (FREE→señales/PRO, PRO→análisis/ELITE, ELITE→oculto) */
+(function(){
+  window._updatePfBanner=function(){
+    var b=document.getElementById('pf-upsell-banner'); if(!b) return;
+    var pl=((window.aurexPlan||{}).plan)||'FREE';
+    var T=function(k){try{return window._i18n&&window._i18n.t?window._i18n.t(k):k;}catch(e){return k;}};
+    if(pl==='ELITE'){ b.style.display='none'; return; }
+    b.style.display='flex';
+    var t=b.querySelector('.pfb-title'), su=b.querySelector('.pfb-sub');
+    if(t) t.textContent = pl==='FREE'? T('pf_activa_senales') : T('pf_activa_analisis');
+    if(su) su.textContent = pl==='FREE'? T('disponible_en_pro') : T('disponible_en_elite');
+  };
+  var _g=window.applyPlanGating;
+  function hook(){ var g=window.applyPlanGating; if(g && !g._pfb){ var w=function(){var r=g.apply(this,arguments); try{window._updatePfBanner();}catch(e){} return r;}; w._pfb=1; window.applyPlanGating=w; } }
+  setTimeout(hook,1000); setTimeout(function(){hook();try{window._updatePfBanner();}catch(e){}},2500);
+  var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); if(arguments[0]==='portfolio') setTimeout(function(){try{window._updatePfBanner();}catch(e){}},300); return r; }; }
+})();
+</script>
+
+
+<script>
+/* A2: versión "Cobrex Web 1.3" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957 */
+(function(){
+  window._injectPerfilVersion=function(){
+    var hdr=document.querySelector('#screen-perfil .aurex-hdr-added'); if(!hdr) return;
+    if(hdr.querySelector('#cobrex-perfil-version')) return;
+    var v=document.createElement('span'); v.id='cobrex-perfil-version';
+    v.style.cssText='font-size:10px;color:var(--textSec);font-weight:600;margin-left:8px;white-space:nowrap';
+    v.textContent='Cobrex Web 1.3';
+    hdr.appendChild(v);
+  };
+  function boot(){ setTimeout(window._injectPerfilVersion,1600); setTimeout(window._injectPerfilVersion,3600); }
+  if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
+  var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); if(arguments[0]==='perfil') setTimeout(window._injectPerfilVersion,300); return r; }; }
+})();
+</script>
+
 </body>
 </html>
 <!-- deploy 1775525028 -->
