@@ -997,7 +997,7 @@ function _renderPortfolioItems(items){
       '<div style="margin-left:auto;text-align:right;flex-shrink:0;">' +
         '<div style="font-size:14px;font-weight:700;color:var(--text);">$'+fmtNum(valor)+'</div>' +
       '</div>' +
-      '<span style="font-size:18px;color:var(--gold);font-weight:700;margin-left:2px;margin-right:-4px;">&#8250;</span>' +
+      '<span onclick="event.stopPropagation();if(window.openCreateAlert)openCreateAlert(\''+item.simbolo+'\',\''+(item.tipo||'')+'\')" style="cursor:pointer;font-size:14px;margin:0 5px;flex-shrink:0">🔔</span>' + '<span style="font-size:18px;color:var(--gold);font-weight:700;margin-left:2px;margin-right:-4px;">&#8250;</span>' +
       '<div onclick="deletePortfolioItem(\''+item.id+'\')" style="font-size:15px;color:var(--textDim);cursor:pointer;padding:4px;" title="Eliminar">&#128465;</div>' +
     '</div>' +
     '<div style="display:flex;align-items:center;justify-content:flex-end;margin-top:4px;padding-left:50px;">' +
@@ -2244,7 +2244,7 @@ window.renderWatchCnt = function(){
       }
       var _rowPct = _rowChg !== null ? _fmt(_rowChg, 'pct') : '...';
       html += '<div style="text-align:right;flex-shrink:0;margin-left:4px">';
-      html += '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end"><span style="font-size:14px;font-weight:700;color:var(--text)">$'+precioFmt+'</span></div>';
+      html += '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end"><span style="font-size:14px;font-weight:700;color:var(--text)">'+precioFmt+'</span></div>';
       html += '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:0">';
       if(isCrypto) html += '<span style="font-size:8px;color:var(--green);font-weight:700;border:0.5px solid var(--green);border-radius:3px;padding:0.5px 3px">24/7</span>';
       if(mktClosed && !isCrypto) html += '<span style="font-size:9px;color:var(--gold);font-weight:700">Ult. cierre</span>';
@@ -2252,6 +2252,7 @@ window.renderWatchCnt = function(){
       html += '</div></div>';
       // Botón eliminar
       html += '<div style="display:flex;align-items:center;gap:4px;margin-left:4px">';
+      html += '<div onclick="if(window.openCreateAlert)openCreateAlert(\''+item.s+'\',\''+(item.tipo||'')+'\')" style="font-size:13px;cursor:pointer;margin-right:4px">🔔</div>';
       html += '<div onclick="wlRemoveAsset(\''+item.s+'\',event)" style="font-size:12px;color:var(--textDim);cursor:pointer">🗑️</div>';
       html += '</div></div>';
       // Bottom row: period buttons + cambio % (como nativa)
@@ -5127,7 +5128,7 @@ function _initHeaderLogos() {
   // PERFIL: ⚖️ + LIVE (como Alertas)
   var pfHdr = document.querySelector('#screen-perfil .aurex-hdr-added');
   window._addLegalChip(pfHdr, null, true);
-  if(pfHdr && !pfHdr.querySelector('#perfil-live-wrap')){
+  if(false && pfHdr && !pfHdr.querySelector('#perfil-live-wrap')){ // P2 (paridad 1.3.45): Perfil NO lleva LIVE
     var pfLive = document.createElement('span');
     pfLive.id = 'perfil-live-wrap';
     pfLive.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:9px;color:var(--green);font-weight:700;margin-left:8px';

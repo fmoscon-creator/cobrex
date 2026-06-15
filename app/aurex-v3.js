@@ -2111,7 +2111,6 @@ function _calcIAScore(activo, datos) {
   var scores = {};
   var tendencia = precio24h > 0 ? (precio - precio24h) / precio24h : 0;
   scores.tendencia = tendencia * 8;
-  if (activo.s === 'BTC') console.log('INPUTS BTC PWA:', JSON.stringify({ tendencia: tendencia, btcCambio: btcCambio, spyCambio: spyCambio, precioOro: precioOro, precioPetroleo: precioPetroleo, rsi: rsi }));
   if (Math.abs(tendencia) > 0.001) {
     if (tendencia > 0) motivos.push('Precio subio +' + (tendencia*100).toFixed(2) + '% en 24hs - momentum alcista activo con presion compradora sostenida');
     else motivos.push('Precio bajo ' + (tendencia*100).toFixed(2) + '% en 24hs - momentum bajista con presion vendedora dominante');
@@ -2968,7 +2967,7 @@ function _goldToScore(pct) { return Math.min(100, Math.max(0, 50 - pct*25)); }
 function _oilToScore(pct) { return Math.min(100, Math.max(0, 50 - Math.abs(pct)*15)); }
 
 function _calcPulseScore(raw, cat) {
-  if(!raw) return { value:50, label:'Neutral', color:'var(--gold)', emoji:'😐', vars:{} };
+  if(!raw) return { value:50, label:(window._i18n?window._i18n.t('pulse_z_neutral'):'Neutral'), color:'var(--gold)', emoji:'😐', vars:{} };
   var scores = {}, weighted = 0, totalW = 0;
   function add(key, score, weight) {
     scores[key] = Math.round(score);
@@ -3025,14 +3024,14 @@ function _calcPulseScore(raw, cat) {
     if(raw.macro) add('Macro_FED', raw.macro.score, 12);
     if(raw.geo)   add('Geopolitica', raw.geo.score, 4);
   }
-  if(totalW===0) return { value:50, label:'Neutral', color:'var(--gold)', emoji:'😐', vars:scores };
+  if(totalW===0) return { value:50, label:(window._i18n?window._i18n.t('pulse_z_neutral'):'Neutral'), color:'var(--gold)', emoji:'😐', vars:scores };
   var v = Math.min(100, Math.max(0, Math.round(weighted/totalW)));
   var label, color, emoji;
-  if(v<=20)      { label='Miedo Extremo';  color='#C62828'; emoji='😱'; }
-  else if(v<=40) { label='Miedo';           color='#FF6B6B'; emoji='😰'; }
-  else if(v<=60) { label='Neutral';         color='var(--gold)'; emoji='😐'; }
-  else if(v<=80) { label='Codicia';         color='var(--green)'; emoji='😏'; }
-  else           { label='Codicia Extrema'; color='#00E676'; emoji='🤑'; }
+  if(v<=20)      { label=(window._i18n?window._i18n.t('pulse_z_miedo_ext'):'Miedo Extremo');  color='#C62828'; emoji='😱'; }
+  else if(v<=40) { label=(window._i18n?window._i18n.t('pulse_z_miedo'):'Miedo');           color='#FF6B6B'; emoji='😰'; }
+  else if(v<=60) { label=(window._i18n?window._i18n.t('pulse_z_neutral'):'Neutral');         color='var(--gold)'; emoji='😐'; }
+  else if(v<=80) { label=(window._i18n?window._i18n.t('pulse_z_codicia'):'Codicia');         color='var(--green)'; emoji='😏'; }
+  else           { label=(window._i18n?window._i18n.t('pulse_z_codicia_ext'):'Codicia Extrema'); color='#00E676'; emoji='🤑'; }
   return { value:v, label:label, color:color, emoji:emoji, vars:scores };
 }
 
