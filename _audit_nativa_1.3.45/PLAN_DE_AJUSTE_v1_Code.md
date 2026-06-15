@@ -37,3 +37,18 @@
 **ORDEN SUGERIDO (a confirmar por Fernando):** críticos primero (C4 plan es el de mayor impacto y menor riesgo → 1ro; C2 inicial; C1 campana; C6/C7 campanas activo; C3 paywall; C8 Pulse i18n; C5 onboarding), luego altos (A1 Metales, A2 versión, A5 ARS, A4/A3 i18n), luego medios. R1/R2 (trial+geo IP) se integran con C3/A-pricing.
 **DECISIONES: TODAS RESUELTAS = IGUAL A v1.3.45.** Regla fija de Fernando: todo idéntico a la nativa 1.3.45; Code resuelve cualquier decisión replicando la nativa, sin preguntar. (Versión='Cobrex Web 1.3'.)
 NADA se ejecuta hasta OK de Fernando + opinión de Escritorio.
+
+
+## ÍTEMS NUEVOS DE LA v8 (agregados al plan)
+- D3 Portfolio UpsellBanner contextual (2 variantes FREE→señales/PRO, PRO→análisis/ELITE) — PortfolioScreen.js:781-790. AGREGAR debajo de Valor Total, antes del Termómetro.
+- D4 Perfil UpsellBanner permanente (FREE/PRO) — PerfilScreen.js:962. AGREGAR.
+- P1 LIVE Portfolio → mover al sortBar (PortfolioScreen.js:867), sacar del header.
+- P2 LIVE Perfil → quitar (nativa no tiene).
+- A2 Versión "Cobrex Web 1.3" en DOS lugares iguales: header Perfil arriba-der (falta) + Soporte (index.html:2838, dice v1.0).
+- N6 (bug nativo Date.now en Alertas) → en PWA el LIVE con timestamp real.
+- N7 Onboarding Build 36 usa íconos 3D PNG (para C5).
+
+## ESTADO DE EJECUCIÓN (al 15-jun)
+HECHO + TESTEADO: C2 (abre Mercados), C3 (paywall FREE), C4 (bug ELITE→FREE), C8 (Pulse i18n), M3 (doble-$$ Watchlist), C6/C7 (campana por activo Portfolio+Watchlist), C1 (campana header 5/6).
+PENDIENTE: C1 Perfil (header JS-render) · P1/P2 (LIVE) · D3/D4 (banners) · A1 (Metales) · A2 (versión 2 lugares) · A3/A4/A5 (i18n/ARS) · M2 (footer color) · M4 (color lista) · M5 (cómo usar) · C5 (onboarding) · trial en todas las superficies · geo por IP.
+NO deployado todavía (se deploya cuando el bloque esté completo y testeado).
