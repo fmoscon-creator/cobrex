@@ -4618,7 +4618,14 @@ document.addEventListener("DOMContentLoaded", function(){
     trialPass();
     applying=false;
   }
-  function load(){ fetch(API+(isAR()?'?country=AR':'')).then(function(r){return r.json();}).then(function(d){D=d;applyAll();}).catch(function(){}); }
+  // geo por IP (la web no puede leer el país de la cuenta App Store/Play como la nativa → lo deduce por IP)
+  function geoCountry(){ return fetch('https://get.geojs.io/v1/ip/country.json').then(function(r){return r.json();}).then(function(d){ return (d&&d.country)?d.country:null; }).catch(function(){return null;}); }
+  function load(){
+    geoCountry().then(function(cc){
+      var ar = (cc!=null) ? (cc==='AR') : isAR(); // IP manda; si falla, fallback al timezone
+      fetch(API+(ar?'?country=AR':'')).then(function(r){return r.json();}).then(function(d){D=d;applyAll();}).catch(function(){});
+    });
+  }
   // re-aplicar cuando el DOM cambie (ej. render de idioma) sin loop
   var to=null; var obs=new MutationObserver(function(){ if(applying)return; if(to)clearTimeout(to); to=setTimeout(applyAll,150); });
   function start(){ load(); try{obs.observe(document.body,{childList:true,subtree:true,characterData:true});}catch(e){} setTimeout(applyAll,1500); setTimeout(applyAll,3500); }
