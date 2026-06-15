@@ -6482,3 +6482,47 @@ window._initSortMenus = function() { try {
     inject(); // intento inicial
   }
 } catch(e) { console.error('_initSortMenus error:', e); } };
+
+// ── M5: bloque "Cómo usar Cobrex" en Perfil (réplica de ComoUsarAurexBlock nativo) ──
+window._COMOUSAR_TABS = [
+  {icon:'💼',nameKey:'portfolio',items:[['➕','cu_portafolio_1'],['💰','cu_portafolio_2'],['⏱️','cu_portafolio_3'],['🌡️','cu_portafolio_4'],['👆','cu_portafolio_5'],['🔔','cu_portafolio_6'],['✋','cu_portafolio_7'],['📤','cu_portafolio_8'],['💱','cu_portafolio_9']]},
+  {icon:'📊',nameKey:'mercados',items:[['🗂️','cu_mercados_1'],['🌍','cu_mercados_2'],['⏱️','cu_mercados_3'],['🔍','cu_mercados_4'],['👆','cu_mercados_5'],['✋','cu_mercados_6'],['💓','cu_mercados_7']]},
+  {icon:'👀',nameKey:'watchlist',items:[['➕','cu_watchlist_1'],['⭐','cu_watchlist_2'],['➕','cu_watchlist_3'],['⚖️','cu_watchlist_4'],['📤','cu_watchlist_5'],['👆','cu_watchlist_6'],['✋','cu_watchlist_7']]},
+  {icon:'🤖',nameKey:'ia',items:[['📋','cu_ia_1'],['🔀','cu_ia_2'],['💼','cu_ia_3'],['👆','cu_ia_4'],['📤','cu_ia_5']]},
+  {icon:'🔔',nameKey:'alertas',items:[['📡','cu_alertas_1'],['🗂️','cu_alertas_2'],['🤖','cu_alertas_3'],['💓','cu_alertas_4'],['💰','cu_alertas_5'],['📅','cu_alertas_6'],['📋','cu_alertas_7']]},
+  {icon:'👤',nameKey:'perfil',items:[['🌙','cu_perfil_1'],['🌐','cu_perfil_2'],['🔒','cu_perfil_3'],['📩','cu_perfil_4'],['💬','cu_perfil_5'],['🚪','cu_perfil_6']]},
+  {icon:'⭐',nameKey:'plan_actual',items:[['🆓','plan_free_f1'],['🆓','plan_free_f2'],['🆓','plan_free_f8'],['🚀','plan_pro_f1'],['🚀','plan_pro_f2'],['🚀','plan_pro_f6'],['🚀','plan_pro_f3'],['👑','plan_elite_f2'],['👑','plan_elite_f3'],['👑','plan_elite_f4'],['👑','plan_elite_f5']]}
+];
+window._renderComoUsar = function(){
+  var body=document.getElementById('comousar-body'); if(!body) return;
+  var t=window.t||function(k){return k;};
+  var h='<div style="font-size:12px;color:var(--textSec);margin-bottom:12px;line-height:1.5">'+t('como_usar_titulo')+'</div>';
+  window._COMOUSAR_TABS.forEach(function(tab){
+    h+='<div style="margin-bottom:8px">'+
+       '<div class="cu-head" onclick="window._cuToggle(this)" style="background:var(--border);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer">'+
+         '<span style="font-size:18px">'+tab.icon+'</span>'+
+         '<span class="cu-name" style="flex:1;font-size:13px;font-weight:700;color:var(--text)">'+t(tab.nameKey)+'</span>'+
+         '<span class="cu-chev" style="font-size:13px;color:var(--textSec)">▼</span>'+
+       '</div>'+
+       '<div class="cu-items" style="display:none;background:var(--card);border:1px solid var(--gold);border-radius:10px;margin-left:8px;margin-top:4px;padding:12px">'+
+         tab.items.map(function(it){return '<div style="display:flex;gap:8px;margin-bottom:8px;align-items:flex-start"><span style="font-size:14px;margin-top:1px">'+it[0]+'</span><span style="flex:1;font-size:12px;color:var(--text);line-height:1.5">'+t(it[1])+'</span></div>';}).join('')+
+       '</div>'+
+     '</div>';
+  });
+  body.innerHTML=h;
+};
+window._cuToggle = function(el){
+  var cont=el.parentNode.parentNode; var items=el.nextElementSibling; var open=items.style.display!=='none';
+  // acordeón: uno abierto a la vez (igual a la nativa, openTab único)
+  cont.querySelectorAll('.cu-items').forEach(function(x){x.style.display='none';});
+  cont.querySelectorAll('.cu-head').forEach(function(x){x.style.background='var(--border)';x.style.borderColor='var(--border)';});
+  cont.querySelectorAll('.cu-name').forEach(function(x){x.style.color='var(--text)';});
+  cont.querySelectorAll('.cu-chev').forEach(function(x){x.textContent='▼';x.style.color='var(--textSec)';});
+  if(!open){
+    items.style.display='block';
+    el.style.background='rgba(212,160,23,0.10)'; el.style.borderColor='var(--gold)';
+    el.querySelector('.cu-name').style.color='var(--gold)';
+    var ch=el.querySelector('.cu-chev'); ch.textContent='▲'; ch.style.color='var(--gold)';
+  }
+};
+if (window._i18n && window._i18n.onLangChange) window._i18n.onLangChange(function(){ if(document.getElementById('comousar-body')) window._renderComoUsar(); });
