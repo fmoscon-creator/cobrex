@@ -612,14 +612,25 @@ function pcLoadPrices(){
       window._pcPrices['BRL']    = 5.70;
       if(rateEl) rateEl.textContent = (window._i18n?window._i18n.t('pw_precios_vivo'):'Precios en vivo via Binance');
       updatePortConv();
+      if(window._fetchARSLive) window._fetchARSLive();
     })
     .catch(function(){
       // Fallback offline
       window._pcPrices = { BTC:66000, ETH:2000, SOL:83, USDT:1, USD:1, ARS:1195, ARS_OF:1060, EUR:0.92, BRL:5.70 };
       if(rateEl) rateEl.textContent = (window._i18n?window._i18n.t('pw_precios_offline'):'Precios sin conexion (aprox)');
       updatePortConv();
+      if(window._fetchARSLive) window._fetchARSLive();
     });
 }
+// A5: tipo de cambio ARS en vivo (dolarapi blue + oficial, CORS *) — los valores hardcodeados quedan de fallback
+window._fetchARSLive = function(){
+  fetch('https://dolarapi.com/v1/dolares/blue').then(function(r){return r.json();}).then(function(d){
+    if(d && d.venta){ window._pcPrices['ARS'] = d.venta; if(typeof updatePortConv==='function') updatePortConv(); }
+  }).catch(function(){});
+  fetch('https://dolarapi.com/v1/dolares/oficial').then(function(r){return r.json();}).then(function(d){
+    if(d && d.venta){ window._pcPrices['ARS_OF'] = d.venta; if(typeof updatePortConv==='function') updatePortConv(); }
+  }).catch(function(){});
+};
 
 // Calcular y mostrar resultado
 window.updatePortConv = function(){
