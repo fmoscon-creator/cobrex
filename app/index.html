@@ -546,12 +546,8 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       var ph=document.querySelector('.phone');
       if(ph) ph.style.display='none';
       var onb=document.getElementById('onboarding');
-      if(onb) onb.style.display='flex';
-      var o1=document.getElementById('obs1');
-      if(o1) o1.style.display='flex';
-      var o2=document.getElementById('obs2');
-      if(o2) o2.style.display='none';
-    initObs1Canvas();
+      if(onb) onb.style.display='block';
+      if(window._renderOnboarding) window._renderOnboarding();
     });
   }
   function initObs1Canvas(){
@@ -1190,244 +1186,42 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </head>
 <body ontouchstart="">
-<div id="onboarding" style="display:block;position:fixed;inset:0;z-index:99999;background:#0D0D1A;font-family:-apple-system,BlinkMacSystemFont,sans-serif">
-<div id="obs1" style="position:fixed;inset:0;z-index:99999;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;width:100%;height:100%;">
-  <canvas id="obs1Stars" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;"></canvas>
-  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;width:100%;padding:30px 24px 20px;box-sizing:border-box;">
-    <div style="margin-bottom:20px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="160" height="160"><defs><linearGradient id="gAo1" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#F7D060"/><stop offset="50%" stop-color="var(--gold)"/><stop offset="100%" stop-color="#8B6208"/></linearGradient><linearGradient id="gCo1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0C030"/><stop offset="100%" stop-color="#9A7010"/></linearGradient></defs><circle cx="150" cy="150" r="118" fill="none" stroke="url(#gCo1)" stroke-width="3.5"/><circle cx="150" cy="150" r="100" fill="none" stroke="url(#gCo1)" stroke-width="1.5"/><circle cx="150" cy="150" r="94" fill="none" stroke="url(#gCo1)" stroke-width="1"/><line x1="150" y1="78" x2="108" y2="168" stroke="url(#gAo1)" stroke-width="11" stroke-linecap="round"/><line x1="150" y1="78" x2="192" y2="168" stroke="url(#gAo1)" stroke-width="11" stroke-linecap="round"/><line x1="104" y1="123" x2="196" y2="123" stroke="url(#gAo1)" stroke-width="11" stroke-linecap="round"/><polyline points="115,186 150,164 185,186" fill="none" stroke="url(#gAo1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="164" r="5" fill="#F7D060"/></svg></div>
-    <div style="font-size:42px;font-weight:900;color:var(--gold);letter-spacing:12px;text-align:center;margin-bottom:6px;">Cobrex</div>
-    <div style="font-size:12px;font-weight:700;color:var(--gold);letter-spacing:3px;text-align:center;margin-bottom:24px;">TERMINAL DE MERCADOS</div>
-    <div style="font-size:13px;color:var(--text);text-align:center;line-height:1.6;margin-bottom:28px;font-weight:500;">Senales de inversion con<br>probabilidad estadistica</div>
-    <div style="display:flex;gap:10px;width:100%;justify-content:center;margin-bottom:20px;">
-      <div style="flex:1;background:rgba(212,160,23,0.08);border:1px solid var(--gold20);border-radius:12px;padding:14px 8px;text-align:center;">
-        <div style="font-size:28px;font-weight:900;color:var(--gold);">500+</div>
-        <div style="font-size:9px;color:var(--textSec);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Activos<br>analizados</div>
-      </div>
-      <div style="flex:1;background:rgba(63,185,80,0.08);border:1px solid #3FB95030;border-radius:12px;padding:14px 8px;text-align:center;">
-        <div style="font-size:28px;font-weight:900;color:var(--green);">10</div>
-        <div style="font-size:9px;color:var(--textSec);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Variables IA<br>por senal</div>
-      </div>
-      <div style="flex:1;background:rgba(74,158,255,0.08);border:1px solid #4A9EFF30;border-radius:12px;padding:14px 8px;text-align:center;">
-        <div style="font-size:28px;font-weight:900;color:#4A9EFF;">7</div>
-        <div style="font-size:9px;color:var(--textSec);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Mercados<br>globales</div>
-      </div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:7px;">
-      <span style="font-size:11px;font-weight:600;color:#F7931A;background:#F7931A15;border:1px solid #F7931A30;padding:5px 12px;border-radius:20px;">Crypto</span>
-      <span style="font-size:11px;font-weight:600;color:#4A9EFF;background:#4A9EFF15;border:1px solid #4A9EFF30;padding:5px 12px;border-radius:20px;">Acciones</span>
-      <span style="font-size:11px;font-weight:600;color:var(--green);background:#3FB95015;border:1px solid #3FB95030;padding:5px 12px;border-radius:20px;">ETFs</span>
-      <span style="font-size:11px;font-weight:600;color:var(--gold);background:var(--goldBg);border:1px solid var(--gold20);padding:5px 12px;border-radius:20px;">Commodities</span>
-      <span style="font-size:11px;font-weight:600;color:#EC4899;background:#EC489915;border:1px solid #EC489930;padding:5px 12px;border-radius:20px;">Forex</span>
-      <span style="font-size:11px;font-weight:600;color:#8B5CF6;background:#8B5CF615;border:1px solid #8B5CF630;padding:5px 12px;border-radius:20px;">Bonos</span>
-      <span style="font-size:11px;font-weight:600;color:var(--red);background:#F8514915;border:1px solid #F8514930;padding:5px 12px;border-radius:20px;">Metales</span>
-    </div>
-  </div>
-  <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;margin-bottom:20px;"><div style="width:22px;height:3px;background:var(--gold);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div></div>
-  <div style="position:relative;z-index:1;width:100%;padding:0 24px 44px;box-sizing:border-box;"><button onclick="showObs2()" style="width:100%;padding:17px;background:linear-gradient(135deg,var(--gold),#F0C040);color:var(--bg);font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:1px;" data-i18n="ob_comenzar">Comenzar</button></div>
-</div>
-<div id="obs2" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99998;background:var(--bg);flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;">
-  <canvas id="obs2Stars" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;"></canvas>
-  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;flex:1;width:100%;padding:20px 14px 12px;box-sizing:border-box;overflow-y:auto;">
-    <div style="width:100%;display:flex;align-items:center;margin-bottom:10px;"><a href="javascript:void(0)" onclick="document.getElementById('obs2').style.display='none';document.getElementById('obs1').style.display='flex';" style="font-size:12px;color:var(--textSec);text-decoration:none;padding:4px 8px;">← Volver</a></div>
-    <div style="font-size:14px;font-weight:800;color:var(--gold);letter-spacing:3px;text-align:center;margin-bottom:3px;">DESCUBRI Cobrex</div>
-    <div style="font-size:11px;color:var(--textSec);text-align:center;margin-bottom:14px;">Asi se ve por dentro</div>
-
-    <!-- Collage de imágenes reales -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:10px;">
-      <!-- Pulse -->
-      <div style="border-radius:10px;overflow:hidden;border:1px solid var(--gold40);position:relative;">
-        <img src="img/onboarding/pulse.jpg" style="width:100%;display:block;border-radius:10px;" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000000CC);padding:6px 8px;">
-          <div style="font-size:9px;font-weight:700;color:var(--gold);">Cobrex PULSE</div>
-          <div style="font-size:7px;color:var(--textSec);">Sentimiento del mercado</div>
-        </div>
-      </div>
-      <!-- Señales IA -->
-      <div style="border-radius:10px;overflow:hidden;border:1px solid #4A9EFF40;position:relative;">
-        <img src="img/onboarding/ia.jpg" style="width:100%;display:block;border-radius:10px;" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000000CC);padding:6px 8px;">
-          <div style="font-size:9px;font-weight:700;color:#4A9EFF;">304 SENALES IA</div>
-          <div style="font-size:7px;color:var(--textSec);">Probabilidad en tiempo real</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:10px;">
-      <!-- Portfolio -->
-      <div style="border-radius:10px;overflow:hidden;border:1px solid #3FB95040;position:relative;">
-        <img src="img/onboarding/portfolio.jpg" style="width:100%;display:block;border-radius:10px;" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000000CC);padding:6px 8px;">
-          <div style="font-size:9px;font-weight:700;color:var(--green);">PORTFOLIO</div>
-          <div style="font-size:7px;color:var(--textSec);">Valor total + termometro IA</div>
-        </div>
-      </div>
-      <!-- Comparador -->
-      <div style="border-radius:10px;overflow:hidden;border:1px solid #EC489940;position:relative;">
-        <img src="img/onboarding/comparador.jpg" style="width:100%;display:block;border-radius:10px;" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,#000000CC);padding:6px 8px;">
-          <div style="font-size:9px;font-weight:700;color:#EC4899;">COMPARADOR</div>
-          <div style="font-size:7px;color:var(--textSec);">Compara activos con IA</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Frase de cierre -->
-    <div style="font-size:13px;color:var(--text);text-align:center;font-weight:600;margin-bottom:4px;">Analisis profesional al alcance de todos</div>
-    <div style="font-size:10px;color:var(--textSec);text-align:center;">Gratis para empezar. PRO y ELITE para mas.</div>
-  </div>
-  <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;margin-bottom:16px;"><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:22px;height:3px;background:var(--gold);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div></div>
-  <div style="position:relative;z-index:1;width:100%;padding:0 24px 40px;box-sizing:border-box;">
-    <button onclick="showObs3()" style="width:100%;padding:17px;background:linear-gradient(135deg,var(--gold),#F0C040);color:var(--bg);font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:1px;" data-i18n="ob_siguiente">Siguiente</button>
-  </div>
+<div id="onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,sans-serif;overflow:hidden;">
+  <img src="assets/onboarding/constellation.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;z-index:0;opacity:.9;">
+  <div id="ob-root" style="position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;box-sizing:border-box;"></div>
 </div>
 
-<!-- OBS3: Diferenciadores Cobrex -->
-<div id="obs3" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:100002;background:var(--bg);flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;">
-  <canvas id="obs3Stars" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;"></canvas>
-  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;width:100%;padding:20px 18px 12px;box-sizing:border-box;overflow-y:auto;">
-    <div style="width:100%;display:flex;align-items:center;margin-bottom:6px;"><a href="javascript:void(0)" onclick="document.getElementById('obs3').style.display='none';showObs2();" style="font-size:12px;color:var(--textSec);text-decoration:none;padding:4px 8px;">← Volver</a></div>
-    <div style="margin-bottom:6px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="80" height="80"><defs><linearGradient id="gAo3" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#F7D060"/><stop offset="50%" stop-color="var(--gold)"/><stop offset="100%" stop-color="#8B6208"/></linearGradient><linearGradient id="gCo3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0C030"/><stop offset="100%" stop-color="#9A7010"/></linearGradient></defs><circle cx="150" cy="150" r="118" fill="none" stroke="url(#gCo3)" stroke-width="3.5"/><circle cx="150" cy="150" r="100" fill="none" stroke="url(#gCo3)" stroke-width="1.5"/><line x1="150" y1="78" x2="108" y2="168" stroke="url(#gAo3)" stroke-width="11" stroke-linecap="round"/><line x1="150" y1="78" x2="192" y2="168" stroke="url(#gAo3)" stroke-width="11" stroke-linecap="round"/><line x1="104" y1="123" x2="196" y2="123" stroke="url(#gAo3)" stroke-width="11" stroke-linecap="round"/><polyline points="115,186 150,164 185,186" fill="none" stroke="url(#gAo3)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="164" r="5" fill="#F7D060"/></svg></div>
-    <div style="font-size:18px;font-weight:900;color:var(--gold);letter-spacing:3px;text-align:center;margin-bottom:4px;">POR QUE Cobrex</div>
-    <div style="font-size:12px;color:var(--textSec);text-align:center;margin-bottom:14px;">Lo que ninguna otra app tiene</div>
-
-    <!-- 24 Variables -->
-    <div style="width:100%;background:rgba(212,160,23,0.06);border:1px solid var(--goldBg);border-radius:12px;padding:14px 14px 12px;margin-bottom:10px;text-align:center;">
-      <div style="font-size:30px;font-weight:900;color:var(--gold);margin-bottom:2px;">24</div>
-      <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:2px;">Variables IA + Macro</div>
-      <div style="font-size:10px;color:var(--textSec);margin-bottom:8px;">10 Motor IA + 14 Cobrex Pulse</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;">
-        <span style="font-size:8px;color:var(--green);background:#3FB95015;padding:2px 6px;border-radius:10px;">Macro FED</span>
-        <span style="font-size:8px;color:#4A9EFF;background:#4A9EFF15;padding:2px 6px;border-radius:10px;">Geopolitica</span>
-        <span style="font-size:8px;color:var(--red);background:#F8514915;padding:2px 6px;border-radius:10px;">VIX</span>
-        <span style="font-size:8px;color:var(--gold);background:var(--goldBg);padding:2px 6px;border-radius:10px;">S&P</span>
-        <span style="font-size:8px;color:#EC4899;background:#EC489915;padding:2px 6px;border-radius:10px;">Futuros</span>
-        <span style="font-size:8px;color:#8B5CF6;background:#8B5CF615;padding:2px 6px;border-radius:10px;">Commodities</span>
-        <span style="font-size:8px;color:#F7931A;background:#F7931A15;padding:2px 6px;border-radius:10px;">Brent</span>
-        <span style="font-size:8px;color:var(--green);background:#3FB95015;padding:2px 6px;border-radius:10px;">Metales</span>
-      </div>
-    </div>
-
-    <!-- Alertas 24/365 -->
-    <div style="width:100%;background:rgba(63,185,80,0.06);border:1px solid #3FB95025;border-radius:12px;padding:14px;margin-bottom:10px;text-align:center;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;"><span style="font-size:18px;">🔔</span><span style="font-size:13px;font-weight:700;color:var(--green);">Alertas 24hs / 365 dias</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;">
-        <span style="font-size:9px;color:#25D366;background:#25D36615;border:1px solid #25D36630;padding:3px 8px;border-radius:8px;font-weight:600;">💬 WhatsApp</span>
-        <span style="font-size:9px;color:#0088CC;background:#0088CC15;border:1px solid #0088CC30;padding:3px 8px;border-radius:8px;font-weight:600;">✈️ Telegram</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);border:1px solid var(--gold20);padding:3px 8px;border-radius:8px;font-weight:600;">📧 Email</span>
-        <span style="font-size:9px;color:#4A9EFF;background:#4A9EFF15;border:1px solid #4A9EFF30;padding:3px 8px;border-radius:8px;font-weight:600;">🔔 Push</span>
-      </div>
-    </div>
-
-    <!-- Señales IA -->
-    <div style="width:100%;background:rgba(74,158,255,0.06);border:1px solid #4A9EFF25;border-radius:12px;padding:14px;margin-bottom:10px;text-align:center;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;"><span style="font-size:18px;">🤖</span><span style="font-size:13px;font-weight:700;color:#4A9EFF;">Senales IA con probabilidad</span></div>
-      <div style="display:flex;gap:8px;justify-content:center;">
-        <div style="flex:1;background:#3FB95015;border:1px solid #3FB95030;border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:8px;color:var(--green);font-weight:700;">ALCISTA</div>
-          <div style="font-size:16px;font-weight:900;color:var(--green);">85%</div>
-        </div>
-        <div style="flex:1;background:#F8514915;border:1px solid #F8514930;border-radius:8px;padding:8px;text-align:center;">
-          <div style="font-size:8px;color:var(--red);font-weight:700;">BAJISTA</div>
-          <div style="font-size:16px;font-weight:900;color:var(--red);">78%</div>
-        </div>
-        <div style="flex:1;background:var(--goldBg);border:1px solid var(--gold20);border-radius:8px;padding:8px;text-align:center;">
-          <div style="font-size:8px;color:var(--gold);font-weight:700;">ALTA CONV</div>
-          <div style="font-size:16px;font-weight:900;color:var(--gold);">88%</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Eventos criticos + Banners (compactos en 2 columnas) -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:8px;">
-      <div style="background:rgba(248,81,73,0.06);border:1px solid #F8514925;border-radius:10px;padding:10px;text-align:center;">
-        <div style="font-size:14px;margin-bottom:3px;">⚡</div>
-        <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:4px;">Eventos criticos</div>
-        <div style="font-size:8px;color:var(--textSec);line-height:1.5;">FED FOMC<br>IPC / PBI<br>Apertura NYSE<br>Datos empleo</div>
-      </div>
-      <div style="background:rgba(139,92,246,0.06);border:1px solid #8B5CF625;border-radius:10px;padding:10px;text-align:center;">
-        <div style="font-size:14px;margin-bottom:3px;">🌍</div>
-        <div style="font-size:10px;font-weight:700;color:#8B5CF6;margin-bottom:4px;">Banners custom</div>
-        <div style="font-size:8px;color:var(--textSec);line-height:1.5;">Mercados globales<br>Indices futuros<br>Commodities<br>Oro · Petroleo · Cobre</div>
-      </div>
-    </div>
-
-  </div>
-  <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;margin-bottom:16px;"><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:22px;height:3px;background:var(--gold);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div></div>
-  <div style="position:relative;z-index:1;width:100%;padding:0 24px 40px;box-sizing:border-box;">
-    <button onclick="showObs4()" style="width:100%;padding:17px;background:linear-gradient(135deg,var(--gold),#F0C040);color:var(--bg);font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:1px;" data-i18n="ob_ver_planes">Ver Planes</button>
-  </div>
-</div>
-
-<!-- OBS4: Planes PRO y ELITE -->
-<div id="obs4" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:100003;background:var(--bg);flex-direction:column;align-items:center;justify-content:space-between;overflow:hidden;box-sizing:border-box;">
-  <canvas id="obs4Stars" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block;"></canvas>
-  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;width:100%;padding:20px 18px 12px;box-sizing:border-box;overflow-y:auto;">
-    <div style="width:100%;display:flex;align-items:center;margin-bottom:6px;"><a href="javascript:void(0)" onclick="document.getElementById('obs4').style.display='none';showObs3();" style="font-size:12px;color:var(--textSec);text-decoration:none;padding:4px 8px;">← Volver</a></div>
-
-    <!-- Logo grande + Cobrex -->
-    <div style="margin-bottom:8px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="80" height="80"><defs><linearGradient id="gAo4" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#F7D060"/><stop offset="50%" stop-color="var(--gold)"/><stop offset="100%" stop-color="#8B6208"/></linearGradient><linearGradient id="gCo4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0C030"/><stop offset="100%" stop-color="#9A7010"/></linearGradient></defs><circle cx="150" cy="150" r="118" fill="none" stroke="url(#gCo4)" stroke-width="3.5"/><circle cx="150" cy="150" r="100" fill="none" stroke="url(#gCo4)" stroke-width="1.5"/><line x1="150" y1="78" x2="108" y2="168" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><line x1="150" y1="78" x2="192" y2="168" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><line x1="104" y1="123" x2="196" y2="123" stroke="url(#gAo4)" stroke-width="11" stroke-linecap="round"/><polyline points="115,186 150,164 185,186" fill="none" stroke="url(#gAo4)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="164" r="5" fill="#F7D060"/></svg></div>
-    <div style="font-size:22px;font-weight:900;color:var(--gold);letter-spacing:6px;text-align:center;margin-bottom:2px;">Cobrex</div>
-    <div style="font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2.5px;text-align:center;margin-bottom:4px;opacity:0.8;">TERMINAL DE MERCADOS</div>
-    <div style="font-size:14px;font-weight:800;color:var(--text);text-align:center;margin-bottom:2px;">'+(window._i18n?window._i18n.t('pw_elegi_plan'):'Elegí tu plan')+'</div>
-    <div style="font-size:10px;color:var(--textSec);text-align:center;margin-bottom:14px;">Empeza gratis, escala cuando quieras</div>
-
-    <!-- FREE -->
-    <div style="width:100%;background:rgba(139,148,158,0.06);border:1px solid var(--textSec);border-radius:12px;padding:14px;margin-bottom:10px;text-align:center;">
-      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;">
-        <span style="font-size:18px;font-weight:900;color:var(--text);">FREE</span>
-        <span style="font-size:13px;color:var(--text);font-weight:600;">$0</span>
-        <span style="font-size:9px;color:var(--green);background:#3FB95015;padding:3px 8px;border-radius:10px;font-weight:700;">Activo</span>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;">
-        <span style="font-size:9px;color:var(--text);background:var(--border);padding:4px 8px;border-radius:8px;">5 activos portfolio</span>
-        <span style="font-size:9px;color:var(--text);background:var(--border);padding:4px 8px;border-radius:8px;">Senales IA basicas</span>
-        <span style="font-size:9px;color:var(--text);background:var(--border);padding:4px 8px;border-radius:8px;">1 watchlist</span>
-        <span style="font-size:9px;color:var(--text);background:var(--border);padding:4px 8px;border-radius:8px;">Cobrex Pulse</span>
-      </div>
-    </div>
-
-    <!-- PRO -->
-    <div style="width:100%;background:rgba(167,139,250,0.08);border:1px solid #A78BFA40;border-radius:12px;padding:16px;margin-bottom:10px;text-align:center;">
-      <div style="font-size:20px;font-weight:900;color:#A78BFA;margin-bottom:2px;">PRO</div>
-      <div style="margin-bottom:8px;"><span data-px="PRO.mensual" style="font-size:22px;font-weight:900;color:#A78BFA;">$9.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">50 activos portfolio</span>
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Senales IA completas</span>
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">10 watchlists</span>
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Alertas WhatsApp</span>
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Comparador</span>
-        <span style="font-size:9px;color:#A78BFA;background:#A78BFA15;padding:4px 8px;border-radius:8px;font-weight:600;">Banners eventos</span>
-      </div>
-      <div style="font-size:10px;color:var(--textSec);">Anual: <span data-px="PRO.anual.year" style="color:#A78BFA;font-weight:700;">$89.99/año</span> (ahorra 25%)</div>
-    </div>
-
-    <!-- ELITE -->
-    <div style="width:100%;background:rgba(212,160,23,0.08);border:2px solid var(--gold40);border-radius:12px;padding:16px;margin-bottom:10px;text-align:center;position:relative;">
-      <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--chipTextActive);font-size:9px;font-weight:800;padding:3px 12px;border-radius:6px;">RECOMENDADO</div>
-      <div style="font-size:20px;font-weight:900;color:var(--gold);margin-bottom:2px;margin-top:4px;">ELITE</div>
-      <div style="margin-bottom:8px;"><span data-px="ELITE.mensual" style="font-size:22px;font-weight:900;color:var(--gold);">$19.99</span><span style="font-size:11px;color:var(--textSec);">/mes</span></div>
-      <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:8px;">
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Activos ilimitados</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Todo PRO incluido</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Watchlists ilimitadas</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Alertas Telegram + Push</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Geopolitica GDELT</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">Soporte prioritario</span>
-        <span style="font-size:9px;color:var(--gold);background:var(--goldBg);padding:4px 8px;border-radius:8px;font-weight:600;">API acceso datos</span>
-      </div>
-      <div style="font-size:10px;color:var(--textSec);">Anual: <span data-px="ELITE.anual.year" style="color:var(--gold);font-weight:700;">$179.99/año</span> (ahorra 25%)</div>
-    </div>
-
-  </div>
-  <div style="position:relative;z-index:1;display:flex;gap:8px;align-items:center;margin-bottom:16px;"><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:8px;height:3px;background:var(--border);border-radius:2px;"></div><div style="width:22px;height:3px;background:var(--gold);border-radius:2px;"></div></div>
-  <div style="position:relative;z-index:1;width:100%;padding:0 24px 40px;box-sizing:border-box;">
-    <button onclick="startApp()" style="width:100%;padding:17px;background:linear-gradient(135deg,var(--gold),#F0C040);color:var(--bg);font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:1px;" data-i18n="ob_empezar_gratis">Empezar gratis</button>
-    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
-      <div onclick="startApp();setTimeout(function(){navTo('perfil');authSwitchTab('register');},300);" style="font-size:12px;color:var(--gold);font-weight:700;cursor:pointer;padding:6px 14px;border:1px solid var(--gold40);border-radius:20px;-webkit-tap-highlight-color:rgba(0,0,0,0);" data-i18n="ob_crear_cuenta">Crear cuenta gratis</div>
-      <div onclick="window._openRegister=true;startApp();setTimeout(function(){navTo('perfil');},400);" style="font-size:12px;color:var(--textSec);cursor:pointer;padding:6px 14px;border:1px solid var(--border2);border-radius:20px;-webkit-tap-highlight-color:rgba(0,0,0,0);" data-i18n="ob_ya_tengo_cuenta">Ya tengo cuenta</div>
-    </div>
-  </div>
-</div>
+<script>
+(function(){
+  var _OB=['onb1','onb2','onb3','onb4']; var _i=0;
+  function T(k){ return (window.t? window.t(k): k); }
+  var LOGO='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="84" height="84"><defs><linearGradient id="gAob" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#F7D060"/><stop offset="50%" stop-color="#D4A017"/><stop offset="100%" stop-color="#8B6208"/></linearGradient><linearGradient id="gCob" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0C030"/><stop offset="100%" stop-color="#9A7010"/></linearGradient></defs><circle cx="150" cy="150" r="118" fill="none" stroke="url(#gCob)" stroke-width="3.5"/><circle cx="150" cy="150" r="100" fill="none" stroke="url(#gCob)" stroke-width="1.5"/><circle cx="150" cy="150" r="94" fill="none" stroke="url(#gCob)" stroke-width="1"/><line x1="150" y1="78" x2="108" y2="168" stroke="url(#gAob)" stroke-width="11" stroke-linecap="round"/><line x1="150" y1="78" x2="192" y2="168" stroke="url(#gAob)" stroke-width="11" stroke-linecap="round"/><line x1="104" y1="123" x2="196" y2="123" stroke="url(#gAob)" stroke-width="11" stroke-linecap="round"/><polyline points="115,186 150,164 185,186" fill="none" stroke="url(#gAob)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="150" cy="164" r="5" fill="#F7D060"/></svg>';
+  window._renderOnboarding=function(){
+    var root=document.getElementById('ob-root'); if(!root) return;
+    var last=_i===_OB.length-1; var s=_OB[_i]; var d='';
+    for(var n=0;n<_OB.length;n++){ d+='<div style="width:'+(n===_i?'22px':'8px')+';height:3px;border-radius:2px;background:'+(n===_i?'var(--gold)':'var(--border)')+';transition:width .2s;"></div>'; }
+    root.innerHTML=
+      '<div style="padding-top:56px;display:flex;flex-direction:column;align-items:center;flex-shrink:0;">'+LOGO+
+        '<div style="color:var(--gold);font-size:22px;font-weight:800;letter-spacing:6px;margin-top:8px;">COBREX</div>'+
+      '</div>'+
+      (_i>0?'<div onclick="window._obBack()" style="position:absolute;top:18px;left:8px;font-size:14px;color:var(--textSec);font-weight:600;cursor:pointer;padding:8px 12px;-webkit-tap-highlight-color:rgba(0,0,0,0);">'+T('volver')+'</div>':'')+
+      '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 34px;text-align:center;min-height:0;">'+
+        '<img src="assets/onboarding/'+s+'.png" alt="" style="width:62%;max-width:230px;height:165px;object-fit:contain;">'+
+        '<div style="color:var(--text);font-size:30px;font-weight:800;margin-top:30px;line-height:1.2;">'+T(s+'_title')+'</div>'+
+        '<div style="color:var(--textSec);font-size:15px;margin-top:14px;line-height:1.5;">'+T(s+'_sub')+'</div>'+
+      '</div>'+
+      '<div style="padding:10px 24px;padding-bottom:calc(34px + env(safe-area-inset-bottom));flex-shrink:0;">'+
+        '<div style="display:flex;justify-content:center;gap:8px;margin-bottom:16px;">'+d+'</div>'+
+        '<button onclick="window._obNext()" style="width:100%;padding:17px;background:var(--gold);color:#000;font-size:16px;font-weight:800;border:none;border-radius:14px;cursor:pointer;letter-spacing:.8px;">'+T(last?'empezar_gratis':'ob_siguiente')+'</button>'+
+        (last?'<button onclick="window._obLogin()" style="width:100%;margin-top:10px;padding:14px;background:var(--card);border:1.5px solid var(--gold);color:var(--gold);font-size:14px;font-weight:700;border-radius:14px;cursor:pointer;letter-spacing:.5px;">'+T('ob_ya_tengo_cuenta')+'</button>':'')+
+        (last?'<div style="font-size:8px;color:var(--textSec);text-align:center;margin-top:8px;line-height:1.5;">'+T('aceptar_terminos')+'</div>':'')+
+      '</div>';
+  };
+  window._obNext=function(){ if(_i<_OB.length-1){_i++;window._renderOnboarding();} else { if(window.startApp)window.startApp(); setTimeout(function(){ if(window.navTo)window.navTo('perfil'); if(window.authSwitchTab)window.authSwitchTab('register'); },300); } };
+  window._obBack=function(){ if(_i>0){_i--;window._renderOnboarding();} };
+  window._obLogin=function(){ if(window.startApp)window.startApp(); setTimeout(function(){ if(window.navTo)window.navTo('perfil'); },400); };
+})();
+</script>
 
 <div class="phone">
 
