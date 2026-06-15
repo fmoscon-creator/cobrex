@@ -1839,7 +1839,7 @@ Modal = function(){ var modal=document.getElementById('port-modal'); if(modal) m
 // Multiples listas, colores, lista principal, detalle activo
 // ═══════════════════════════════════════════════════════════════
 
-var WL_COLORS = ['var(--gold)','#3B82F6','#EC4899','#8B5CF6','#EF4444','#10B981','#F59E0B','#6366F1'];
+var WL_COLORS = ['#D4A017','#3B82F6','#EC4899','#8B5CF6','#EF4444','#10B981','#F59E0B','#6366F1']; // M4: idéntico a LIST_COLORS nativo
 var _wlSelectedList = null;
 var _wlNewColor = WL_COLORS[0];
 var _wlNewPrimary = false;
