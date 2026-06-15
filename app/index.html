@@ -423,9 +423,13 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 /* === TAB-BAR NAVEGACIN INFERIOR === */
 .tab-bar{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--bg);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:2000;}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;height:100%;color:var(--textSec);font-size:9px;font-weight:500;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;gap:3px;}
-.tab-btn.active{color:var(--gold);}
-.tab-btn svg{width:22px;height:22px;flex-shrink:0;}
-.tab-btn span{font-size:9px;margin-top:1px;}
+.tab-btn.active{color:inherit;}
+.tab-btn svg{width:22px;height:22px;flex-shrink:0;padding:3px 11px;border-radius:11px;box-sizing:content-box;transition:background .15s;}
+.tab-btn span{font-size:9px;margin-top:1px;color:#8B949E;}
+/* M2 footer multicolor — paridad nativa TabNavigator (TAB_COLOR verificado) */
+#btn-portfolio svg{stroke:#3FB950}#btn-mercados svg{stroke:#D4A017}#btn-watchlist svg{stroke:#58A6FF}#btn-ia svg{stroke:#BC8CFF}#btn-alertas svg{stroke:#FF7B72}#btn-perfil svg{stroke:#C9D1D9}
+#btn-portfolio.active span{color:#3FB950}#btn-mercados.active span{color:#D4A017}#btn-watchlist.active span{color:#58A6FF}#btn-ia.active span{color:#BC8CFF}#btn-alertas.active span{color:#FF7B72}#btn-perfil.active span{color:#C9D1D9}
+#btn-portfolio.active svg{background:#3FB95026}#btn-mercados.active svg{background:#D4A01726}#btn-watchlist.active svg{background:#58A6FF26}#btn-ia.active svg{background:#BC8CFF26}#btn-alertas.active svg{background:#FF7B7226}#btn-perfil.active svg{background:#C9D1D926}
 .screen{padding-bottom:60px;}
 
 @keyframes tkScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }

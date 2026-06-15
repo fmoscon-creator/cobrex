@@ -1974,11 +1974,21 @@ window._IA_ACTIVOS = [
 ];
 
 // EVENTOS MACRO SEMANALES
-window._IA_EVENTOS = [
-  {label:'EVENTO CRITICO - FED', text:'Reunion FOMC - Decision de tasas de interes - Alto impacto en todos los mercados - Se espera pausa en subas - Mercados atentos a declaraciones de Powell', tiempo:'5h 54m', impacto:'ALTO', hora:'14:00 EST', color:'var(--gold)', bg:'var(--card)', border:'var(--gold40)'},
-  {label:'DATO MACRO - IPC EEUU', text:'Indice de Precios al Consumidor - Publicacion 8:30 EST - Estimado 3.2% interanual - Impacto alto en bonos y acciones growth - Dato clave para politica monetaria', tiempo:'3h 00m', impacto:'MEDIO', hora:'08:30 EST', color:'var(--green)', bg:'#0A1A00', border:'#3FB95060'},
-  {label:'EARNINGS - NVIDIA', text:'Resultados trimestrales NVDA Q1 2026 - EPS estimado 5.58 - Ingresos estimados 24.6B - Pre-mercado manana - Alta volatilidad esperada sector tech', tiempo:'12h 00m', impacto:'ALTO', hora:'Pre-market', color:'var(--red)', bg:'var(--card)', border:'#FF444460'}
+// A4: eventos IA con i18n (textos en aurex-i18n.js, 8 idiomas)
+window._IA_EVENTOS_DEF = [
+  {lk:'ia_ev1_l', tk:'ia_ev1_t', tiempo:'5h 54m', impacto:'ALTO', hora:'14:00 EST', color:'var(--gold)', bg:'var(--card)', border:'var(--gold40)'},
+  {lk:'ia_ev2_l', tk:'ia_ev2_t', tiempo:'3h 00m', impacto:'MEDIO', hora:'08:30 EST', color:'var(--green)', bg:'#0A1A00', border:'#3FB95060'},
+  {lk:'ia_ev3_l', tk:'ia_ev3_t', tiempo:'12h 00m', impacto:'ALTO', hora:'Pre-market', color:'var(--red)', bg:'var(--card)', border:'#FF444460'}
 ];
+window._buildIAEventos = function(){
+  var T = window._i18n;
+  window._IA_EVENTOS = window._IA_EVENTOS_DEF.map(function(e){
+    return Object.assign({}, e, { label: (T?T.t(e.lk):e.lk), text: (T?T.t(e.tk):e.tk) });
+  });
+  return window._IA_EVENTOS;
+};
+window._buildIAEventos();
+if (window._i18n && window._i18n.onLangChange) window._i18n.onLangChange(window._buildIAEventos);
 
 function _iniciarBanner() {
   var evts = window._IA_EVENTOS;
@@ -2033,7 +2043,7 @@ function abrirEventosPanel() {
       '<div style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:6px">'+ev.text.split('-')[0].trim()+'</div>' +
       '<div style="font-size:11px;color:var(--textSec);line-height:1.5">'+ev.text+'</div>' +
       '<div style="margin-top:8px;display:flex;gap:6px">' +
-        '<span style="background:'+impColor+'20;border:1px solid '+impColor+'60;border-radius:4px;padding:2px 8px;font-size:10px;color:'+impColor+';font-weight:700">IMPACTO '+ev.impacto+'</span>' +
+        '<span style="background:'+impColor+'20;border:1px solid '+impColor+'60;border-radius:4px;padding:2px 8px;font-size:10px;color:'+impColor+';font-weight:700">'+(window._i18n?window._i18n.t('ia_impacto'):'IMPACTO')+' '+(window._i18n?window._i18n.t('imp_'+ev.impacto.toLowerCase()):ev.impacto)+'</span>' +
         '<span style="background:var(--border);border-radius:4px;padding:2px 8px;font-size:10px;color:var(--textSec)">'+ev.hora+'</span>' +
       '</div>' +
     '</div>';
