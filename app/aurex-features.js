@@ -4189,7 +4189,7 @@ function _renderIALista(signals, keepLoadingBar) {
     var upsideHtml = '';
     if(s.upside != null){
       var uSign = s.upside >= 0 ? '↑+' : '↓';
-      upsideHtml = '<span style="font-size:10px;color:var(--textDim)"> · </span><span style="font-size:10px;color:'+dirColor+';font-weight:700">'+uSign+Math.abs(s.upside).toFixed(1)+'% al precio objetivo</span>';
+      upsideHtml = '<span style="font-size:10px;color:var(--textDim)"> · </span><span style="font-size:10px;color:'+dirColor+';font-weight:700">'+uSign+Math.abs(s.upside).toFixed(1)+'% '+(window.t?window.t('ia_al_precio_obj'):'al precio objetivo')+'</span>';
     }
     return '<div class="ia-row" id="ia-row-'+i+'" onclick="toggleIARow('+i+')" style="border-bottom:0.5px solid #13171D;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation">' +
       '<div style="display:flex;align-items:center;gap:9px;padding:12px 13px">' +

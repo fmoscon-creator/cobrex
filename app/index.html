@@ -4022,13 +4022,15 @@ document.addEventListener("DOMContentLoaded", function(){
       nombreEl.textContent = p;
       nombreEl.style.color = (p === 'FREE') ? 'var(--textSec)' : s.color;
     }
+    var _lp = (p || 'FREE').toLowerCase();
+    var _pt = (window.t || function(k){return k;});
     if (subtitleEl) {
-      subtitleEl.textContent = SUBTITLE[p] || SUBTITLE.FREE;
-      subtitleEl.removeAttribute('data-i18n');
+      subtitleEl.setAttribute('data-i18n', 'plan_' + _lp + '_subtitle');
+      subtitleEl.textContent = _pt('plan_' + _lp + '_subtitle');
     }
     if (descEl) {
-      descEl.textContent = DESC[p] || DESC.FREE;
-      descEl.removeAttribute('data-i18n');
+      descEl.setAttribute('data-i18n', 'plan_' + _lp + '_desc');
+      descEl.textContent = _pt('plan_' + _lp + '_desc');
     }
 
     // 3. Botones upgrade en modal de planes — ocultar segun plan actual
