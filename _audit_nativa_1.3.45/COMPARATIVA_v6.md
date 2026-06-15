@@ -29,3 +29,17 @@ Hay DOS campanas distintas, no confundir:
 
 ## META — honesto
 El cruce VISUAL elemento por elemento NO se había hecho (ni Code ni Escritorio); por eso el LIVE, la campana y el banner ELITE aparecieron recién ahora y no en v1-v5. Se está haciendo pantalla por pantalla; Portfolio cerrado, faltan Mercados/Watchlist/IA/Alertas/Perfil + onboarding/modales. Cuando estén todas → plan visual completo (v7 con el aporte independiente de Escritorio).
+
+
+## ADDENDUM v6 — PASE VISUAL COMPLETO (las 6 pantallas) + CORRECCIONES
+Cruce elemento por elemento captura nativa vs PWA renderizada, las 6 pantallas:
+- PORTFOLIO: ❌ LIVE mal ubicado (header vs debajo Termómetro/Sort) · ❌ campana por activo falta · ❌ banner upsell ELITE falta. Resto OK.
+- MERCADOS: ❌ falta tab Metales · ⚠️ nativa(Futuros)=ticker de futuros vs PWA=tira de países (verificar mismo modo) · ⚠️ menú "⋯" por fila. Resto OK.
+- WATCHLIST: ❌ campana por activo falta (C7) · ❌ DOBLE-$$ confirmado VISUALMENTE ("$$66.863,70", aurex-features.js:2247). Resto OK.
+- IA: ✅ match fuerte, sin discrepancias nuevas.
+- ALERTAS: ✅ CORRECCIÓN — SÍ tiene header "Cobrex Alertas + LIVE" (mi finding v6 "falta header" estaba MAL). ⚠️ canales en banners apilados vs 3 cards toggle nativas. Resto OK.
+- PERFIL: ❌ LIVE de más (nativa no tiene) · ❌ falta campana del header (C1 la salteó por header JS-render) · ⚠️ comparador en header (verificar vs nativa). Resto OK.
+
+CORRECCIÓN clave: Alertas NO está sin header (v6 lo decía mal). La verificación visual lo atrapó.
+Pendiente verificar (mismo modo): Mercados futuros vs países; Perfil comparador.
+Esto completa el pase visual de Code → cruzar con Escritorio para v7.
