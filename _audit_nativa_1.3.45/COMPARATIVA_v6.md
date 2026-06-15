@@ -43,3 +43,17 @@ Cruce elemento por elemento captura nativa vs PWA renderizada, las 6 pantallas:
 CORRECCIÓN clave: Alertas NO está sin header (v6 lo decía mal). La verificación visual lo atrapó.
 Pendiente verificar (mismo modo): Mercados futuros vs países; Perfil comparador.
 Esto completa el pase visual de Code → cruzar con Escritorio para v7.
+
+
+## RESOLUCIÓN de los 2 "a verificar" (ambos = NO son diferencia)
+- Mercados futuros vs países: la PWA tiene AMBOS (ticker futuros aurex-features.js + tira países) y la nativa también (MercadosScreen getPaises + market hours). La diferencia que se veía era solo por comparar modos distintos (captura nativa en Futuros vs render PWA en Mercados). NO es diferencia.
+- Perfil comparador: la nativa también tiene comparador en Perfil. NO es diferencia.
+
+## DIFERENCIAS REALES del pase visual (lista limpia para el plan)
+- Portfolio: LIVE mal ubicado · campana por activo falta · banner upsell ELITE falta.
+- Mercados: falta tab Metales (A1).
+- Watchlist: campana por activo falta (C7) · doble-$$ (M3).
+- Perfil: LIVE de más · falta campana del header.
+- Alertas: header OK (corregido); diferencia menor = canales en banners apilados vs 3 cards toggle.
+- IA: sin diferencias.
+Pase visual de Code COMPLETO. → cruzar con Escritorio para v7.
