@@ -973,7 +973,7 @@ if(window._i18n) window._i18n.onLangChange(function(){
   // Watchlist (chips de tipo cripto/accion) + combo banner Mercados/Futuros
   try{ if(window.renderWatchCnt) window.renderWatchCnt(); }catch(e){}
   try{ if(typeof _renderComboBanner==='function') _renderComboBanner('mkt-combo-banner'); }catch(e){}
-  try{ if(typeof _renderFearGreed==='function') _renderFearGreed(); }catch(e){}  // gauge "46 — Neutral" (label ya usa t())
+  try{ if(typeof _renderFearGreed==='function'){ _renderFearGreed('mkt-fear-greed'); _renderFearGreed('port-fear-greed'); } }catch(e){}  // gauge "46 — Neutral" en Mercados y Portfolio (label ya usa t())
   // Solo favoritos (chip usa t() pero no se re-dibuja)
   try{ var fc=document.getElementById('only-favs-chip'); if(fc && window.t){ var sp=fc.querySelector('span'); if(sp) sp.textContent=window.t('solo_favoritos'); } }catch(e){}
 });
