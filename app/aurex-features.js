@@ -1002,10 +1002,11 @@ function _renderPortfolioItems(items){
       '<div style="margin-left:auto;text-align:right;flex-shrink:0;">' +
         '<div style="font-size:14px;font-weight:700;color:var(--text);">$'+fmtNum(valor)+'</div>' +
       '</div>' +
-      '<span onclick="event.stopPropagation();if(window.openCreateAlert)openCreateAlert(\''+item.simbolo+'\',\''+(item.tipo||'')+'\')" style="cursor:pointer;font-size:14px;margin:0 5px;flex-shrink:0">🔔</span>' + '<span style="font-size:18px;color:var(--gold);font-weight:700;margin-left:2px;margin-right:-4px;">&#8250;</span>' +
+      '<span style="font-size:18px;color:var(--gold);font-weight:700;margin-left:2px;margin-right:-4px;">&#8250;</span>' +
       '<div onclick="deletePortfolioItem(\''+item.id+'\')" style="font-size:15px;color:var(--textDim);cursor:pointer;padding:4px;" title="Eliminar">&#128465;</div>' +
     '</div>' +
-    '<div style="display:flex;align-items:center;justify-content:flex-end;margin-top:4px;padding-left:50px;">' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;padding-left:50px;">' +
+      '<span onclick="event.stopPropagation();if(window.openCreateAlert)openCreateAlert(\''+item.simbolo+'\',\''+(item.tipo||'')+'\')" style="cursor:pointer;font-size:15px;color:var(--gold);flex-shrink:0" title="Crear alerta">🔔</span>' +
       '<div style="display:flex;align-items:center;gap:4px;">' +
         (isCrypto ? '<span style="font-size:8px;color:var(--green);font-weight:700;border:0.5px solid var(--green);border-radius:3px;padding:0.5px 3px;margin-right:2px;">24/7</span>' : '') +
         (mktClosed && !isCrypto ? '<span style="font-size:9px;color:var(--gold);font-weight:700;margin-right:2px;">'+(window.t?window.t('pw_ult_cierre'):'Ult. cierre')+'</span>' : '') +
@@ -2257,7 +2258,6 @@ window.renderWatchCnt = function(){
       html += '</div></div>';
       // Botón eliminar
       html += '<div style="display:flex;align-items:center;gap:4px;margin-left:4px">';
-      html += '<div onclick="if(window.openCreateAlert)openCreateAlert(\''+item.s+'\',\''+(item.tipo||'')+'\')" style="font-size:13px;cursor:pointer;margin-right:4px">🔔</div>';
       html += '<div onclick="wlRemoveAsset(\''+item.s+'\',event)" style="font-size:12px;color:var(--textDim);cursor:pointer">🗑️</div>';
       html += '</div></div>';
       // Bottom row: period buttons + cambio % (como nativa)
@@ -2276,7 +2276,8 @@ window.renderWatchCnt = function(){
         }
       }
       var _perPct = _perChange !== null ? _fmt(_perChange, 'pct') : '...';
-      html += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:0 12px 3px 52px;gap:4px;border-bottom:0.5px solid var(--border2)">';
+      html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:0 12px 3px 52px;gap:4px;border-bottom:0.5px solid var(--border2)">';
+      html += '<div onclick="event.stopPropagation();if(window.openCreateAlert)openCreateAlert(\''+item.s+'\',\''+(item.tipo||'')+'\')" style="font-size:14px;color:var(--gold);cursor:pointer;flex-shrink:0" title="Crear alerta">🔔</div>';
       html += '<div style="display:flex;gap:2px">';
       ['24h','7d','1m','3m','1y'].forEach(function(p){
         var isAct = _curPer === p;
