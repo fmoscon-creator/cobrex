@@ -4157,8 +4157,8 @@ document.addEventListener("DOMContentLoaded", function(){
           ? (window._i18n?window._i18n.t('pw_pasate_pro'):'Pasate a PRO')+' — ' + (window.__cobrexP?window.__cobrexP('PRO.mensual'):'$4.99') + (window._i18n?window._i18n.t('por_mes'):'/mes')
           : (window._i18n?window._i18n.t('pw_pasate_elite'):'Pasate a ELITE')+' — ' + (window.__cobrexP?window.__cobrexP('ELITE.mensual'):'$9.99') + (window._i18n?window._i18n.t('por_mes'):'/mes');
         document.getElementById('upsell-sub').textContent = isFree
-          ? 'Activos ilimitados · 14 tipos de alertas · Telegram en tiempo real'
-          : 'Cobrex Pulse completo · RSI/MACD · Alertas geopolíticas GDELT';
+          ? (window._i18n?window._i18n.t('pf_upsell_sub_pro'):'Activos ilimitados · 14 tipos de alertas · Telegram en tiempo real')
+          : (window._i18n?window._i18n.t('pf_upsell_sub_elite'):'Cobrex Pulse completo · RSI/MACD · Alertas geopolíticas GDELT');
         document.getElementById('upsell-arrow').style.color = targetColor;
         document.getElementById('upsell-arrow').textContent = '›';
       }
@@ -4305,7 +4305,7 @@ document.addEventListener("DOMContentLoaded", function(){
         var bar = document.createElement('div');
         bar.id = 'mis-alertas-btn'; bar.onclick = window.abrirMisAlertas;
         bar.style.cssText = 'display:flex;align-items:center;gap:10px;margin:10px 11px;background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border);cursor:pointer';
-        bar.innerHTML = '<span style="font-size:20px;position:relative;display:inline-block">🔔<span id="mis-alertas-badge" style="display:none;position:absolute;top:-6px;right:-8px;background:#EF4444;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px">0</span></span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Mis Alertas</div><div style="font-size:10px;color:var(--textSec)">Historial de alertas disparadas</div></div><span style="font-size:14px;color:var(--gold)">→</span>';
+        bar.innerHTML = '<span style="font-size:20px;position:relative;display:inline-block">🔔<span id="mis-alertas-badge" style="display:none;position:absolute;top:-6px;right:-8px;background:#EF4444;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px">0</span></span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+(window.t?window.t('mis_al_titulo'):'Mis Alertas')+'</div><div style="font-size:10px;color:var(--textSec)">'+(window.t?window.t('mis_al_historial'):'Historial de alertas disparadas')+'</div></div><span style="font-size:14px;color:var(--gold)">→</span>';
         cnt.insertBefore(bar, cnt.firstChild);
       }
       if (!document.getElementById('mis-alertas-modal')){
@@ -4314,8 +4314,8 @@ document.addEventListener("DOMContentLoaded", function(){
         ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:flex-end;justify-content:center';
         ov.onclick = function(e){ if (e.target === ov) window.cerrarMisAlertas(); };
         ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85dvh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
-          + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 Mis Alertas</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
-          + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ Marcar leídas</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ Borrar</button></div>'
+          + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 '+(window.t?window.t('mis_al_titulo'):'Mis Alertas')+'</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
+          + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ '+(window.t?window.t('mis_al_marcar'):'Marcar leídas')+'</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ '+(window.t?window.t('mis_al_borrar'):'Borrar')+'</button></div>'
           + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1;padding-bottom:env(safe-area-inset-bottom)"></div></div>';
         document.body.appendChild(ov);
       }
@@ -4777,6 +4777,8 @@ window.connectTelegram=function(){
     try{ if(window.pacInitCuenta) window.pacInitCuenta(); }catch(e){}
     try{ if(window.updateUserUI) window.updateUserUI(window._currentUser); }catch(e){}
     try{ if(window.calculateAlerts) window.calculateAlerts(); }catch(e){}  // re-genera descripciones de alertas traducidas
+    try{ var mam=document.getElementById('mis-alertas-modal'); if(mam) mam.remove(); }catch(e){}  // modal cacheado → se reconstruye en el idioma nuevo
+    try{ var bar=document.getElementById('mis-alertas-btn'); if(bar&&window.t){ var inn=bar.querySelector('div[style*="flex:1"]'); if(inn&&inn.children[0]){ inn.children[0].textContent=window.t('mis_al_titulo'); if(inn.children[1]) inn.children[1].textContent=window.t('mis_al_historial'); } } }catch(e){}
   }
   function reg(){ if(window._i18n&&window._i18n.onLangChange){ window._i18n.onLangChange(reRenderPerfil); return true; } return false; }
   if(!reg()){ var iv=setInterval(function(){ if(reg()) clearInterval(iv); },300); setTimeout(function(){clearInterval(iv);},6000); }
