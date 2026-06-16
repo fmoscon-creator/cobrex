@@ -481,7 +481,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 
   // 2. Mover phone al body
-  function _movePhone(){
+  function _movePhone(dest){
     var ph=document.querySelector('.phone');
     var onb=document.getElementById('onboarding');
     if(!ph||!onb) return;
@@ -489,7 +489,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     ph.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;';
     if(_done){
       onb.style.display='none';
-      setTimeout(function(){ if(window.navTo) window.navTo('mercados'); },100);
+      setTimeout(function(){ if(window.navTo) window.navTo(dest||'mercados'); },100);
     }
   }
 
@@ -524,13 +524,16 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   };
 
   // 4. startApp
-  window.startApp=function(){
+  window.startApp=function(dest){
+    dest = dest || 'mercados';
     localStorage.setItem('aurex_onboarding_done','1');
     _done=true;
     var onb=document.getElementById('onboarding');
     if(onb) onb.style.display='none';
-    _movePhone();
-    setTimeout(function(){ if(window.navTo) window.navTo('mercados'); },100);
+    _movePhone(dest);
+    // navegar a la pantalla destino YA (síncrono) para no mostrar la pantalla default (Mercados) un instante.
+    if(window.navTo) window.navTo(dest);
+    setTimeout(function(){ if(window.navTo) window.navTo(dest); },100);
   };
 
   // 5. Neutralizar initOnboarding del features.js
@@ -1247,9 +1250,9 @@ document.addEventListener('DOMContentLoaded', function() {
         (last?'<div style="font-size:8px;color:var(--textSec);text-align:center;margin-top:8px;line-height:1.5;">'+T('aceptar_terminos')+'</div>':'')+
       '</div>';
   };
-  window._obNext=function(){ if(_i<_OB.length-1){_i++;window._renderOnboarding();} else { if(window.startApp)window.startApp(); setTimeout(function(){ if(window.navTo)window.navTo('perfil'); if(window.authSwitchTab)window.authSwitchTab('register'); },300); } };
+  window._obNext=function(){ if(_i<_OB.length-1){_i++;window._renderOnboarding();} else { if(window.startApp)window.startApp('perfil'); setTimeout(function(){ if(window.authSwitchTab)window.authSwitchTab('register'); },300); } };
   window._obBack=function(){ if(_i>0){_i--;window._renderOnboarding();} };
-  window._obLogin=function(){ if(window.startApp)window.startApp(); setTimeout(function(){ if(window.navTo)window.navTo('perfil'); },400); };
+  window._obLogin=function(){ if(window.startApp)window.startApp('perfil'); };
 })();
 </script>
 
@@ -2675,7 +2678,7 @@ display:flex;align-items:center;justify-content:space-between}
       <div style="padding:14px 0 4px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:12px;color:var(--textDim)" data-i18n="version_app">Versión de la app</span>
-          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web 1.6 &#127775;</span>
+          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web 1.7 &#127775;</span>
         </div>
         <div style="display:flex;gap:16px">
           <span onclick="pacLegal('terminos')" style="font-size:11px;color:#58A6FF;cursor:pointer;text-decoration:underline" data-i18n="terminos_uso">Términos de uso</span>
@@ -2839,8 +2842,11 @@ display:flex;align-items:center;justify-content:space-between}
             <span style="font-size:22px;font-weight:800;color:var(--textSec)">FREE</span>
             <span style="font-size:20px;font-weight:800;color:var(--text)">$0</span>
           </div>
-          <div style="font-size:12px;color:var(--textSec);margin-bottom:16px">
+          <div style="font-size:12px;color:var(--textSec);margin-bottom:12px">
             <span data-i18n="plan_free_subtitle">Para empezar a invertir mejor</span>
+          </div>
+          <div id="free-plan-actual-badge" style="display:none;align-self:flex-start;background:#8B949E22;border:1px solid #8B949E66;border-radius:20px;padding:4px 14px;margin-bottom:16px">
+            <span style="font-size:11px;font-weight:800;color:var(--textSec);letter-spacing:0.5px" data-i18n="plan_actual">Plan actual</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:10px">
             <div style="display:flex;align-items:flex-start;gap:10px">
@@ -3080,7 +3086,14 @@ function abrirModalPlanes(mode){
   m.style.display='block';
   if(window._planMode==='perfil') _showPlanTabs('FREE'); else _showAllPlans();
   _applyPaywallHeader();
+  _updateFreeBadge();
   try{ m.scrollTop=0; }catch(e){}
+}
+// Badge "Plan actual" en la card FREE cuando el usuario ES FREE (nativa SubscriptionScreen.js:245-248).
+function _updateFreeBadge(){
+  var el=document.getElementById('free-plan-actual-badge'); if(!el) return;
+  var plan=(window.aurexPlan&&window.aurexPlan.plan) || localStorage.getItem('aurex_plan') || 'FREE';
+  el.style.display=(plan==='FREE')?'inline-block':'none';
 }
 function cerrarModalPlanes(){
   var m=document.getElementById('modal-planes');
@@ -4745,7 +4758,7 @@ window.connectTelegram=function(){
     if(hdr.querySelector('#cobrex-perfil-version')) return;
     var v=document.createElement('span'); v.id='cobrex-perfil-version';
     v.style.cssText='font-size:10px;color:var(--textSec);font-weight:600;margin-left:8px;white-space:nowrap';
-    v.textContent='Cobrex Web 1.6';
+    v.textContent='Cobrex Web 1.7';
     hdr.appendChild(v);
   };
   function boot(){ setTimeout(window._injectPerfilVersion,1600); setTimeout(window._injectPerfilVersion,3600); }
