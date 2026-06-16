@@ -554,7 +554,7 @@ window._moveRow=function(row,dir){
   }
 };
 
-function updateItemRT(tab,pais,sk,price,pct){var arr=tab==='acciones'?DATA.acciones[pais]||[]:DATA[tab]||[];var it=arr.find(function(x){return x.s===sk;});if(!it||!price)return;it.p=price>=1000?'$'+_fmt(price,'precio'):_fmt(price,'precio');it.c=_fmt(pct,'pct');it.up=pct>=0?1:0;}
+function updateItemRT(tab,pais,sk,price,pct){var arr=tab==='acciones'?DATA.acciones[pais]||[]:DATA[tab]||[];var it=arr.find(function(x){return x.s===sk;});if(!it||!price)return;it.p=_fmt(price,'precio');it.c=_fmt(pct,'pct');it.up=pct>=0?1:0;}
 
 function yahooFinanceRT(){}
 

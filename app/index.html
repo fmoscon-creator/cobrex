@@ -1094,6 +1094,8 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       // C4 (paridad 1.3.45): cargar el plan SIEMPRE que haya sesión (login o restauración),
       // no depender del poll de DOMContentLoaded que se rendía y dejaba FREE a usuarios PRO/ELITE.
       if (session && session.user && window.loadUserPlan) { window.loadUserPlan(); }
+      // M2 (web-1.4): cargar Mis Alertas + actualizar el badge de la campana al restaurar sesión (antes solo corría en boot → badge en 0).
+      if (session && session.user && window.cargarMisAlertas) { window.cargarMisAlertas().then(function(){ if(window.updateBells) window.updateBells(); }); }
       if (event === 'SIGNED_IN') {
         console.log('[Cobrex Auth] Usuario logueado:', _currentUser.email);
         upsertUserDB(_currentUser);
@@ -2347,13 +2349,13 @@ display:flex;align-items:center;justify-content:space-between}
           padding:5px 8px;font-size:13px;cursor:pointer;outline:none;
           -webkit-appearance:auto">
           <option value="en">&#127482;&#127480; English</option>
-          <option value="es-ar" selected>&#127462;&#127479; Espa&#241;ol (Arg)</option>
-          <option value="pt-br">&#127463;&#127479; Portugu&#234;s (BR)</option>
+          <option value="es" selected>&#127462;&#127479; Espa&#241;ol (Arg)</option>
+          <option value="pt">&#127463;&#127479; Portugu&#234;s (BR)</option>
           <option value="fr">&#127467;&#127479; Fran&#231;ais</option>
           <option value="it">&#127470;&#127481; Italiano</option>
           <option value="zh">&#127464;&#127475; &#20013;&#25991;</option>
           <option value="hi">&#127470;&#127475; &#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</option>
-          <option value="ar">&#127462;&#127466; &#1593;&#1585;&#1576;&#1610;</option>
+          <option value="ar">&#127480;&#127462; &#1593;&#1585;&#1576;&#1610;</option>
         </select>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;
@@ -3154,7 +3156,7 @@ function pacSaveLang(sel){
   if(lbl) lbl.innerHTML=labels[code]||code;
 }
 function pacInitLang(){
-  var saved=localStorage.getItem('aurex_lang')||'es-ar';
+  var saved=localStorage.getItem('aurex_lang')||'es';
   var sel=document.getElementById('select-idioma');
   if(sel) sel.value=saved;
   pacSaveLang({value:saved});
@@ -4196,7 +4198,7 @@ document.addEventListener("DOMContentLoaded", function(){
       return '<div style="display:flex;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border);background:'+(a.leida?'transparent':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.7':'1')+'">'
         + '<input type="checkbox" class="ma-chk" data-id="'+a.id+'" style="margin-top:3px">'
         + '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+dir+' '+(a.simbolo||'')+(a.precio_disparado!=null?' — '+a.precio_disparado:'')+'</div>'
-        + '<div style="font-size:10px;color:var(--textSec);margin-top:2px">'+(al.tipo||'')+' · '+fecha+'</div></div></div>';
+        + '<div style="font-size:10px;color:var(--textSec);margin-top:2px">'+(function(tp){var _t=window.t||function(k){return k;};var m={precio_objetivo:'al_precio_obj',variacion_brusca:'al_precio_var',max_min:'al_precio_maxmin',precio:'al_precio_obj',porcentaje:'al_precio_var',umbral:'al_ia_umbral',apertura:'al_ev_apertura'};return m[tp]?_t(m[tp]):(tp||'');})(al.tipo)+' · '+fecha+'</div></div></div>';
     }).join('');
   };
   window.abrirMisAlertas = async function(){
@@ -4524,13 +4526,13 @@ window.connectTelegram=function(){
     var old=document.getElementById('cobrex-ca-modal'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='cobrex-ca-modal'; ov.dir=dirRtl;
     ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100080;display:flex;align-items:center;justify-content:center;padding:20px';
-    function seg(active){ return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid '+(active?'var(--gold)':'var(--border2)')+';background:'+(active?'var(--gold)':'var(--bg)')+';color:'+(active?'#000':'var(--text)'); }
+    function seg(active, c){ c=c||'var(--gold)'; return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid '+(active?c:'var(--border2)')+';background:'+(active?c:'var(--bg)')+';color:'+(active?'#000':'var(--text)'); }
     function render(){
       var pct = tipo==='variacion_brusca';
       ov.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:360px;padding:22px">'+
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div style="font-size:17px;font-weight:800;color:var(--text)">'+T('al_ca_titulo','Nueva alerta')+' · '+sym+'</div><div id="ca-x" style="font-size:20px;color:var(--textDim);cursor:pointer">✕</div></div>'+
         '<div style="font-size:11px;color:var(--textSec);margin-bottom:14px">'+T('al_ca_actual','Precio actual')+': '+fmt(cur)+'</div>'+
-        '<div style="display:flex;gap:8px;margin-bottom:10px"><div id="ca-up" style="'+seg(dir==="arriba")+'">▲ '+T('al_ca_sube','Sube')+'</div><div id="ca-down" style="'+seg(dir==="abajo")+'">▼ '+T('al_ca_baja','Baja')+'</div></div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:10px"><div id="ca-up" style="'+seg(dir==="arriba",'var(--green)')+'">▲ '+T('al_ca_sube','Sube')+'</div><div id="ca-down" style="'+seg(dir==="abajo",'var(--red)')+'">▼ '+T('al_ca_baja','Baja')+'</div></div>'+
         '<div style="display:flex;gap:8px;margin-bottom:12px"><div id="ca-tp" style="'+seg(!pct)+'">'+T('al_ca_precio_obj','Precio objetivo')+'</div><div id="ca-tv" style="'+seg(pct)+'">'+T('al_ca_variacion','Variación %')+'</div></div>'+
         '<input id="ca-val" type="number" inputmode="decimal" placeholder="'+(pct?'%':'$')+'" style="width:100%;box-sizing:border-box;padding:13px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:16px;font-weight:700;margin-bottom:8px">'+
         '<div id="ca-prev" style="font-size:11px;color:var(--gold);font-weight:600;min-height:16px;margin-bottom:14px"></div>'+

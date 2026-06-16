@@ -624,7 +624,7 @@ window._moveRow=function(row,dir){
   }
 };
 
-function updateItemRT(tab,pais,sk,price,pct){var arr=tab==='acciones'?DATA.acciones[pais]||[]:DATA[tab]||[];var it=arr.find(function(x){return x.s===sk;});if(!it||!price)return;it.p=price>=1000?'$'+_fmt(price,'precio'):_fmt(price,'precio');it.c=_fmt(pct,'pct');it.up=pct>=0?1:0;}
+function updateItemRT(tab,pais,sk,price,pct){var arr=tab==='acciones'?DATA.acciones[pais]||[]:DATA[tab]||[];var it=arr.find(function(x){return x.s===sk;});if(!it||!price)return;it.p=price>=1000?_fmt(price,'precio'):_fmt(price,'precio');it.c=_fmt(pct,'pct');it.up=pct>=0?1:0;}
 
 function yahooFinanceRT(){}
 
@@ -2672,10 +2672,10 @@ window.wlShowCompare = function(){
   var rows = [
     {label:'Señal IA', fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+d+'</span>';}},
     {label:'Probabilidad', fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+getProb(t)+'%</span>';}},
-    {label:'Precio', fn:function(t){var p=getPrice(t);return '<span style="color:var(--text);font-weight:700">'+(p?'$'+_fmt(p):'---')+'</span>';}},
+    {label:'Precio', fn:function(t){var p=getPrice(t);return '<span style="color:var(--text);font-weight:700">'+(p?_fmt(p):'---')+'</span>';}},
     {label:'Cambio '+_curPer, fn:function(t){var c=getChange(t);return '<span style="color:'+(c>=0?'var(--green)':'var(--red)')+';font-weight:700">'+_fmt(c,'pct')+'</span>';}},
-    {label:'Objetivo', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--green);font-weight:700">'+(p?'$'+_fmt(p*(d==='BAJISTA'?0.95:1.08)):'---')+'</span>';}},
-    {label:'Stop', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--red);font-weight:700">'+(p?'$'+_fmt(p*(d==='BAJISTA'?1.03:0.96)):'---')+'</span>';}},
+    {label:'Objetivo', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--green);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?0.95:1.08)):'---')+'</span>';}},
+    {label:'Stop', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--red);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?1.03:0.96)):'---')+'</span>';}},
   ];
   rows.forEach(function(row){
     html += '<div style="display:flex;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div style="width:100px;font-size:10px;font-weight:600;color:var(--textSec)">'+row.label+'</div>';
@@ -2812,9 +2812,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // iOS Safari fix: event delegation global para TODOS los clicks de watchlist
 document.addEventListener('click', function(e){
-  // Checkbox comparar activo
-  var cmpEl = e.target.closest('[data-wl-compare]');
-  if(cmpEl){ e.stopPropagation(); window.wlToggleCompare(cmpEl.getAttribute('data-wl-compare')); return; }
+  // L (web-1.4): NO togglear el comparar desde el delegador — la fila ya llama wlToggleCompare en su onclick.
+  // Antes esto disparaba wlToggleCompare una 2da vez al tocar el círculo → doble toggle (neto cero, no marcaba).
   // Boton "+ Nueva lista" en header
   var btn = e.target.closest('#wl-btn-nueva');
   if(btn){ e.preventDefault(); window.wlCreateListModal(); return; }
@@ -5161,7 +5160,7 @@ function _initHeaderLogos() {
       langChip.className = 'lang-chip';
       langChip.onclick = function(){ window._openIdiomaModal(); };
       var curLang = localStorage.getItem('aurex_lang') || 'es';
-      var flags = {es:'🇪🇸',en:'🇺🇸',pt:'🇧🇷',zh:'🇨🇳',fr:'🇫🇷',it:'🇮🇹',hi:'🇮🇳',ar:'🇦🇪'};
+      var flags = {es:'🇦🇷',en:'🇺🇸',pt:'🇧🇷',zh:'🇨🇳',fr:'🇫🇷',it:'🇮🇹',hi:'🇮🇳',ar:'🇸🇦'};
       langChip.innerHTML = '<span id="lang-flag">' + (flags[curLang]||'🇪🇸') + '</span> <span style="font-size:8px;">&#9660;</span>';
       langChip.style.cssText = 'display:flex;align-items:center;gap:2px;padding:3px 7px;border:1.5px solid var(--gold);border-radius:6px;cursor:pointer;font-size:14px;margin-left:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);';
       portHlRow.appendChild(langChip);
@@ -6417,7 +6416,7 @@ window._setIdioma = function(code) {
   else localStorage.setItem('aurex_lang', code);
   var ov = document.getElementById('idioma-modal-overlay');
   if (ov) ov.remove();
-  var flags = { es: '🇪🇸', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', fr: '🇫🇷', it: '🇮🇹', hi: '🇮🇳', ar: '🇦🇪' };
+  var flags = { es: '🇦🇷', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', fr: '🇫🇷', it: '🇮🇹', hi: '🇮🇳', ar: '🇸🇦' };
   var flagEl = document.getElementById('lang-flag');
   if (flagEl) flagEl.textContent = flags[code] || '🇪🇸';
 };
