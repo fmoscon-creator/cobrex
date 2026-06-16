@@ -2736,7 +2736,7 @@ display:flex;align-items:center;justify-content:space-between}
 <div id="auth-msg" class="auth-msg"></div>
 <div id="modal-planes" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
   background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch">
-  <div style="min-height:100%;padding:0 0 40px">
+  <div style="min-height:100%;padding:0 0 40px;background:var(--bg)">
     <div style="background:linear-gradient(180deg,var(--headerGradTop) 0%,var(--bg) 80px);
       padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;
       border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2;
@@ -3036,32 +3036,22 @@ function pacToggle(id){
 }
 function abrirModalPlanes(){
   var m=document.getElementById('modal-planes');
-  if(m){m.style.display='block';planTab('PRO');}
+  if(m){m.style.display='block';_showAllPlans();}
 }
 function cerrarModalPlanes(){
   var m=document.getElementById('modal-planes');
   if(m) m.style.display='none';
 }
+// D1 (web-1.4): paywall = 3 tarjetas apiladas (FREE/PRO/ELITE) sin pestañas, = nativa SubscriptionScreen.
+function _showAllPlans(){
+  var tabs=document.getElementById('plan-tabs'); if(tabs) tabs.style.display='none';
+  ['FREE','PRO','ELITE'].forEach(function(k){ var panel=document.getElementById('plan-panel-'+k); if(panel){ panel.style.display='block'; panel.style.marginBottom='14px'; } });
+}
 function planTab(p){
-  var plans=['FREE','PRO','ELITE'];
-  var cols={FREE:'var(--textSec)',PRO:'#A78BFA',ELITE:'#c9a84c'};
-  plans.forEach(function(k){
-    var tab=document.getElementById('ptab-'+k);
-    var panel=document.getElementById('plan-panel-'+k);
-    if(tab&&panel){
-      if(k===p){
-        tab.style.background=cols[k];
-        tab.style.color=k==='PRO'?'#fff':'#000';
-        tab.style.border='none';
-        panel.style.display='block';
-      } else {
-        tab.style.background='var(--card)';
-        tab.style.color=cols[k];
-        tab.style.border='1px solid '+cols[k];
-        panel.style.display='none';
-      }
-    }
-  });
+  // Mantiene las 3 apiladas y scrollea a la elegida (los botones "Quiero PRO/ELITE" siguen funcionando).
+  _showAllPlans();
+  var panel=document.getElementById('plan-panel-'+p);
+  if(panel) panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function pacInitCuenta(){
   var u=window._currentUser;
