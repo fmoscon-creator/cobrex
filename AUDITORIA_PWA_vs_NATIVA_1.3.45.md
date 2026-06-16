@@ -196,6 +196,19 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 - **K2 · `listDot` Watchlist — OK:** PWA `aurex-features.js:2131 <div style="width:10px;height:10px;border-radius:5px;background:'+currentList.color+'">` = nativa `WatchlistScreen.js:854` (dot 10×10 con `currentList.color`). ✓
 - **K3 · Pop "detalle de activo" (análisis IA) — OK:** usa los colores/emojis de dirección ya verificados (verde/rojo/dorado, 📈/📉/⚡, objetivo dorado). Detalle menor: mercado cerrado en nativa usa `#FF6B6B` (`MercadosScreen.js:1039`); confirmar que la PWA use el mismo tono. Las fugas de texto del detalle ya están en G-IA / H (badges/varDefs).
 
+## SECCIÓN L — BUG FUNCIONAL: "Comparar activos" en Watchlist (el círculo de tilde no marca)
+**Síntoma (Fernando):** en modo Comparar, tocar el **círculo de check** de un activo no lo marca; solo se marca tocando el resto de la card.
+**Causa raíz (doble disparo de `wlToggleCompare`):**
+- La **fila** tiene `onclick` inline que llama `wlToggleCompare(sym)` → `aurex-features.js:2213,2215` (`rowClick = isCompareMode ? 'wlToggleCompare(...)'`).
+- El **círculo** (`:2218 <div data-wl-compare="sym" …>`) **no tiene `onclick` propio**, pero hay un **delegador global** en `document` que captura el click del círculo y llama `wlToggleCompare` OTRA VEZ → `:2809-2812`:
+  ```
+  var cmpEl = e.target.closest('[data-wl-compare]');
+  if(cmpEl){ e.stopPropagation(); window.wlToggleCompare(cmpEl.getAttribute('data-wl-compare')); return; }
+  ```
+- Al tocar el círculo, burbujea: (1) dispara el `onclick` de la fila → marca; (2) llega a `document` → delegador → `wlToggleCompare` de nuevo → desmarca. Neto: **marca y desmarca = no pasa nada**. Tocando el resto de la card no hay `[data-wl-compare]` en el ancestro → solo dispara una vez → funciona.
+**AJUSTE PROPUESTO:** eliminar UNA de las dos rutas. Recomendado: quitar la rama `[data-wl-compare]` del delegador (`:2811-2812`) — la fila ya cubre el círculo por burbujeo. (O, alternativamente, hacer que el `onclick` de la fila no dispare cuando `event.target.closest('[data-wl-compare]')`.) Verificar que tras el fix, tocar el círculo marque/desmarque una sola vez.
+**Severidad:** ALTA (función no usable como se espera). No lo habíamos detectado ni Code ni Escritorio.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
