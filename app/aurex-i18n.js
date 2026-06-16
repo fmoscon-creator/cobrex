@@ -757,6 +757,7 @@
     wl_cmp_objetivo: { es: 'Objetivo', en: 'Target', pt: 'Objetivo', zh: '目标', fr: 'Objectif', it: 'Obiettivo', hi: 'लक्ष्य', ar: 'الهدف' },
     wl_cmp_stop: { es: 'Stop', en: 'Stop', pt: 'Stop', zh: 'Stop', fr: 'Stop', it: 'Stop', hi: 'Stop', ar: 'Stop' },
     wl_cmp_resumen: { es: 'Resumen', en: 'Summary', pt: 'Resumo', zh: '摘要', fr: 'Résumé', it: 'Riepilogo', hi: 'सारांश', ar: 'ملخص' },
+    wl_cmp_cambio: { es: 'Cambio', en: 'Change', pt: 'Variação', zh: '变化', fr: 'Variation', it: 'Variazione', hi: 'परिवर्तन', ar: 'التغيّر' },
     wl_mejor_performance: { es: '⭐ MEJOR PERFORMANCE', en: '⭐ BEST PERFORMANCE', pt: '⭐ MELHOR PERFORMANCE', zh: '⭐ 最佳表现', fr: '⭐ MEILLEURE PERFORMANCE', it: '⭐ MIGLIORE PERFORMANCE', hi: '⭐ सर्वश्रेष्ठ प्रदर्शन', ar: '⭐ أفضل أداء' },
     wl_variables_ia_10: { es: 'VARIABLES IA (10)', en: 'AI VARIABLES (10)', pt: 'VARIÁVEIS IA (10)', zh: 'AI变量 (10)', fr: 'VARIABLES IA (10)', it: 'VARIABILI IA (10)', hi: 'AI वेरिएबल (10)', ar: 'متغيرات AI (10)' },
     wl_compartir_comparacion: { es: '📤 Compartir comparación', en: '📤 Share comparison', pt: '📤 Compartilhar comparação', zh: '📤 分享比较', fr: '📤 Partager la comparaison', it: '📤 Condividi confronto', hi: '📤 तुलना शेयर करें', ar: '📤 مشاركة المقارنة' },

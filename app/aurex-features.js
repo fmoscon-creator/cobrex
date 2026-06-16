@@ -2730,12 +2730,12 @@ window.wlShowCompare = function(){
 
   // Data rows
   var rows = [
-    {label:'Señal IA', fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+d+'</span>';}},
-    {label:'Probabilidad', fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+getProb(t)+'%</span>';}},
-    {label:'Precio', fn:function(t){var p=getPrice(t);return '<span style="color:var(--text);font-weight:700">'+(p?_fmt(p):'---')+'</span>';}},
-    {label:'Cambio '+_curPer, fn:function(t){var c=getChange(t);return '<span style="color:'+(c>=0?'var(--green)':'var(--red)')+';font-weight:700">'+_fmt(c,'pct')+'</span>';}},
-    {label:'Objetivo', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--green);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?0.95:1.08)):'---')+'</span>';}},
-    {label:'Stop', fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--red);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?1.03:0.96)):'---')+'</span>';}},
+    {label:t('wl_cmp_senal_ia'), fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+d+'</span>';}},
+    {label:t('wl_cmp_probabilidad'), fn:function(t){var d=getDir(t);return '<span style="color:'+dirColor(d)+';font-weight:700">'+getProb(t)+'%</span>';}},
+    {label:t('wl_cmp_precio'), fn:function(t){var p=getPrice(t);return '<span style="color:var(--text);font-weight:700">'+(p?_fmt(p):'---')+'</span>';}},
+    {label:t('wl_cmp_cambio')+' '+_curPer, fn:function(t){var c=getChange(t);return '<span style="color:'+(c>=0?'var(--green)':'var(--red)')+';font-weight:700">'+_fmt(c,'pct')+'</span>';}},
+    {label:t('wl_cmp_objetivo'), fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--green);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?0.95:1.08)):'---')+'</span>';}},
+    {label:t('wl_cmp_stop'), fn:function(t){var p=getPrice(t);var d=getDir(t);return '<span style="color:var(--red);font-weight:700">'+(p?_fmt(p*(d==='BAJISTA'?1.03:0.96)):'---')+'</span>';}},
   ];
   rows.forEach(function(row){
     html += '<div style="display:flex;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border)"><div style="width:100px;font-size:10px;font-weight:600;color:var(--textSec)">'+row.label+'</div>';
@@ -4791,7 +4791,7 @@ function _renderFearGreed(containerId) {
       '<div style="display:flex;align-items:center;gap:10px;">' +
         gauge +
         '<div style="flex:1;min-width:0;">' +
-          '<div style="font-size:16px;font-weight:700;color:'+(d.color||'var(--gold)')+';">'+( d.emoji||'')+' '+d.value+' &#x2014; '+d.label+'</div>' +
+          '<div style="font-size:16px;font-weight:700;color:'+(d.color||'var(--gold)')+';">'+( d.emoji||'')+' '+d.value+' &#x2014; '+((window._i18n&&window._i18n.t)?(d.value<=20?window._i18n.t('pulse_z_miedo_ext'):d.value<=40?window._i18n.t('pulse_z_miedo'):d.value<=60?window._i18n.t('pulse_z_neutral'):d.value<=80?window._i18n.t('pulse_z_codicia'):window._i18n.t('pulse_z_codicia_ext')):d.label)+'</div>' +
           '<div style="font-size:10px;color:var(--gold);font-weight:700;margin-top:2px;">&#x25B6; Cobrex PULSE&#x2122; '+d.value+'</div>' +
           (cat==='CRIPTO' && (btcSentIdx !== null || altFngIdx !== null) ?
             '<div style="display:flex;gap:6px;align-items:center;margin-top:2px;flex-wrap:wrap;">' +
