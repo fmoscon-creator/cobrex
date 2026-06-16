@@ -160,6 +160,11 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 - **PWA `aurex-features.js:4174`**: `tipoLabel = s.tipo==='accion'?'Acciones':…'cripto'?'Cripto':…'Metal':'Mat. Prima':'Bono':'Otro'` **hardcodeado** (vs `:1641` que sí usa `t('mkt_tipo_*')`).
 - **AJUSTE:** usar `t('mkt_tipo_accion')` etc. como en `:1641`. (= la fuga "Accion" de Escritorio.)
 
+## SECCIÓN G-Alertas — pantalla Alertas (15 toggles)
+- **OK:** 4 secciones con iconos/colores = nativa: IA 🤖 `#A78BFA` (`index.html:1936,1947 al_sec_ia`), Pulse 💓 `#EC4899` (`:1962 al_sec_pulse`), Precio 💰 (`:1977 al_sec_precio`), Eventos 📅 (`:1989`). Títulos de sección con `data-i18n`. Nativa `AlertasScreen.js:52-91` (mismos 15 ids, iconos 🤖/💓/💰/📅, colores `#A78BFA/#EC4899/C.gold/#3B82F6`).
+- **G-AL-1 · Pop "alertas activas" con labels hardcodeados (fuga):** `index.html:950 var toggleLabels = ['Cambio de senal','Alta Conviccion','Umbral probabilidad','Senal en Portfolio','Cambio de zona','Por categoria','Termometro de Riesgo','Precio objetivo','Variacion brusca','Nuevo maximo/minimo','FED FOMC','CPI / PBI','Apertura mercados','Earnings portfolio','Geopolitica GDELT']` — **15 labels en español sin acentos**, usados en el modal de resumen (`alert-info-modal`, `:951-952`). La nativa usa `t('alert_ia_cambio')` etc. (`AlertasScreen.js:56-91`). → en inglés ese pop queda en español.
+  - **AJUSTE:** reemplazar el array por `t()` de cada toggle. (También el array `sections` `:944` con títulos hardcodeados.)
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
