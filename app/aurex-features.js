@@ -926,12 +926,25 @@ window._tipoLabel = function(tipo){
   if(extra[t]) return extra[t];
   return (I&&I.t)?I.t('mkt_tipo_activo'):(tipo||'Activo');
 };
-// web-1.7: al cambiar idioma re-dibujar el Portfolio (filas + Termómetro de Riesgo), no solo el estado vacío.
+// web-1.7: al cambiar idioma re-dibujar el Portfolio (filas + Termómetro + botón Ordenar), no solo el estado vacío.
+function _retranslateSortBtn(tab){
+  try{
+    var sb=document.getElementById(tab+'-sort-btn');
+    if(sb && window._sortCfgs && window._sortCfgs[tab]){
+      var cur=_getSort(tab); var o=window._sortCfgs[tab].opts.find(function(x){return x.k===cur;})||window._sortCfgs[tab].opts[0];
+      sb.innerHTML=t('port_sort_btn_prefix')+' <span class="sort-value">'+t(o.lk)+'</span> <span class="sort-arrow">↓</span>';
+    }
+  }catch(e){}
+}
 if(window._i18n) window._i18n.onLangChange(function(){
   if(window._portItems && window._portItems.length>0){
     _renderPortfolioItems(window._portItems);
     if(typeof _renderThermoRisk==='function') try{ _renderThermoRisk(window._portItems); }catch(e){}
   } else { _renderPortfolioEmpty(); }
+  _retranslateSortBtn('portfolio'); _retranslateSortBtn('mercados'); _retranslateSortBtn('ia');
+  // banner upsell de Portfolio (usa claves i18n, solo falta re-llamarlo) + label "Hoy"
+  try{ if(window._updatePfBanner) window._updatePfBanner(); }catch(e){}
+  try{ var hl=document.getElementById('port-hoy-label'); if(hl) hl.textContent=' '+t('hoy'); }catch(e){}
 });
 
 function _renderPortfolioItems(items){
@@ -5575,7 +5588,8 @@ window._initHoyIndicator = function() {
   hoyPct.style.cssText = 'font-size:12px;font-weight:800;color:' + (isPos ? 'var(--green)' : 'var(--red)') + ';';
 
   var hoyLabel = document.createElement('span');
-  hoyLabel.textContent = ' Hoy';
+  hoyLabel.id = 'port-hoy-label';
+  hoyLabel.textContent = ' ' + ((window._i18n&&window._i18n.t)?window._i18n.t('hoy'):'Hoy');
   hoyLabel.style.cssText = 'font-size:10px;font-weight:600;color:var(--textSec);white-space:nowrap;';
 
   hoyDiv.appendChild(hoyPct);
