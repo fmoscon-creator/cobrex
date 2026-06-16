@@ -263,19 +263,41 @@ Probado con `aurextester12` (FREE) y `fmoscon` (ELITE) en `cobrex.io/app`.
 - *Nota:* el backend `PLAN_LIMITS` enumera 6 alertTypes para FREE (sin `precio`/`porcentaje`); la app nativa (`usePlan.js`) y la PWA enumeran 8. Es el **mismo desajuste que ya existe en la nativa** (no es una divergencia de la PWA).
 
 ### Comportamiento (pantalla/flujo) — verificado
-| | FREE | ELITE |
-|---|---|---|
-| portfolioMax | 5 | ∞ |
-| watchlistMax | 1 | ∞ |
-| paywall automático al entrar | **SÍ** | NO |
-| toggles alertas desbloqueados / bloqueados | **5 / 10** | **15 / 0** |
-| badge plan | PLAN FREE | PLAN ELITE |
+| | FREE | PRO | ELITE |
+|---|---|---|---|
+| portfolioMax | 5 | ∞ | ∞ |
+| watchlistMax | 1 | ∞ | ∞ |
+| paywall automático al entrar | **SÍ** | NO | NO |
+| toggles desbloqueados / bloqueados | **5 / 10** | **14 / 1** | **15 / 0** |
+| badge plan | PLAN FREE | PLAN PRO | PLAN ELITE |
 
-- **FREE:** ✅ paywall aparece solo (C3); en el modal se puede pasar a PRO/ELITE (`planTab`) y muestra trial ("Quiero probar gratis 7 días / Luego $2.99/mes"); gating enforced: crear 2ª lista → bloqueada por límite 1 (`checkPlanLimit`, ver N); 10 toggles `data-locked` no se pueden activar (`applyAlertGating`).
-- **ELITE:** ✅ sin paywall forzado, 15 toggles desbloqueados, portfolio/watchlist ∞, badge ELITE.
-- **PRO:** validado solo por **código** (no hay cuenta PRO): `PLAN_LIMITS_CLIENT.PRO` = ∞/∞/×17 (todo menos `geopolitica_gdelt`). En pantalla, PRO debería mostrar 14 toggles desbloqueados (todos menos GDELT) — a confirmar con una cuenta PRO.
+- **FREE:** ✅ paywall aparece solo (C3); en el modal se pasa a PRO/ELITE (`planTab`) y muestra trial ("Quiero probar gratis 7 días / Luego $2.99/mes"); gating enforced: crear 2ª lista → bloqueada por límite 1 (`checkPlanLimit`, ver N); 10 toggles `data-locked`.
+- **PRO:** ✅ (cuenta `app.aurex`, plan PRO) — portfolio/watchlist ∞, sin paywall, **14 toggles desbloqueados / 1 bloqueado = "Geopolítica GDELT"** (exclusiva ELITE). Exactamente lo esperado.
+- **ELITE:** ✅ sin paywall, 15 toggles desbloqueados, ∞/∞.
 
-**Veredicto gating:** ✅ correctamente seteado y alineado a la nativa para FREE y ELITE (lo que cada plan PUEDE y NO PUEDE acceder). PRO pendiente de prueba en vivo (config OK).
+**Veredicto gating:** ✅ correctamente seteado y alineado a la nativa para los **3 planes** (FREE/PRO/ELITE) — validado en código + pantalla + flujo. Lo que cada plan PUEDE y NO PUEDE acceder está bien.
+
+## SECCIÓN P — Consolidación con Escritorio (Issue #18, todo probado por él con FREE)
+
+### COINCIDIMOS (lo mismo encontró Escritorio y yo):
+- Pop Mis Alertas **cortado** (Escritorio: "40% inferior, sin scroll") = **M1**. ✅
+- Sube/Baja **dorados** ambos = **I2**. ✅
+- Tipo de alerta crudo "**precio_objetivo**" = **M3**. ✅
+- **Badge** no se actualiza al marcar leídas (Escritorio: `alertasService.js:L93`, "solo refresh on focus") = **M2** (yo lo ubiqué en `updateBells`/boot, `index.html:4618-4622`). ✅ (mismo síntoma, causa complementaria).
+- Modal de plan con **snake_case** ("cambio_senal") = **G-AL-1** (`index.html:950`). ✅
+
+### ESCRITORIO encontró y yo NO (a verificar/incorporar):
+- **F1 · CRÍTICO: la papelera de Portfolio CONGELA la app** (timeout 30s, repro 3×; la de Watchlist sí funciona). Mi test llamaba `deletePortfolioItem()` directo (no congeló); Escritorio hizo **click real en la papelera**. → **A REPRODUCIR con click real** (lo verifico).
+- **F1 · 6 activos en cuenta pero el modal dice "límite 5"** (inconsistencia de conteo).
+- **F6 · Comparador: "Precio" muestra "$$66.328,02" — doble $** (otro caso de doble-$, distinto de M3 de Watchlist).
+- **F5 · Modal de agregar (Watchlist) se desplaza/corta al abrir el teclado.**
+
+### YO encontré y Escritorio NO:
+- **L · Comparar: el CÍRCULO de tilde no marca** (doble disparo `wlToggleCompare`). **Escritorio dijo "comparar funciona" porque clickeó la CARD (que sí marca), no el círculo.** No es contradicción: la card funciona, el círculo no (lo confirmó Fernando). Escritorio NO probó el círculo.
+- Headers ⚖️/timer/LIVE ocultos por `HIDE_HEADER_LEGAL` (**A**), posición campana por activo (**B**), estructura del paywall (**D**), formato de números `es-AR` (**F**), emojis Pulse (**G-Mercados**), **banderas** 🇦🇷/🇸🇦 (**J**), gating completo 3 planes (**O**), y varias fugas i18n (varDefs, "Solo favoritos", tipoLabel, etc.).
+
+### Discrepancia a resaltar:
+- **Comparar activos:** Escritorio ✅ "funciona" (click en card) vs Code ❌ bug L (click en círculo). Ambos ciertos → **el círculo está roto pero la card no**, por eso uno lo vio y el otro no. Hay que arreglar el círculo (L).
 
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
