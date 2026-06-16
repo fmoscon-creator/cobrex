@@ -290,7 +290,7 @@ Probado con `aurextester12` (FREE) y `fmoscon` (ELITE) en `cobrex.io/app`.
 - **F1 · "CRÍTICO: la papelera congela la app" → FALSO POSITIVO (verificado por Code).** Reproduje con **click real** en la papelera (cuenta FREE): NO congela. Lo que dispara es un **`confirm()` del navegador** ("¿Eliminar este activo del portfolio?"). El `confirm()` bloquea el renderer hasta que el usuario responde → la automatización de Escritorio, al no cerrar ese diálogo, vio "timeout 30s" y lo interpretó como freeze. **Para un usuario real funciona** (confirm → Eliminar → borra; test: frozen=false, app responsive, 0 errores). 
   - **PERO sí hay 2 diffs reales acá:** (a) el texto del `confirm()` está **hardcodeado en español** ("¿Eliminar este activo del portfolio?") → fuga i18n; (b) la nativa usa `Alert.alert('Eliminar','Eliminar?',[Cancelar/Eliminar])` (`PortfolioScreen.js:410-413`, traducido) en vez de un `confirm()` del navegador. AJUSTE: usar un modal propio traducido (como `wlDeleteList`) en vez de `confirm()` hardcodeado.
 - **F1 · 6 activos en cuenta pero el modal dice "límite 5"** (inconsistencia de conteo).
-- **F6 · Comparador: "Precio" muestra "$$66.328,02" — doble $** (otro caso de doble-$, distinto de M3 de Watchlist).
+- **F6 · Comparador doble $ — CONFIRMADO por Code (y en 3 filas, no 1).** `_fmt(n)` ya incluye el `$`; el comparador antepone OTRO `$`: `'$'+_fmt(p)` → `$$66.328,02`. Pasa en **Precio (`aurex-features.js:2670`), Objetivo (`:2672`) y Stop (`:2673`)**. AJUSTE: quitar el `'$'+` (dejar solo `_fmt(...)`) en las 3.
 - **F5 · Modal de agregar (Watchlist) se desplaza/corta al abrir el teclado.**
 
 ### YO encontré y Escritorio NO:
