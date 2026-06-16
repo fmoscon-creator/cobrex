@@ -277,6 +277,14 @@ Probado con `aurextester12` (FREE) y `fmoscon` (ELITE) en `cobrex.io/app`.
 
 **Veredicto gating:** ✅ correctamente seteado y alineado a la nativa para los **3 planes** (FREE/PRO/ELITE) — validado en código + pantalla + flujo. Lo que cada plan PUEDE y NO PUEDE acceder está bien.
 
+### Flujos funcionales en PRO (control independiente Code, cuenta `app.aurex`)
+- ✅ **Crear 2ª lista** — funciona (POST watchlists), sin el límite que bloquea a FREE.
+- ✅ **Agregar varios activos a Portfolio** (ADA/DOT/LINK, 3 POST) — sin límite.
+- ✅ **Togglear un evento que en FREE estaba bloqueado** (FED FOMC/CPI): `data-locked=0` y **el toggle cambia al click**. → confirma que el "toggle FREE que no cambiaba" era **gating correcto** (bloqueado), no un bug; cuando está desbloqueado, responde bien.
+- ✅ 6 tabs renderizan.
+- El **círculo de comparar** quedó sin probar en PRO (lista recién creada vacía), pero el **bug L es de código** (independiente del plan), ya confirmado en FREE.
+- Limpieza: borré los datos de prueba cargados en `app.aurex` (3 activos + lista `PRO_QA`).
+
 ## SECCIÓN P — Consolidación con Escritorio (Issue #18, todo probado por él con FREE)
 
 ### COINCIDIMOS (lo mismo encontró Escritorio y yo):
