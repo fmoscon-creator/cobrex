@@ -144,6 +144,22 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 
 > **Coincidencias Escritorio↔Code (doble verificación):** balanza headers (A1 = Escritorio brand.js:L11), campana Portfolio/Watchlist (B1/B2 = Escritorio C6/C7), colores sube/baja dorados (I2 = Escritorio L4525), "Ult. cierre"/hardcodes IA (H4/H6/G-IA = Escritorio A3 parcial). Lo de Escritorio que verifiqué línea por línea coincide; nada se da por cierto sin leer el código.
 
+## SECCIÓN G-Mercados — pantalla Mercados / Cobrex Pulse
+
+### G-M-1 · Emojis del Pulse distintos (nivel emoji)
+- **NATIVA `MercadosScreen.js:39-40`** (`pulseEmoji`): `😨`=😨 (Miedo Extremo ≤20), `😟`=😟 (Miedo ≤40), `😐`=😐 (Neutral ≤60), `😏`=😏 (Codicia ≤80), `🤑`=🤑 (Codicia Extrema).
+- **PWA `aurex-v3.js:3051-3055`**: 😱 (≤20), 😰 (≤40), 😐 (≤60), 😏 (≤80), 🤑 (>80). Además **inconsistencia interna**: `:3054` usa 😏 pero `:3068` usa 😊 para Codicia.
+- **DIFERENCIA:** Miedo Extremo PWA 😱 vs nativa 😨; Miedo PWA 😰 vs nativa 😟; Codicia PWA inconsistente (😏/😊).
+- **AJUSTE:** usar 😨/😟/😐/😏/🤑 (idéntico a `pulseEmoji`) y unificar `:3054` y `:3068` a 😏.
+
+### G-M-2 · Colores y filtros del Pulse — OK
+- Colores por zona `#C62828/#FF6B6B/var(--gold)/var(--green)/#00E676` (`aurex-v3.js:3051-3055,3120`) = nativa (`MercadosScreen.js:42`). ✓
+- Filtros: `🌐 GLOBAL / 🪙 CRIPTO / 📈 ACCIONES / 🛢️ COMOD / ⚡ FUTUROS` (`aurex-v3.js:3197`) = emojis nativos (`MercadosScreen.js:194-198`). ✓ *(menor: `catLabels` en `:3197` están hardcodeados en mayúscula; la nativa usa `i18n('pulse_global')` etc.)*
+
+### G-M-3 · "Acciones/Cripto/ETF…" hardcodeado (H7)
+- **PWA `aurex-features.js:4174`**: `tipoLabel = s.tipo==='accion'?'Acciones':…'cripto'?'Cripto':…'Metal':'Mat. Prima':'Bono':'Otro'` **hardcodeado** (vs `:1641` que sí usa `t('mkt_tipo_*')`).
+- **AJUSTE:** usar `t('mkt_tipo_accion')` etc. como en `:1641`. (= la fuga "Accion" de Escritorio.)
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
