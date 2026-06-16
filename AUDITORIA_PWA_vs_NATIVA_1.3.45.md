@@ -57,9 +57,29 @@
 
 ---
 
-## PENDIENTE (sigo auditando, mismo nivel de detalle, con capturas):
-- **SECCIÓN D — PAYWALL** (`#modal-planes`, `index.html:2733`): fondo/overlay (rgba 0,0,0,0.85) vs diseño nativo, botón Trial, comprabilidad, colores, emojis. Comparar contra el paywall nativo.
-- **SECCIÓN E — "PLANES" dentro de Perfil** (`planTab` / `plan-panel-*`, `index.html:3060+`): lo que Fernando ve "todo negro debajo".
+## SECCIÓN D — PAYWALL (pantalla de planes)
+
+### D1 · Diseño general: pantalla completa con 3 tarjetas apiladas (nativa) vs modal con pestañas (PWA)
+- **NATIVA:** `SubscriptionScreen.js:205-235` → `SafeAreaView` + `ScrollView` a **pantalla completa** (`st.container backgroundColor C.bg`, `st.scroll padding:20`). Muestra **las 3 tarjetas apiladas verticalmente** (FREE `:233`, loop PRO/ELITE `:255-309`), cada una `st.card` (`:348` bg `C.card`; PRO acento `C.purple`, ELITE acento `C.gold` — `:260`). Arriba: Saltar/Volver, título `elegir_plan` (24px), subtítulo `todos_planes_incluyen`, links Términos/Privacidad azul `#58A6FF` (`:222-231`).
+- **PWA:** `index.html:2733 #modal-planes` = **modal overlay** (`background:rgba(0,0,0,0.85)`, `:2734`) con **pestañas FREE/PRO/ELITE** (`planTab`, `:3229`) que muestran **un plan por vez** (`plan-panel-FREE/PRO/ELITE`, `:3060,3145`). No apila las 3.
+- **DIFERENCIA:** estructura totalmente distinta — nativa apila 3 tarjetas en pantalla con scroll; PWA usa modal con pestañas.
+- **AJUSTE PROPUESTO:** rehacer el paywall PWA como vista de pantalla completa con las 3 tarjetas apiladas (FREE→PRO→ELITE), sin pestañas, replicando `SubscriptionScreen.js`. (Cambio grande.)
+
+### D2 · Fondo/overlay que se transparenta (tema claro)
+- **NATIVA:** fondo sólido `C.bg` (no overlay translúcido) — `st.container` `:343`.
+- **PWA:** outer `#modal-planes` `background:rgba(0,0,0,0.85)` (`:2734`), header interno `background:var(--bg)` (`:2739`), cuerpo SIN fondo propio → en tema claro queda mezcla claro/oscuro y el Perfil de atrás se filtra (captura `x_planes.png`).
+- **DIFERENCIA:** nativa = pantalla opaca; PWA = overlay translúcido que deja ver el Perfil detrás → se ve roto.
+- **AJUSTE PROPUESTO:** si se mantiene como modal, el cuerpo debe tener fondo opaco `var(--bg)`; si se rehace como pantalla (D1), queda resuelto.
+
+### D3 · Botón de compra / Trial
+- **NATIVA:** botón por tarjeta `st.buyBtn` con bg del acento (`:298`), texto blanco. Trial: `🚀 ` (PRO) / `👑 ` (ELITE) + `probar_gratis_dias` (`:305`); nota `trial_despues` debajo (`:308`). Botón FREE de salida gris `freeContinueBtn` (`#E7E9ED`, `:372`).
+- **PWA:** botones `btn-pro-monthly`/`btn-elite-monthly` (`index.html:3132,3200`) abren PayPal; trial por `trialPass()` (`:4576`). Funcionan, pero el layout roto (D1/D2) los tapa (Fernando: "no se ve el botón de trial / no se puede comprar").
+- **AJUSTE PROPUESTO:** resolver D1/D2 y verificar botón por tarjeta con acento + emoji (🚀/👑) + nota trial, igual a `SubscriptionScreen.js:298-308`.
+
+## SECCIÓN E — "PLANES" dentro de Perfil
+*(pendiente: leer bloque `plan-panel-*` / `planTab` en Perfil (`index.html:3060+`) — lo "todo negro debajo". Probable mismo origen que D2. A confirmar con captura del bloque real + líneas.)*
+
+## PENDIENTE (sigo, mismo detalle, con capturas):
 - **SECCIÓN F — TRADUCCIÓN runtime + formato de números**: al cambiar idioma con el selector (no al cargar); formato `$238,43` (coma) vs `$238.43` en EN.
 - **SECCIÓN G — cada TAB**: emojis, colores de texto, cada POP/modal que abre (detalle de activo, comparador, crear alerta, ordenar, filtros IA, Pulse, Cómo usar, etc.) — elemento por elemento.
 - **SECCIÓN H — fugas i18n** que reportó Escritorio: "hace Xs", "Act. HH:MM", "ALTA CONV", "Solo favoritos", "Oro:".
