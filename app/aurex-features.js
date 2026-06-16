@@ -973,6 +973,7 @@ if(window._i18n) window._i18n.onLangChange(function(){
   // Watchlist (chips de tipo cripto/accion) + combo banner Mercados/Futuros
   try{ if(window.renderWatchCnt) window.renderWatchCnt(); }catch(e){}
   try{ if(typeof _renderComboBanner==='function') _renderComboBanner('mkt-combo-banner'); }catch(e){}
+  try{ if(typeof _renderFearGreed==='function') _renderFearGreed(); }catch(e){}  // gauge "46 — Neutral" (label ya usa t())
   // Solo favoritos (chip usa t() pero no se re-dibuja)
   try{ var fc=document.getElementById('only-favs-chip'); if(fc && window.t){ var sp=fc.querySelector('span'); if(sp) sp.textContent=window.t('solo_favoritos'); } }catch(e){}
 });
@@ -2289,7 +2290,7 @@ window.renderWatchCnt = function(){
       }
       html += logoHtml;
       html += '<div style="flex:1;min-width:0">';
-      html += '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:14px;font-weight:700;color:var(--text)">'+item.s+'</span><span style="font-size:10px;padding:1px 6px;border-radius:5px;background:var(--border);color:var(--textSec)">'+(tipoLow||'')+'</span></div>';
+      html += '<div style="display:flex;align-items:center;gap:6px"><span style="font-size:14px;font-weight:700;color:var(--text)">'+item.s+'</span><span style="font-size:10px;padding:1px 6px;border-radius:5px;background:var(--border);color:var(--textSec)">'+(window._tipoLabel?window._tipoLabel(tipoLow):(tipoLow||''))+'</span></div>';
       html += '<div style="font-size:11px;color:var(--textSec);margin-top:1px">'+item.n+'</div>';
       html += '<div style="display:flex;align-items:center;gap:4px;margin-top:3px"><span style="font-size:8px;font-weight:700;color:'+dirColor+'">'+(dir==='alcista'?'📈':dir==='bajista'?'📉':dir==='alta_conf'?'⚡':'')+ ' '+dirLabel+' '+(prob?prob+'%':'')+'</span></div>';
       html += '</div>';
