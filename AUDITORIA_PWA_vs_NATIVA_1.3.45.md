@@ -77,7 +77,21 @@
 - **AJUSTE PROPUESTO:** resolver D1/D2 y verificar botón por tarjeta con acento + emoji (🚀/👑) + nota trial, igual a `SubscriptionScreen.js:298-308`.
 
 ## SECCIÓN E — "PLANES" dentro de Perfil
-*(pendiente: leer bloque `plan-panel-*` / `planTab` en Perfil (`index.html:3060+`) — lo "todo negro debajo". Probable mismo origen que D2. A confirmar con captura del bloque real + líneas.)*
+- **VERIFICADO:** el botón de planes en Perfil (`index.html:2230 <button onclick="abrirModalPlanes()">`, dentro del bloque "Plan actual" `pac-b1`/`plan-actual-card` `:2160,2221`) abre **el mismo `#modal-planes`**. Lo que Fernando ve "todo negro debajo" = **exactamente el problema D2** (overlay translúcido + cuerpo sin fondo opaco en tema claro).
+- **AJUSTE PROPUESTO:** mismo que D1/D2.
+
+## SECCIÓN F — Traducción en runtime + formato de números
+
+### F1 · Formato de números fijo en es-AR (coma) aun en inglés
+- **NATIVA:** formato **según idioma** — `lib/locale.js:20-28`: `LATAM_LOCALES = ['es-AR','pt-BR','fr-FR','it-IT']` → `{thousands:'.', decimal:','}`; resto (en, zh, hi, ar) → `{thousands:',', decimal:'.'}`. `applyFormat` (`:31-41`) usa esos separadores. → EN muestra `$238.43` (punto), ES `$238,43` (coma).
+- **PWA:** hardcodea `toLocaleString('es-AR')` en múltiples lugares → **coma decimal SIEMPRE**, aun en inglés: `index.html:793, 1577, 1710, 1730`; `aurex-features.js:733, 752`. → EN muestra `$238,43` (mal).
+- **DIFERENCIA:** la PWA no cambia el separador con el idioma; siempre es-AR.
+- **AJUSTE PROPUESTO:** replicar `getSeparators()` por idioma (LATAM → coma, resto → punto) y usarlo en todos los formateos en vez de `toLocaleString('es-AR')` fijo. Existe `applyFormat` en `aurex-features.js:82` — unificar todos los call sites a una función locale-aware.
+
+### F2 · Re-render de Portfolio al cambiar idioma con el selector (a verificar a fondo)
+- **NATIVA:** cambia idioma y re-renderiza (React `useT` re-render).
+- **PWA:** el selector llama `window._i18n.setLang(code)` (`index.html:3140`, `aurex-features.js:6410`). En prueba aislada `setLang('en')+applyTranslations()` SÍ tradujo los `data-i18n`, pero el contenido **JS-renderizado** de Portfolio (filas de activos, banners) puede no re-renderizarse en runtime + los números quedan en coma (F1). **A confirmar con captura del flujo real del selector** (no del setLang aislado).
+- **AJUSTE PROPUESTO:** asegurar que al cambiar idioma se re-rendericen los contenidos JS de cada pantalla (no solo `applyTranslations` de `data-i18n`).
 
 ## PENDIENTE (sigo, mismo detalle, con capturas):
 - **SECCIÓN F — TRADUCCIÓN runtime + formato de números**: al cambiar idioma con el selector (no al cargar); formato `$238,43` (coma) vs `$238.43` en EN.
