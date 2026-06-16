@@ -520,7 +520,7 @@
     ia_w_bajista: { es: 'BAJISTA', en: 'BEARISH', pt: 'BAIXISTA', zh: '看跌', fr: 'BAISSIER', it: 'RIBASSISTA', hi: 'मंदी', ar: 'هبوطي' },
     ia_w_altaconf: { es: 'ALTA CONV-IA', en: 'HIGH CONV-AI', pt: 'ALTA CONV-IA', zh: '高确信-AI', fr: 'HAUTE CONV-IA', it: 'ALTA CONV-IA', hi: 'उच्च CONV-AI', ar: 'ثقة عالية-AI' },
     act_corto: { es: 'Act.', en: 'Upd.', pt: 'Atual.', zh: '更新', fr: 'MàJ', it: 'Agg.', hi: 'अपड.', ar: 'تحديث' },
-    cu_block_title: { es: '📖 Cómo usar Cobrex', en: '📖 How to use Cobrex', pt: '📖 Como usar o Cobrex', zh: '📖 如何使用 Cobrex', fr: '📖 Comment utiliser Cobrex', it: '📖 Come usare Cobrex', hi: '📖 Cobrex कैसे उपयोग करें', ar: '📖 كيفية استخدام Cobrex' },
+    cu_block_title: { es: '❓ Cómo usar Cobrex', en: '❓ How to use Cobrex', pt: '❓ Como usar o Cobrex', zh: '❓ 如何使用 Cobrex', fr: '❓ Comment utiliser Cobrex', it: '❓ Come usare Cobrex', hi: '❓ Cobrex कैसे उपयोग करें', ar: '❓ كيفية استخدام Cobrex' },
     portfolio: { es: 'Portfolio', en: 'Portfolio', pt: 'Portfólio', zh: '投资组合' , fr: 'Portfolio', it: 'Portfolio', hi: 'Portfolio', ar: 'Portfolio' },
     mercados: { es: 'Mercados', en: 'Markets', pt: 'Mercados', zh: '市场' , fr: 'Marchés', it: 'Mercati', hi: 'बाज़ार', ar: 'الأسواق' },
     watchlist: { es: 'Watchlist', en: 'Watchlist', pt: 'Watchlist', zh: '自选列表' , fr: 'Watchlist', it: 'Watchlist', hi: 'Watchlist', ar: 'Watchlist' },

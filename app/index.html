@@ -1878,7 +1878,7 @@ window._mktOpenDetail = function(idx){
 </div>
 <!-- Modal Agregar Activo -->
 <div id="wl-add-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:100;align-items:flex-end;justify-content:center">
-  <div style="background:var(--card);border-radius:20px 20px 0 0;width:100%;padding:20px 16px 36px;border-top:1px solid var(--border2);max-height:85vh;overflow-y:auto">
+  <div style="background:var(--card);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(36px + env(safe-area-inset-bottom));border-top:1px solid var(--border2);max-height:85dvh;overflow-y:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span style="font-size:15px;font-weight:500;color:var(--text)" data-i18n="wl_agregar_activo">Agregar activo</span><span onclick="wlCloseAddModal()" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</span></div>
     <input id="wl-add-search" type="text" placeholder="Buscar: BTC, AAPL, SPY..." data-i18n="wl_buscar_placeholder" data-i18n-attr="placeholder" autocomplete="off" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px" oninput="wlSearchAssets()" />
     <div id="wl-add-results" style="max-height:350px;overflow-y:auto"></div>
@@ -2306,6 +2306,14 @@ display:flex;align-items:center;justify-content:space-between}
     </div>
   </div>
 </div>
+<div class="pac-bloque" id="pac-comousar">
+  <div class="pac-titulo" onclick="pacToggle('pac-comousar');if(window._renderComoUsar)window._renderComoUsar();">
+    <span data-i18n-html="cu_block_title">&#128214; C&#243;mo usar Cobrex</span><span class="pac-chevron">&#9660;</span>
+  </div>
+  <div class="pac-cuerpo">
+    <div id="comousar-body"></div>
+  </div>
+</div>
 <div class="pac-bloque" id="pac-b4">
   <div class="pac-titulo" onclick="pacToggle('pac-b4');pacInitLang()">
     <span data-i18n="b4_preferencias">🎨 Preferencias</span><span class="pac-chevron">&#9660;</span>
@@ -2574,14 +2582,6 @@ display:flex;align-items:center;justify-content:space-between}
         <div onclick="pacNotif(this,'notif_novedades')" data-on="1" style="width:44px;height:26px;background:var(--gold);border-radius:13px;display:flex;align-items:center;justify-content:flex-end;padding:0 3px;cursor:pointer"><div style="width:20px;height:20px;background:#000;border-radius:50%"></div></div>
       </div>
     </div>
-  </div>
-</div>
-<div class="pac-bloque" id="pac-comousar">
-  <div class="pac-titulo" onclick="pacToggle('pac-comousar');if(window._renderComoUsar)window._renderComoUsar();">
-    <span data-i18n-html="cu_block_title">&#128214; C&#243;mo usar Cobrex</span><span class="pac-chevron">&#9660;</span>
-  </div>
-  <div class="pac-cuerpo">
-    <div id="comousar-body"></div>
   </div>
 </div>
 <div class="pac-bloque" id="pac-b8">
@@ -4194,8 +4194,12 @@ document.addEventListener("DOMContentLoaded", function(){
     body.innerHTML = data.map(function(a){
       var al = a.alertas || {};
       var fecha = a.created_at ? new Date(a.created_at).toLocaleString() : '';
-      var dir = (al.direccion==='subio'||al.direccion==='up') ? '▲' : ((al.direccion==='bajo'||al.direccion==='down') ? '▼' : '•');
-      return '<div style="display:flex;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border);background:'+(a.leida?'transparent':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.7':'1')+'">'
+      // C1 (web-1.4): dirección con los strings reales del backend ('arriba'/'abajo') + color verde/rojo en el borde izquierdo (como nativa MisAlertasScreen.js).
+      var _isUp = al.direccion==='arriba'||al.direccion==='subio'||al.direccion==='up';
+      var _isDown = al.direccion==='abajo'||al.direccion==='bajo'||al.direccion==='down';
+      var _dirColor = _isUp ? 'var(--green)' : (_isDown ? 'var(--red)' : 'var(--textSec)');
+      var dir = _isUp ? '▲' : (_isDown ? '▼' : '•');
+      return '<div style="display:flex;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border);border-left:4px solid '+_dirColor+';background:'+(a.leida?'transparent':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.7':'1')+'">'
         + '<input type="checkbox" class="ma-chk" data-id="'+a.id+'" style="margin-top:3px">'
         + '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+dir+' '+(a.simbolo||'')+(a.precio_disparado!=null?' — '+a.precio_disparado:'')+'</div>'
         + '<div style="font-size:10px;color:var(--textSec);margin-top:2px">'+(function(tp){var _t=window.t||function(k){return k;};var m={precio_objetivo:'al_precio_obj',variacion_brusca:'al_precio_var',max_min:'al_precio_maxmin',precio:'al_precio_obj',porcentaje:'al_precio_var',umbral:'al_ia_umbral',apertura:'al_ev_apertura'};return m[tp]?_t(m[tp]):(tp||'');})(al.tipo)+' · '+fecha+'</div></div></div>';
@@ -4234,10 +4238,10 @@ document.addEventListener("DOMContentLoaded", function(){
         ov.id = 'mis-alertas-modal';
         ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:flex-end;justify-content:center';
         ov.onclick = function(e){ if (e.target === ov) window.cerrarMisAlertas(); };
-        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85vh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
+        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85dvh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
           + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 Mis Alertas</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
           + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ Marcar leídas</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ Borrar</button></div>'
-          + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1"></div></div>';
+          + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1;padding-bottom:env(safe-area-inset-bottom)"></div></div>';
         document.body.appendChild(ov);
       }
       setTimeout(function(){ try{ window.actualizarBadgeMisAlertas(); }catch(e){} }, 1500);
