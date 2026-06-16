@@ -916,8 +916,23 @@ function _renderPortfolioEmpty(){
     '<button onclick="openPortModal()" style="background:var(--gold);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;">'+t('port_empty_btn')+'</span>' +
   '</div>';
 }
-// Re-render empty state on lang change
-if(window._i18n) window._i18n.onLangChange(function(){ if(!window._portItems || window._portItems.length===0) _renderPortfolioEmpty(); });
+// Etiqueta de tipo de activo traducible (usa las claves mkt_tipo_* que ya existen; fallback para los sin clave).
+window._tipoLabel = function(tipo){
+  var t=(tipo||'cripto').toLowerCase();
+  var map={cripto:'mkt_tipo_cripto',stable:'mkt_tipo_cripto',accion:'mkt_tipo_accion',etf:'mkt_tipo_etf'};
+  var I=window._i18n;
+  if(map[t] && I && I.t) return I.t(map[t]);
+  var extra={bono:'Bono',metal:'Metal',materia_prima:'Commodity'};
+  if(extra[t]) return extra[t];
+  return (I&&I.t)?I.t('mkt_tipo_activo'):(tipo||'Activo');
+};
+// web-1.7: al cambiar idioma re-dibujar el Portfolio (filas + Termómetro de Riesgo), no solo el estado vacío.
+if(window._i18n) window._i18n.onLangChange(function(){
+  if(window._portItems && window._portItems.length>0){
+    _renderPortfolioItems(window._portItems);
+    if(typeof _renderThermoRisk==='function') try{ _renderThermoRisk(window._portItems); }catch(e){}
+  } else { _renderPortfolioEmpty(); }
+});
 
 function _renderPortfolioItems(items){
   var cnt = document.getElementById('port-cnt');
@@ -994,7 +1009,7 @@ function _renderPortfolioItems(items){
       '<div style="flex:1;min-width:0;cursor:pointer;overflow:hidden;" onclick="openPortItemDetail(\x27'+item.id+'\x27)">' +
         '<div style="display:flex;align-items:center;gap:6px;">' +
           '<span style="font-weight:700;color:var(--text);font-size:14px;">'+item.simbolo+'</span>' +
-          '<span style="font-size:10px;padding:1px 6px;border-radius:5px;background:var(--border);color:var(--textSec);">'+(item.tipo||'cripto')+'</span>' +
+          '<span style="font-size:10px;padding:1px 6px;border-radius:5px;background:var(--border);color:var(--textSec);">'+window._tipoLabel(item.tipo)+'</span>' +
         '</div>' +
         '<div style="font-size:11px;color:var(--textSec);margin-top:2px;">'+item.cantidad+' u. @ $'+fmtNum(item.precio_compra)+'</div>' +
       '</div>' +
@@ -5110,24 +5125,8 @@ function _initHeaderLogos() {
     window._addLegalChip(iaHdrRow, iaLive, false);
   }
 
-  // WATCHLIST: wrapper con chip + "+ Nueva lista" pegados a la derecha
-  var wlHdr = document.querySelector('#screen-watchlist > div:first-child');
-  var nuevoEl = wlHdr ? wlHdr.querySelector('a') : null;
-  if (wlHdr && nuevoEl && !wlHdr.querySelector('.legal-chip')) {
-    var wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;';
-    var wlChip = document.createElement('div');
-    wlChip.className = 'legal-chip';
-    wlChip.onclick = window._openAvisoLegal;
-    wlChip.style.cssText = 'display:inline-flex;align-items:center;gap:4px;cursor:pointer;' +
-      'background:var(--card);border:1px solid var(--gold);border-radius:8px;' +
-      'padding:3px 8px;font-size:14px;color:var(--gold);font-weight:600;flex-shrink:0;' +
-      'user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0);';
-    wlChip.innerHTML = '⚖️<span style="font-size:9px;color:var(--gold);font-weight:800">▼</span>';
-    wlHdr.insertBefore(wrapper, nuevoEl);
-    wrapper.appendChild(wlChip);
-    wrapper.appendChild(nuevoEl);
-  }
+  // WATCHLIST: la nativa oculta la balanza ⚖️ del header (HIDE_HEADER_LEGAL=true).
+  // web-1.7: NO se inyecta el chip ⚖️ (Aviso Legal). Se deja "+ Nueva lista" tal cual.
 
   // ALERTAS: ⚖️ + LIVE (en ese orden, como nativa)
   var alHdr = document.querySelector('#screen-alertas .aurex-hdr-added');
@@ -5161,7 +5160,7 @@ function _initHeaderLogos() {
       langChip.className = 'lang-chip';
       langChip.onclick = function(){ window._openIdiomaModal(); };
       var curLang = localStorage.getItem('aurex_lang') || 'es';
-      var flags = {es:'🇦🇷',en:'🇺🇸',pt:'🇧🇷',zh:'🇨🇳',fr:'🇫🇷',it:'🇮🇹',hi:'🇮🇳',ar:'🇸🇦'};
+      var flags = {es:'🇪🇸',en:'🇺🇸',pt:'🇧🇷',zh:'🇨🇳',fr:'🇫🇷',it:'🇮🇹',hi:'🇮🇳',ar:'🇸🇦'};
       langChip.innerHTML = '<span id="lang-flag">' + (flags[curLang]||'🇪🇸') + '</span> <span style="font-size:8px;">&#9660;</span>';
       langChip.style.cssText = 'display:flex;align-items:center;gap:2px;padding:3px 7px;border:1.5px solid var(--gold);border-radius:6px;cursor:pointer;font-size:14px;margin-left:auto;-webkit-tap-highlight-color:rgba(0,0,0,0);';
       portHlRow.appendChild(langChip);
@@ -6417,7 +6416,7 @@ window._setIdioma = function(code) {
   else localStorage.setItem('aurex_lang', code);
   var ov = document.getElementById('idioma-modal-overlay');
   if (ov) ov.remove();
-  var flags = { es: '🇦🇷', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', fr: '🇫🇷', it: '🇮🇹', hi: '🇮🇳', ar: '🇸🇦' };
+  var flags = { es: '🇪🇸', en: '🇺🇸', pt: '🇧🇷', zh: '🇨🇳', fr: '🇫🇷', it: '🇮🇹', hi: '🇮🇳', ar: '🇸🇦' };
   var flagEl = document.getElementById('lang-flag');
   if (flagEl) flagEl.textContent = flags[code] || '🇪🇸';
 };

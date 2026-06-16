@@ -1931,15 +1931,16 @@ window._mktOpenDetail = function(idx){
 </div>
 
 <!-- Resumen — numeros grandes, clickeables -->
-<!-- Canal Telegram (paridad nativa: deep-link al bot) -->
-<div onclick="connectTelegram()" style="display:flex;align-items:center;gap:10px;margin:10px 11px;background:#0A2A3A;border-radius:10px;padding:10px;border:1px solid #2AABEE55;cursor:pointer">
+<!-- Canal Telegram (paridad nativa AlertasScreen.js:453: TOGGLE que activa la conexión, no un botón de texto) -->
+<div style="display:flex;align-items:center;gap:10px;margin:10px 11px;background:#0A2A3A;border-radius:10px;padding:10px;border:1px solid #2AABEE55">
   <div style="font-size:22px">✈️</div>
   <div style="flex:1">
     <div style="font-size:12px;font-weight:700;color:#2AABEE" data-i18n="al_tg_title">Alertas por Telegram</div>
     <div style="font-size:10px;color:var(--textSec);margin-top:2px" data-i18n="al_tg_desc">Conectá el bot para recibir tus alertas al instante</div>
   </div>
-  <div style="font-size:11px;font-weight:800;color:#2AABEE;border:1px solid #2AABEE;border-radius:8px;padding:6px 10px" data-i18n="al_tg_btn">Conectar</div>
+  <label class="toggle-sw"><input type="checkbox" id="tg-toggle" onchange="if(this.checked){ if(window.connectTelegram) connectTelegram(); } else { try{localStorage.removeItem('cobrex_tg_on');}catch(e){} }"><span class="toggle-slider"></span></label>
 </div>
+<script>(function(){try{var tg=document.getElementById('tg-toggle');if(tg&&localStorage.getItem('cobrex_tg_on')==='1')tg.checked=true;}catch(e){}})();</script>
 <div style="margin:10px 11px;background:var(--card);border-radius:12px;padding:14px;border:1.5px solid var(--gold)">
   <div style="display:flex;align-items:center">
     <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('alertas')"><div style="font-size:28px;font-weight:900;color:var(--green)" id="alert-active">15</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_alertas_on">ALERTAS ON</div></div>
@@ -2383,7 +2384,7 @@ display:flex;align-items:center;justify-content:space-between}
           padding:5px 8px;font-size:13px;cursor:pointer;outline:none;
           -webkit-appearance:auto">
           <option value="en">&#127482;&#127480; English</option>
-          <option value="es" selected>&#127462;&#127479; Espa&#241;ol (Arg)</option>
+          <option value="es" selected>&#127466;&#127480; Espa&#241;ol</option>
           <option value="pt">&#127463;&#127479; Portugu&#234;s (BR)</option>
           <option value="fr">&#127467;&#127479; Fran&#231;ais</option>
           <option value="it">&#127470;&#127481; Italiano</option>
@@ -3216,7 +3217,7 @@ function pacSaveLang(sel){
   var code=map[val]||val;
   if(window._i18n) window._i18n.setLang(code);
   var labels={
-    'es':'Español (Argentina)',
+    'es':'Español',
     'en':'English',
     'pt':'Português (Brasil)',
     'fr':'Français',
@@ -4579,7 +4580,8 @@ document.addEventListener("DOMContentLoaded", function(){
 <script>
 window.connectTelegram=function(){
   var uid=(window._currentUser&&window._currentUser.id)||null;
-  if(!uid){ if(window.showPaywall){} var m=(window._i18n&&window._i18n.t)?window._i18n.t('pw_error_sesion'):'Necesitás iniciar sesión'; alert(m); try{navTo('perfil');}catch(e){} return; }
+  if(!uid){ if(window.showPaywall){} var m=(window._i18n&&window._i18n.t)?window._i18n.t('pw_error_sesion'):'Necesitás iniciar sesión'; alert(m); try{navTo('perfil');}catch(e){} var tg0=document.getElementById('tg-toggle'); if(tg0)tg0.checked=false; return; }
+  try{localStorage.setItem('cobrex_tg_on','1');}catch(e){}
   window.open('https://t.me/Aurexalertas_bot?start='+uid,'_blank');
 };
 </script>
@@ -4658,7 +4660,7 @@ window.connectTelegram=function(){
 (function(){
   function bellHTML(){
     return '<div class="cobrex-bell" title="Mis Alertas" onclick="if(window.abrirMisAlertas)window.abrirMisAlertas()" '+
-      'style="position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:1;flex-shrink:0;margin-left:8px">'+
+      'style="position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:1;flex-shrink:0;margin-left:auto">'+
       '\u{1F514}'+
       '<span class="cobrex-bell-badge" style="display:none;position:absolute;top:-6px;right:-7px;background:#EF4444;color:#fff;font-size:8px;font-weight:800;min-width:14px;height:14px;border-radius:7px;text-align:center;line-height:14px;padding:0 2px">0</span>'+
       '</div>';
@@ -4683,12 +4685,9 @@ window.connectTelegram=function(){
       var scr=document.getElementById('screen-'+sName); if(!scr) return;
       if(scr.querySelector('.cobrex-bell')) return;
       if(sName==='alertas'){
-        var cnt=scr.querySelector('#alertas-cnt')||scr;
-        if(!cnt.querySelector('.cobrex-bell-row')){
-          var row=document.createElement('div'); row.className='cobrex-bell-row';
-          row.style.cssText='display:flex;align-items:center;justify-content:flex-end;padding:8px 14px 0';
-          row.innerHTML=bellHTML(); cnt.insertBefore(row, cnt.firstChild);
-        }
+        // web-1.7: la campana va INLINE en la fila del logo (.aurex-hdr-added), a la derecha (margin-left:auto), no en una fila aparte (que dejaba el hueco).
+        var alH=scr.querySelector('.aurex-hdr-added');
+        if(alH){ var tmpA=document.createElement('div'); tmpA.innerHTML=bellHTML(); alH.appendChild(tmpA.firstChild); }
         return;
       }
       var h=headerOf(sName, scr); if(!h) return;
@@ -4719,7 +4718,7 @@ window.connectTelegram=function(){
     var bar=sortBtn.parentElement;
     if(bar.querySelector('.live')) return; // ya movido
     var live=scr.querySelector('.live'); if(!live) return;
-    bar.style.display='flex'; bar.style.alignItems='center'; bar.style.justifyContent='space-between';
+    bar.style.display='flex'; bar.style.alignItems='center'; bar.style.justifyContent='space-between'; bar.style.width='100%';
     bar.insertBefore(live, bar.firstChild);
   };
   function boot(){ setTimeout(window.movePortfolioLive,1500); setTimeout(window.movePortfolioLive,3500); }
