@@ -93,7 +93,25 @@
 - **PWA:** el selector llama `window._i18n.setLang(code)` (`index.html:3140`, `aurex-features.js:6410`). En prueba aislada `setLang('en')+applyTranslations()` SÍ tradujo los `data-i18n`, pero el contenido **JS-renderizado** de Portfolio (filas de activos, banners) puede no re-renderizarse en runtime + los números quedan en coma (F1). **A confirmar con captura del flujo real del selector** (no del setLang aislado).
 - **AJUSTE PROPUESTO:** asegurar que al cambiar idioma se re-rendericen los contenidos JS de cada pantalla (no solo `applyTranslations` de `data-i18n`).
 
-## PENDIENTE (sigo, mismo detalle, con capturas):
-- **SECCIÓN F — TRADUCCIÓN runtime + formato de números**: al cambiar idioma con el selector (no al cargar); formato `$238,43` (coma) vs `$238.43` en EN.
-- **SECCIÓN G — cada TAB**: emojis, colores de texto, cada POP/modal que abre (detalle de activo, comparador, crear alerta, ordenar, filtros IA, Pulse, Cómo usar, etc.) — elemento por elemento.
-- **SECCIÓN H — fugas i18n** que reportó Escritorio: "hace Xs", "Act. HH:MM", "ALTA CONV", "Solo favoritos", "Oro:".
+## SECCIÓN G — Tab por tab (emojis, colores, textos, pops)
+
+### G-IA — pantalla IA
+Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.html:79,80,62`) = nativa (`IAScreen.js:40-41`, `#3FB950`/`#F85149`). Los 3 contadores existen en la PWA: alcista verde (`index.html:1797`), bajista rojo (`:1801`), alta-conv dorado (`:1805`) = nativa (`IAScreen.js:325-335`). Emojis ⚡ (alta conv), 💼 (mi portfolio), 📈/📉 coinciden.
+
+- **G-IA-1 · Etiqueta del 3er contador "ALTA CONV-IA" sin traducir**
+  - NATIVA: `IAScreen.js:335 <Text…>{t('alta_conv')}</Text>` (traducible).
+  - PWA: `index.html:1807 <div … >ALTA CONV-IA</div>` **sin `data-i18n`** (las de alcistas/bajistas SÍ lo tienen, `:1799,:1803`). → en inglés queda "ALTA CONV-IA".
+  - AJUSTE: agregar `data-i18n="ia_alta_conv"` (o la clave correspondiente) a ese div. (= la fuga "ALTA CONV" de Escritorio.)
+
+- **G-IA-2 · Badge de dirección por señal hardcodeado (ALCISTA/BAJISTA/ALTA CONV)**
+  - NATIVA: `IAScreen.js:414 {sig.direccion==='ALTA CONV-IA' ? t('alta_conv_badge') : … t('alcista_badge') : t('bajista_badge')}` (traducidos).
+  - PWA: `dirLabel` hardcodeado `'ALCISTA'/'BAJISTA'/'ALTA CONV'` en `aurex-features.js:2047, 2179, 2319, 2351, 2761`. → en inglés quedan en mayúscula español.
+  - AJUSTE: reemplazar cada `dirLabel` por `t('alcista_badge')/t('bajista_badge')/t('alta_conv_badge')`.
+  - NOTA: mi scan A3 anterior NO detectó esto (el regex no incluía ALCISTA/ALTA CONV). Validación previa incompleta.
+
+*(Siguen: G-Mercados, G-Watchlist, G-Alertas, G-Perfil, y cada POP — detalle de activo, comparador, crear alerta, ordenar, Pulse, Cómo usar — con sus emojis/colores/textos. EN PROGRESO.)*
+
+## SECCIÓN H — Fugas i18n (las reportadas por Escritorio + las que encuentre)
+- "ALTA CONV-IA" → ver **G-IA-1**.
+- "hace Xs" (timer LIVE) → ver **A2** (además de traducir, la nativa lo OCULTA).
+- Pendientes de localizar línea exacta: "Act. HH:MM" (barra IA), "Solo favoritos" (filtro Watchlist), "Oro:" (variable IA). EN PROGRESO.
