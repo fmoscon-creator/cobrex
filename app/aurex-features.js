@@ -2031,7 +2031,7 @@ window.wlSelectList = function(listId){
 window.wlOpenAddModal = function(){
   var m = document.getElementById('wl-add-modal');
   if(!m) return;
-  m.style.cssText = 'display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:100;align-items:flex-end;justify-content:center';
+  m.style.cssText = 'display:flex;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000000CC;z-index:100;align-items:flex-end;justify-content:center';
   var searchEl = document.getElementById('wl-add-search');
   if(searchEl){ searchEl.value = ''; }
   wlSearchAssets();
@@ -4174,7 +4174,7 @@ function _renderIALista(signals, keepLoadingBar) {
   listEl.innerHTML = filtered.map(function(s, i) {
     var dirColor = s.direccion==='alcista'?'var(--green)':s.direccion==='bajista'?'var(--red)':'var(--gold)';
     var dirBg = s.direccion==='alcista'?'#3FB95020':s.direccion==='bajista'?'#FF444420':'var(--goldBg)';
-    var dirLabel = s.direccion==='alcista'?'ALCISTA':s.direccion==='bajista'?'BAJISTA':'ALTA CONV';
+    var dirLabel = s.direccion==='alcista'?t('ia_w_alcista'):s.direccion==='bajista'?t('ia_w_bajista'):t('ia_w_altaconf');
     var tipoColor = s.tipo==='cripto'?'#A78BFA':s.tipo==='accion'?'#58A6FF':s.tipo==='etf'?'#F0883E':s.tipo==='metal'?'#FFD700':s.tipo==='materia_prima'?'#C8A96E':s.tipo==='bono'?'#79C0FF':'var(--gold)';
     var tipoLabel = s.tipo==='cripto'?'Cripto':s.tipo==='accion'?'Acciones':s.tipo==='etf'?'ETF':s.tipo==='metal'?'Metal':s.tipo==='materia_prima'?'Mat. Prima':s.tipo==='bono'?'Bono':'Otro';
     var estrellas = '';
@@ -4228,7 +4228,7 @@ function _renderIALista(signals, keepLoadingBar) {
 
 function _buildIADetail(s) {
   var dirColor = s.direccion==='alcista'?'var(--green)':s.direccion==='bajista'?'var(--red)':'var(--gold)';
-  var dirLabel = s.direccion==='alcista'?'ALCISTA':s.direccion==='bajista'?'BAJISTA':'ALTA CONV-IA';
+  var dirLabel = s.direccion==='alcista'?t('ia_w_alcista'):s.direccion==='bajista'?t('ia_w_bajista'):t('ia_w_altaconf');
   var signo = s.direccion==='alcista'?'+':s.direccion==='bajista'?'-':'&#9889;';
   var html = '<div style="padding-top:12px">';
   html += '<div style="background:'+dirColor+'15;border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:10px">';
@@ -4345,7 +4345,7 @@ window._compartirSenal = function(info) {
   for(var i=0;i<sigs.length;i++) { if(sigs[i].simbolo===symBuscar) { sig=sigs[i]; break; } }
   if(!sig) return;
   var dirEmoji = sig.direccion==='alcista'?'📈':sig.direccion==='bajista'?'📉':'⚡';
-  var dirLabel = sig.direccion==='alcista'?'ALCISTA':sig.direccion==='bajista'?'BAJISTA':'ALTA CONV-IA';
+  var dirLabel = sig.direccion==='alcista'?t('ia_w_alcista'):sig.direccion==='bajista'?t('ia_w_bajista'):t('ia_w_altaconf');
   var precioFmt = sig.precio>=1000?'$'+Math.round(sig.precio).toLocaleString('en'):sig.precio>=1?'$'+sig.precio.toFixed(2):'$'+sig.precio.toFixed(4);
   var cambio = sig.precio24h>0?((sig.precio-sig.precio24h)/sig.precio24h*100):0;
   var texto = '🤖 Cobrex IA — SEÑAL '+dirEmoji+'\n';
