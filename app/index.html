@@ -2993,11 +2993,11 @@ display:flex;align-items:center;justify-content:space-between}
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="pro_mensual_btn">&#128640; PRO Mensual — $9,99/mes</span>
         </button>
-        <button id="btn-pro-annual" data-pxr="PRO.anual.year" onclick="cbxBuy('P-2N0098015C849324MNIW7UAI')"
+        <button id="btn-pro-annual" onclick="cbxBuy('P-2N0098015C849324MNIW7UAI')"
           style="width:100%;background:rgba(167,139,250,0.15);
           border:1.5px solid #A78BFA;border-radius:10px;color:#A78BFA;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
-          <span data-i18n-html="pro_anual_btn">&#11088; PRO Anual — $89,99/año</span> <span style="font-size:11px" data-i18n="ahorras_25">(ahorrás 25%)</span>
+          <span data-i18n="pro_anual_lbl">&#11088; PRO Anual</span> &#8212; <span data-px="PRO.anual.year">$89,99/año</span> <span style="font-size:11px" data-i18n="ahorras_25">(ahorrás 25%)</span>
         </button>
       </div>
       <div id="plan-panel-ELITE" style="display:block;margin-bottom:14px">
@@ -3061,11 +3061,11 @@ display:flex;align-items:center;justify-content:space-between}
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="elite_mensual_btn">&#128081; ELITE Mensual — $19,99/mes</span>
         </button>
-        <button id="btn-elite-annual" data-pxr="ELITE.anual.year" onclick="cbxBuy('P-11266502KC039145PNIW7UAQ')"
+        <button id="btn-elite-annual" onclick="cbxBuy('P-11266502KC039145PNIW7UAQ')"
           style="width:100%;background:rgba(201,168,76,0.15);
           border:1.5px solid #c9a84c;border-radius:10px;color:#c9a84c;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
-          <span data-i18n-html="elite_anual_btn">&#11088; ELITE Anual — $179,99/año</span> <span style="font-size:11px" data-i18n="ahorras_25">(ahorrás 25%)</span>
+          <span data-i18n="elite_anual_lbl">&#11088; ELITE Anual</span> &#8212; <span data-px="ELITE.anual.year">$179,99/año</span> <span style="font-size:11px" data-i18n="ahorras_25">(ahorrás 25%)</span>
         </button>
       </div>
     </div>
@@ -4497,12 +4497,13 @@ document.addEventListener("DOMContentLoaded", function(){
         if(changed)el.setAttribute(attr,v); });});
     // data-px (solo precio)
     document.querySelectorAll('[data-px]').forEach(function(el){var k=el.getAttribute('data-px');var v=priceOf(k);if(v==null)return;
-      var a=k.split('.'); var suf=a[2]==='year'?'/año':(a[2]==='permes'?'/mes':''); el.textContent='$'+v+suf;});
+      var a=k.split('.'); var T=function(kk,f){return window._i18n&&window._i18n.t?window._i18n.t(kk):f;}; var suf=a[2]==='year'?T('por_anio','/año'):(a[2]==='permes'?T('por_mes','/mes'):''); el.textContent='$'+v+suf;});
     // data-pxsave (card anual: precio/mes + ahorro calculado real)
     document.querySelectorAll('[data-pxsave]').forEach(function(el){var t=el.getAttribute('data-pxsave');
       var m=D.plans[t]&&D.plans[t].mensual, a=D.plans[t]&&D.plans[t].anual; if(!m||!a||!m.price||!a.price)return;
       var permes=(parseFloat(a.price)/12).toFixed(2); var save=Math.round(parseFloat(m.price)*12-parseFloat(a.price));
-      el.textContent=' ANUAL: $'+permes+'/mes · Ahorrás $'+save+'/año';});
+      var T2=function(kk,f){return window._i18n&&window._i18n.t?window._i18n.t(kk):f;};
+      el.textContent=' '+T2('px_anual','ANUAL')+': $'+permes+T2('por_mes','/mes')+' · '+T2('px_ahorras','Ahorrás')+' $'+save+T2('por_anio','/año');});
     // data-pxr (reemplaza el precio dentro del texto, conserva el resto)
     document.querySelectorAll('[data-pxr]').forEach(function(el){var v=priceOf(el.getAttribute('data-pxr'));if(v==null)return;
       var nt=el.textContent.replace(/\$\s?\d{1,3}([.,]\d{2})?/, '$'+v); if(nt!==el.textContent)el.textContent=nt;});
