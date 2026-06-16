@@ -4506,7 +4506,11 @@ document.addEventListener("DOMContentLoaded", function(){
       el.textContent=' '+T2('px_anual','ANUAL')+': $'+permes+T2('por_mes','/mes')+' · '+T2('px_ahorras','Ahorrás')+' $'+save+T2('por_anio','/año');});
     // data-pxr (reemplaza el precio dentro del texto, conserva el resto)
     document.querySelectorAll('[data-pxr]').forEach(function(el){var v=priceOf(el.getAttribute('data-pxr'));if(v==null)return;
-      var nt=el.textContent.replace(/\$\s?\d{1,3}([.,]\d{2})?/, '$'+v); if(nt!==el.textContent)el.textContent=nt;});
+      // web-1.7: reemplazar el precio SOLO en los nodos de texto directos (no destruir spans hijos con data-i18n, ej. "/mes")
+      var done=false, rx=/\$\s?\d{1,3}([.,]\d{2})?/;
+      for(var i=0;i<el.childNodes.length;i++){ var nd=el.childNodes[i];
+        if(nd.nodeType===3 && rx.test(nd.nodeValue)){ var nv=nd.nodeValue.replace(rx,'$'+v); if(nv!==nd.nodeValue){nd.nodeValue=nv; done=true;} } }
+      if(!done){ var nt=el.textContent.replace(rx,'$'+v); if(nt!==el.textContent)el.textContent=nt; }});
     trialPass();
     applying=false;
   }
