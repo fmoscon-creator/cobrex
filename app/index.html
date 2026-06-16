@@ -193,6 +193,8 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .hp{font-size:13px;color:var(--textSec)}
 .live{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--green);font-weight:700}
 .ldot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:lp 1.5s infinite}
+/* A2 (web-1.4): la nativa oculta el timer "· hace Xs" del LIVE (HIDE_HEADER_LEGAL=true). Queda solo punto verde + LIVE. */
+#liveTimePort, #liveTime, #ia-live-time { display:none !important; }
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* SUMMARY */

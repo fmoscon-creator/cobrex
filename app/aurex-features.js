@@ -5184,6 +5184,7 @@ window._openAvisoLegal = function() {
 };
 
 window._addLegalChip = function(headerEl, insertBeforeEl, useMarginAuto) {
+  return; // A1 (web-1.4): la nativa oculta la ⚖️ en headers (HIDE_HEADER_LEGAL=true). No inyectar el chip.
   if (!headerEl || headerEl.querySelector('.legal-chip')) return;
   var chip = document.createElement('div');
   chip.className = 'legal-chip';
