@@ -1008,7 +1008,7 @@ function _renderPortfolioItems(items){
     '<div style="display:flex;align-items:center;justify-content:flex-end;margin-top:4px;padding-left:50px;">' +
       '<div style="display:flex;align-items:center;gap:4px;">' +
         (isCrypto ? '<span style="font-size:8px;color:var(--green);font-weight:700;border:0.5px solid var(--green);border-radius:3px;padding:0.5px 3px;margin-right:2px;">24/7</span>' : '') +
-        (mktClosed && !isCrypto ? '<span style="font-size:9px;color:var(--gold);font-weight:700;margin-right:2px;">Ult. cierre</span>' : '') +
+        (mktClosed && !isCrypto ? '<span style="font-size:9px;color:var(--gold);font-weight:700;margin-right:2px;">'+(window.t?window.t('pw_ult_cierre'):'Ult. cierre')+'</span>' : '') +
         '<span id="pct-'+item.id+'" style="font-size:11px;font-weight:600;color:'+cc+';">'+(mktClosed && prevClosePct!==null ? _fmt(prevClosePct,'pct') : _fmt(ch24,'pct'))+'</span>' +
         '<div style="display:flex;gap:2px;">' +
           ['24h','7d','1m','3m','1y'].map(function(p){ return '<span onclick="portPeriod(\''+item.id+'\',\''+item.simbolo+'\',\''+item.tipo+'\',\''+p+'\')" id="pp-'+p+'-'+item.id+'" style="font-size:9px;padding:1px 3px;border-radius:3px;background:'+(p==='24h'?'var(--gold)':'var(--border)')+';color:'+(p==='24h'?'var(--bg)':'var(--textSec)')+';cursor:pointer;touch-action:manipulation;">'+p+'</span>'; }).join('') +
@@ -2049,7 +2049,7 @@ window.wlSearchAssets = function(){
     for(var i=0;i<sigs.length;i++){ if(sigs[i].simbolo===a.s){ sig=sigs[i]; break; } }
     var dir = sig ? sig.direccion : '';
     var dirColor = dir==='alcista'?'var(--green)':dir==='bajista'?'var(--red)':dir==='alta_conf'?'var(--gold)':'var(--textDim)';
-    var dirLabel = dir==='alcista'?'ALCISTA':dir==='bajista'?'BAJISTA':dir==='alta_conf'?'ALTA CONV':'';
+    var dirLabel = dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'';
     var prob = sig ? (sig.confianza||'') : '';
     var logoHtml = a.logo ? '<img src="'+a.logo+'" style="width:26px;height:26px;border-radius:50%;object-fit:cover" onerror="this.style.display=\'none\'" />' : '<div style="width:26px;height:26px;border-radius:50%;background:'+(a.color||'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text)">'+a.s[0]+'</div>';
     return '<div onclick="wlAddAsset(\''+a.s+'\',\''+a.n.replace(/'/g,"\\'")+'\',\''+a.tipo+'\')" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;background:var(--bg);border:0.5px solid var(--border);margin-bottom:4px;cursor:pointer">'+
@@ -2181,7 +2181,7 @@ window.renderWatchCnt = function(){
       var cambio = chg24[item.s] || (sig && sig.precio24h>0 && sig.precio ? ((sig.precio-sig.precio24h)/sig.precio24h*100) : null);
       var dir = sig ? sig.direccion : '';
       var dirColor = dir==='alcista'?'var(--green)':dir==='bajista'?'var(--red)':dir==='alta_conf'?'var(--gold)':'var(--textDim)';
-      var dirLabel = dir==='alcista'?'ALCISTA':dir==='bajista'?'BAJISTA':dir==='alta_conf'?'ALTA CONV':'';
+      var dirLabel = dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'';
       var dirBg = dir==='alcista'?'#3FB95020':dir==='bajista'?'#F8514920':dir==='alta_conf'?'var(--goldBg)':'transparent';
       var prob = sig ? (sig.confianza||'') : '';
       var act = (window._IA_ACTIVOS||[]).find(function(a){ return a.s===item.s; });
@@ -2252,7 +2252,7 @@ window.renderWatchCnt = function(){
       html += '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end"><span style="font-size:14px;font-weight:700;color:var(--text)">'+precioFmt+'</span></div>';
       html += '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:0">';
       if(isCrypto) html += '<span style="font-size:8px;color:var(--green);font-weight:700;border:0.5px solid var(--green);border-radius:3px;padding:0.5px 3px">24/7</span>';
-      if(mktClosed && !isCrypto) html += '<span style="font-size:9px;color:var(--gold);font-weight:700">Ult. cierre</span>';
+      if(mktClosed && !isCrypto) html += '<span style="font-size:9px;color:var(--gold);font-weight:700">'+(window.t?window.t('pw_ult_cierre'):'Ult. cierre')+'</span>';
       html += '<span style="font-size:11px;font-weight:600;color:'+_rowChgCol+'">'+_rowPct+'</span>';
       html += '</div></div>';
       // Botón eliminar
@@ -2321,7 +2321,7 @@ window.wlOpenDetail = function(sym){
   var cambio = chg24[sym] || (sig && sig.precio24h>0 ? ((sig.precio-sig.precio24h)/sig.precio24h*100) : 0);
   var dir = sig ? sig.direccion : '';
   var dirColor = dir==='alcista'?'var(--green)':dir==='bajista'?'var(--red)':dir==='alta_conf'?'var(--gold)':'var(--textDim)';
-  var dirLabel = dir==='alcista'?'ALCISTA':dir==='bajista'?'BAJISTA':dir==='alta_conf'?'ALTA CONV-IA':'SIN SENAL';
+  var dirLabel = dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'SIN SENAL';
   var dirBg = dir==='alcista'?'#3FB95015':dir==='bajista'?'#F8514915':dir==='alta_conf'?'var(--goldBg)':'#55555510';
   var prob = sig ? (sig.confianza||sig.prob_principal||'--') : '--';
   var logoHtml = act && act.logo
@@ -2353,7 +2353,7 @@ window.wlShowShareSignal = function(ticker){
   var prcs = window._pcPrices || {};
   var precio = prcs[ticker] || (sig ? sig.precio : 0);
   var dir = sig ? sig.direccion : '';
-  var dirL = dir==='alcista'?'ALCISTA':dir==='bajista'?'BAJISTA':dir==='alta_conf'?'ALTA CONV-IA':'';
+  var dirL = dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'';
   var prob = sig ? (sig.confianza||'') : '';
   var msg = '📊 Cobrex — Señal IA\n━━━━━━━━━━━━━━━━\n';
   msg += (dir==='alcista'?'📈':dir==='bajista'?'📉':'⚡')+' '+ticker+' — '+dirL+(prob?' '+prob+'%':'')+'\n';
@@ -2688,7 +2688,7 @@ window.wlShowCompare = function(){
 
   // Variables IA
   html += '<div style="font-size:11px;font-weight:700;color:var(--textSec);margin-top:14px;margin-bottom:8px">VARIABLES IA (10)</div>';
-  var varDefs = [{k:'tendencia',l:'Tendencia 24h'},{k:'rsi',l:'RSI14'},{k:'volumen',l:'Volumen'},{k:'volatilidad',l:'Volatilidad'},{k:'correlacion',l:'Correlacion BTC/SPY'},{k:'oro_petroleo',l:'Oro/Petroleo'},{k:'macro',l:'Macro FED'},{k:'earnings',l:'Earnings'},{k:'macd',l:'MACD (12/26)'},{k:'soporte_resist',l:'Soporte/Resist. 30d'}];
+  var varDefs = [{k:'tendencia',l:t('mkt_var1_label')},{k:'rsi',l:t('mkt_var2_label')},{k:'volumen',l:t('mkt_var3_label')},{k:'volatilidad',l:t('mkt_var4_label')},{k:'correlacion',l:t('mkt_var5_label')},{k:'oro_petroleo',l:t('mkt_var6_label')},{k:'macro',l:t('mkt_var7_label')},{k:'earnings',l:t('mkt_var8_label')},{k:'macd',l:t('mkt_var9_label')},{k:'soporte_resist',l:t('mkt_var10_label')}];
   varDefs.forEach(function(v){
     html += '<div style="display:flex;align-items:center;padding:4px 0;border-bottom:0.5px solid #21262D80"><div style="width:100px;font-size:9px;color:var(--textSec)">'+v.l+'</div>';
     items.forEach(function(t){
@@ -2763,7 +2763,7 @@ window._wlBuildShareMsg = function(){
     var sig=null; for(var i=0;i<sigs.length;i++){if(sigs[i].simbolo===sym){sig=sigs[i];break;}}
     var dir=sig?sig.direccion:'';
     var icon=dir==='alcista'?'📈':dir==='bajista'?'📉':dir==='alta_conf'?'⚡':'';
-    var dirL=dir==='alcista'?'ALCISTA':dir==='bajista'?'BAJISTA':dir==='alta_conf'?'ALTA CONV':'';
+    var dirL=dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'';
     var prob=sig?(sig.confianza||''):'';
     var p=prcs[sym]||(sig?sig.precio:0);
     msg+=icon+' '+sym+' — '+dirL+(prob?' '+prob+'%':'')+' — $'+(p?_fmt(p):'---')+'\n';
@@ -3828,7 +3828,7 @@ function generarSenalesIA() {
         var upd=document.getElementById('ia-updated');
         if(upd){
           var ts = data.updatedAt ? new Date(data.updatedAt) : new Date();
-          upd.textContent='Act. '+ts.getHours()+':'+(ts.getMinutes()<10?'0':'')+ts.getMinutes()+' (backend)';
+          upd.textContent=(window.t?window.t('act_corto'):'Act.')+' '+ts.getHours()+':'+(ts.getMinutes()<10?'0':'')+ts.getMinutes()+' (backend)';
         }
         // LIVE refresh timer
         window._iaLiveTs = Date.now();
@@ -3974,7 +3974,7 @@ function _generarSenalesIALocal() {
     _renderIALista(signals1, true);
     _iniciarBanner();
     var upd=document.getElementById('ia-updated');
-    if(upd){var now=new Date();upd.textContent='Act. '+now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();}
+    if(upd){var now=new Date();upd.textContent=(window.t?window.t('act_corto'):'Act.')+' '+now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();}
     // FASE 2: cargar el resto en background
     setTimeout(function(){
       _cargarFase2(phase2Activos, signals1, buildSignals, fetchBinanceBatch, fetchYahooBatch);

@@ -947,7 +947,7 @@ function showAlertInfoModal(tipo){
     title = checks.length + ' ' + t('al_info_alertas_activas');
     var scope = window._alertScope||'todos';
     subtitle = t('al_info_monitoreando') + ' ' + (scope==='portfolio'?t('al_mi_portfolio'):scope==='watchlist'?t('al_mi_watchlist'):t('al_todos'));
-    var toggleLabels = ['Cambio de senal','Alta Conviccion','Umbral probabilidad','Senal en Portfolio','Cambio de zona','Por categoria','Termometro de Riesgo','Precio objetivo','Variacion brusca','Nuevo maximo/minimo','FED FOMC','CPI / PBI','Apertura mercados','Earnings portfolio','Geopolitica GDELT'];
+    var toggleLabels = [t('al_ia_cambio'),t('al_ia_alta'),t('al_ia_umbral'),t('al_ia_portfolio'),t('al_pulse_zona'),t('al_pulse_cat'),t('al_pulse_thermo'),t('al_precio_obj'),t('al_precio_var'),t('al_precio_maxmin'),'FED FOMC','CPI / PBI',t('al_ev_apertura'),t('al_ev_earnings'),t('al_ev_gdelt')];
     var allChecks = document.querySelectorAll('.alert-section input[type=checkbox]');
     allChecks.forEach(function(c,i){if(c.checked && toggleLabels[i]) items.push({icon:'✅',label:toggleLabels[i]});});
   } else {
@@ -1804,7 +1804,7 @@ window._mktOpenDetail = function(idx){
     </div>
     <div id="ia-cnt-altaconf" onclick="setIAFiltro('alta_conf')" style="flex:1;background:var(--card);border:2px solid var(--gold);border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)">
       <div id="ia-num-altaconf" style="font-size:22px;font-weight:900;color:var(--gold);line-height:1">0</div>
-      <div style="font-size:8px;font-weight:700;color:var(--gold);margin-top:3px;letter-spacing:0.5px">ALTA CONV-IA</div>
+      <div style="font-size:8px;font-weight:700;color:var(--gold);margin-top:3px;letter-spacing:0.5px" data-i18n="alta_conv">ALTA CONV-IA</div>
     </div>
   </div>
   <!-- Fila: Mi Portfolio + Ordenar + Variables (como nativa) -->
@@ -4263,7 +4263,7 @@ document.addEventListener("DOMContentLoaded", function(){
         var chip = document.createElement('div');
         chip.id = 'only-favs-chip'; chip.onclick = window.toggleOnlyFavs;
         chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;width:fit-content';
-        chip.innerHTML = '⭐ <span>Solo favoritos</span>';
+        chip.innerHTML = '⭐ <span>'+(window.t?window.t('solo_favoritos'):'Solo favoritos')+'</span>';
         bar.appendChild(chip);
       }
       var cnt = document.getElementById('cnt');
