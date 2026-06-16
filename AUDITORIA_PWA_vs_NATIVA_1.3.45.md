@@ -232,6 +232,25 @@ Probado en `cobrex.io/app` logueado (tester con 2 alertas en historial). Hallazg
 ### M6 · PENDIENTE de prueba en DISPOSITIVO (no validable headless):
 - Que la alerta MANUAL, al dispararse, genere: (a) el **emergente in-app**, (b) la notificación en el **centro de notificaciones del teléfono** (`showAlertNotification`, `aurex-features.js:631`, vía Service Worker), (c) que aparezca en el **listado de la campana** + sume al badge (depende de M2), y (d) marcar leída / borrar efectivamente. El disparo requiere movimiento de precio real → se valida en teléfono con una alerta puntual.
 
+## SECCIÓN N — FLUJOS FUNCIONALES probados en vivo (cuenta tester FREE)
+Cada uno ejecutado de verdad en `cobrex.io/app`, verificando POST al backend / cambio de estado. **Antes de marcar algo como bug, lo confirmé** (dos casos parecían fallar y eran gating correcto).
+
+| Flujo | Resultado |
+|---|---|
+| **Agregar activo a Portfolio** (`addPortfolioItem`) | ✅ POST portfolio, el activo aparece. |
+| **Crear alerta manual de precio** (`openCreateAlert` → `ca-go`) | ✅ POST `/api/alertas`. |
+| **Filtros de ordenar** (`_sortCfgs`/`_applySort`) | ✅ aplica (config correcta, ver K). |
+| **Crear nueva lista** (`wlCreateList`) | ✅ GATING correcto: FREE = límite 1 lista (`:1972-1975 checkPlanLimit`); el tester ya tiene 1 → paywall. NO es bug. *(Para probar la creación: cuenta bajo el límite.)* |
+| **Agregar activo a Watchlist** (`wlAddAsset`) | ✅ POST `watchlist_items`. |
+| **Comparar activos — círculo de tilde** | ❌ **BUG L confirmado por interacción**: click en el círculo → selección 0→0, no marca (doble disparo). |
+| **15 toggles de alertas** | ✅ 15 presentes; FREE muestra **5 activos** (gating `applyAlertGating :4120`); los otros 10 `data-locked` no cambian al click (correcto). |
+| **6 tabs** | ✅ las 6 renderizan. |
+| **Sacar activo (Watchlist/Portfolio)** | ⏳ probando (`wlRemoveAsset`/`deletePortfolioItem`) — sirve también para limpiar los datos de prueba que cargué. |
+
+**Pendiente prueba en DISPOSITIVO (no headless):** disparo real de alerta → emergente in-app + notificación del teléfono (`showAlertNotification`/SW) + suma al badge (depende de M2) + marcar leída/borrar (ver M).
+
+**Nota de método:** los "fallos" #CrearLista y #Toggle resultaron ser **gating de plan correcto**, no bugs. Verificar antes de afirmar evita reportar falsos bugs.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
