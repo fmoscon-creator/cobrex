@@ -926,6 +926,27 @@ window._tipoLabel = function(tipo){
   if(extra[t]) return extra[t];
   return (I&&I.t)?I.t('mkt_tipo_activo'):(tipo||'Activo');
 };
+// web-1.7: motivos del análisis IA generados EN LA APP y traducidos (réplica nativa lib/aiMotivos.js Build 42).
+// Reemplaza los sig.motivos que vienen del backend en español por las 5 justificaciones localizadas.
+window.buildAiMotivos = function(sig){
+  if(!sig) return [];
+  var T=function(k){ try{ return (window._i18n&&window._i18n.t)?window._i18n.t(k):k; }catch(e){ return k; } };
+  var dir=(sig.direccion||'').toUpperCase(); var isBaj=dir.indexOf('BAJ')>=0;
+  var p=parseFloat(sig.precio)||0, p24=parseFloat(sig.precio24h)||0;
+  var chg=(p>0&&p24>0)?((p-p24)/p24*100):0;
+  var pct=(chg>=0?'+':'-')+Math.abs(chg).toFixed(1)+'%';
+  var rsi=(sig.rsi!=null)?Math.round(parseFloat(sig.rsi)):50;
+  var vol=(sig.volatilidad!=null)?(parseFloat(sig.volatilidad)*100).toFixed(1)
+         :(sig.scores&&sig.scores.volatilidad!=null)?(parseFloat(sig.scores.volatilidad)*100).toFixed(1)
+         :Math.abs(chg).toFixed(1);
+  return [
+    (isBaj?T('ai_motivo1_baj'):T('ai_motivo1_alc')).replace('{pct}',pct),
+    (isBaj?T('ai_motivo2_baj'):T('ai_motivo2_alc')).replace('{rsi}',String(rsi)),
+    T('ai_motivo3'),
+    (isBaj?T('ai_motivo4_baj'):T('ai_motivo4_alc')).replace('{vol}',vol),
+    T('ai_motivo5')
+  ];
+};
 // web-1.7: al cambiar idioma re-dibujar el Portfolio (filas + Termómetro + botón Ordenar), no solo el estado vacío.
 function _retranslateSortBtn(tab){
   try{
@@ -945,6 +966,8 @@ if(window._i18n) window._i18n.onLangChange(function(){
   // banner upsell de Portfolio (usa claves i18n, solo falta re-llamarlo) + label "Hoy"
   try{ if(window._updatePfBanner) window._updatePfBanner(); }catch(e){}
   try{ var hl=document.getElementById('port-hoy-label'); if(hl) hl.textContent=' '+t('hoy'); }catch(e){}
+  // IA: re-dibujar la lista de señales (resumen "al precio objetivo" + motivos buildAiMotivos) en el idioma nuevo
+  try{ if(window._iaSignals && window._iaSignals.length>0 && typeof _renderIALista==='function') _renderIALista(window._iaSignals); }catch(e){}
 });
 
 function _renderPortfolioItems(items){
@@ -2361,7 +2384,7 @@ window.wlOpenDetail = function(sym){
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="display:flex;align-items:center;gap:12px">'+logoHtml+'<div><div style="font-size:18px;font-weight:700;color:var(--text)">'+sym+'</div><div style="font-size:11px;color:var(--textSec)">'+(act?act.n:sym)+' · '+(act?act.tipo:'')+'</div></div></div><div onclick="wlCloseDetail()" style="width:36px;height:36px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text);cursor:pointer">✕</div></div>';
   html += '<div style="display:flex;gap:10px;margin-bottom:14px"><div style="flex:1;background:var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:4px">Precio</div><div style="font-size:16px;font-weight:700;color:var(--text)">'+_fmt(precio)+'</div></div><div style="flex:1;background:var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:4px">24h</div><div style="font-size:16px;font-weight:700;color:'+(cambio>=0?'var(--green)':'var(--red)')+'">'+_fmt(cambio,'pct')+'</div></div></div>';
   html += '<div style="background:'+dirBg+';border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:'+dirColor+'">'+dirLabel+'</span><span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">PROB. '+prob+'%</span></div>';
-  if(sig && sig.motivos && sig.motivos.length>0){html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';(sig.motivos||[]).slice(0,5).forEach(function(m){html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';});}
+  if(sig && sig.motivos && sig.motivos.length>0){html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';(window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,5).forEach(function(m){html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';});}
   html += '</div>';
   if(sig){var objC=dir==='bajista'?'var(--red)':'var(--green)';var stC=dir==='bajista'?'#FF9500':'var(--red)';var up=sig.upside||0;html += '<div style="display:flex;gap:8px;margin-bottom:12px"><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">Objetivo</div><div style="font-size:12px;font-weight:700;color:'+objC+'">'+_fmt(sig.objetivo)+'</div></div><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">Stop</div><div style="font-size:12px;font-weight:700;color:'+stC+'">'+_fmt(sig.stop)+'</div></div><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">'+(up<0?'Downside':'Upside')+'</div><div style="font-size:12px;font-weight:700;color:'+(up<0?'var(--red)':'var(--green)')+'">'+(up>=0?'+':'')+up.toFixed(1)+'%</div></div></div>';}
   if(sig && sig.scores){var sc=sig.scores;var vd=[{k:'tendencia',l:t('mkt_var1_label')},{k:'rsi',l:t('mkt_var2_label')},{k:'volumen',l:t('mkt_var3_label')},{k:'volatilidad',l:t('mkt_var4_label')},{k:'correlacion',l:t('mkt_var5_label')},{k:'oro_petroleo',l:t('mkt_var6_label')},{k:'macro',l:t('mkt_var7_label')},{k:'earnings',l:t('mkt_var8_label')},{k:'macd',l:t('mkt_var9_label')},{k:'soporte_resist',l:t('mkt_var10_label')}];var pV=vd.filter(function(d){return(sc[d.k]||0)>0.01;});var nV=vd.filter(function(d){return(sc[d.k]||0)<-0.01;});var neV=vd.filter(function(d){return Math.abs(sc[d.k]||0)<=0.01;});html+='<div style="margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px"><span style="font-size:10px;color:var(--textSec);font-weight:600">'+t('ia_variables_modelo')+'</span><span style="font-size:10px"><span style="color:var(--green);font-weight:700">→ '+pV.length+' '+t('ia_vars_alcistas')+'</span> · <span style="color:var(--red);font-weight:700">↓ '+nV.length+' '+t('ia_vars_bajistas')+'</span></span></div>';pV.forEach(function(d){html+='<div style="padding:4px 8px;background:#3FB95010;border-left:2px solid var(--green);border-radius:0 6px 6px 0;margin-bottom:3px"><span style="font-size:10px;color:var(--green);font-weight:600">→ '+d.l+'</span></div>';});nV.forEach(function(d){html+='<div style="padding:4px 8px;background:#F8514910;border-left:2px solid var(--red);border-radius:0 6px 6px 0;margin-bottom:3px"><span style="font-size:10px;color:var(--red);font-weight:600">↓ '+d.l+'</span></div>';});if(neV.length>0){html+='<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">';neV.forEach(function(d){html+='<span style="font-size:9px;color:var(--textDim);background:var(--border);border-radius:4px;padding:2px 6px">— '+d.l+'</span>';});html+='</div>';}html+='</div>';}
@@ -2389,7 +2412,7 @@ window.wlShowShareSignal = function(ticker){
   msg += '💰 Precio: $'+(precio?_fmt(precio):'---')+'\n';
   if(sig && sig.motivos && sig.motivos.length>0){
     msg += '\n📋 Justificación:\n';
-    sig.motivos.slice(0,3).forEach(function(m2){ msg += '→ '+m2+'\n'; });
+    (window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,3).forEach(function(m2){ msg += '→ '+m2+'\n'; });
   }
   msg += '━━━━━━━━━━━━━━━━\nCobrex IA | cobrex.io';
   window._wlShareSignalMsg = msg;
@@ -2929,7 +2952,7 @@ window.openPortItemDetail = function(itemId){
   if(sig){
     var dirColor = sig.direccion === 'ALCISTA' ? 'var(--green)' : (sig.direccion === 'BAJISTA' ? 'var(--red)' : 'var(--gold)');
     var probPrincipal = sig.prob_principal || sig.confianza || 0;
-    var motivosHtml = (sig.motivos||[]).slice(0,5).map(function(m,i){ return '<div style="display:flex;gap:6px;margin-bottom:4px;"><span style="color:'+dirColor+';font-weight:700;flex-shrink:0;">'+(i+1)+'.</span><span style="color:var(--textSec);font-size:11px;">'+m+'</span></div>'; }).join('');
+    var motivosHtml = (window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,5).map(function(m,i){ return '<div style="display:flex;gap:6px;margin-bottom:4px;"><span style="color:'+dirColor+';font-weight:700;flex-shrink:0;">'+(i+1)+'.</span><span style="color:var(--textSec);font-size:11px;">'+m+'</span></div>'; }).join('');
     sigHtml = '<div style="background:var(--card);border-radius:9px;padding:12px;border-left:3px solid '+dirColor+';margin-top:10px;">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
       '<div style="font-size:10px;font-weight:700;color:'+dirColor+';letter-spacing:.5px;">'+sig.direccion+'</div>' +
@@ -4265,7 +4288,7 @@ function _buildIADetail(s) {
   html += '<span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">PRINCIPAL '+s.prob_principal+'%</span>';
   html += '</div>';
   html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';
-  (s.motivos||[]).slice(0,5).forEach(function(m) {
+  (window.buildAiMotivos?window.buildAiMotivos(s):(s.motivos||[])).slice(0,5).forEach(function(m) {
     html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';flex-shrink:0;font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';
   });
   html += '</div>';
@@ -4384,7 +4407,7 @@ window._compartirSenal = function(info) {
   texto += '🎯 Objetivo: $'+sig.objetivo+' | Stop: $'+sig.stop+'\n';
   texto += '----------------\n';
   texto += '📊 ANÁLISIS (10 variables):\n';
-  (sig.motivos||[]).slice(0,3).forEach(function(m,i){ texto += (i+1)+'. '+m+'\n'; });
+  (window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,3).forEach(function(m,i){ texto += (i+1)+'. '+m+'\n'; });
   texto += '----------------\n';
   texto += 'Señal generada por Cobrex IA⚡\n';
   texto += 'aurex-app.github.io';
