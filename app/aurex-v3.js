@@ -675,7 +675,7 @@ window.updatePortConv = function(){
   if(isCrypto(to)){
     fmt = result.toFixed(8).replace(/\.?0+$/, '') + ' ' + to;
   } else {
-    fmt = result.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + to;
+    fmt = result.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + to;
   }
   resEl.textContent = fmt;
 
@@ -694,7 +694,7 @@ window.updatePortConv = function(){
   if(isCrypto(to)){
     fmtRate = oneTo.toFixed(8).replace(/\.?0+$/,'');
   } else {
-    fmtRate = oneTo.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    fmtRate = oneTo.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
   }
   if(rateEl) rateEl.textContent = '1 ' + from + ' = ' + fmtRate + ' ' + to;
 };
@@ -859,7 +859,7 @@ function _renderPortfolioItems(items){
   }
   window._portItems = items;
   var prcs = window._pcPrices || {};
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
   cnt.innerHTML = items.map(function(item, idx){
     var rowActs = window._IA_ACTIVOS||[]; var rowAct=null; for(var ri2=0;ri2<rowActs.length;ri2++){if(rowActs[ri2].s===item.simbolo){rowAct=rowActs[ri2];break;}}
     var precio = prcs[item.simbolo] || item.precio_compra;
@@ -946,7 +946,7 @@ window._updatePortTotalDisplay = function() {
   var badge = document.getElementById('port-curr-badge');
   var total = window._portTotalUSD || 0;
   var cur = window._portCurrency || 'USD';
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d!==undefined?d:2,maximumFractionDigits:d!==undefined?d:2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d!==undefined?d:2,maximumFractionDigits:d!==undefined?d:2}); };
 
   if(cur === 'BTC') {
     var btcPrice = window._pcPrices && window._pcPrices['BTC'] ? window._pcPrices['BTC'] : 0;
@@ -1114,7 +1114,7 @@ function _updateTotals(items){
   });
   var pnlUsd = total - totalCosto;
   var pnlPct = totalCosto > 0 ? (pnlUsd / totalCosto * 100) : 0;
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
   var el = function(id){ return document.getElementById(id); };
   window._portTotalUSD = total;
   _updatePortTotalDisplay();
@@ -3048,8 +3048,8 @@ function _calcPulseScore(raw, cat) {
   if(totalW===0) return { value:50, label:(window._i18n?window._i18n.t('pulse_z_neutral'):'Neutral'), color:'var(--gold)', emoji:'😐', vars:scores };
   var v = Math.min(100, Math.max(0, Math.round(weighted/totalW)));
   var label, color, emoji;
-  if(v<=20)      { label=(window._i18n?window._i18n.t('pulse_z_miedo_ext'):'Miedo Extremo');  color='#C62828'; emoji='😱'; }
-  else if(v<=40) { label=(window._i18n?window._i18n.t('pulse_z_miedo'):'Miedo');           color='#FF6B6B'; emoji='😰'; }
+  if(v<=20)      { label=(window._i18n?window._i18n.t('pulse_z_miedo_ext'):'Miedo Extremo');  color='#C62828'; emoji='😨'; }
+  else if(v<=40) { label=(window._i18n?window._i18n.t('pulse_z_miedo'):'Miedo');           color='#FF6B6B'; emoji='😟'; }
   else if(v<=60) { label=(window._i18n?window._i18n.t('pulse_z_neutral'):'Neutral');         color='var(--gold)'; emoji='😐'; }
   else if(v<=80) { label=(window._i18n?window._i18n.t('pulse_z_codicia'):'Codicia');         color='var(--green)'; emoji='😏'; }
   else           { label=(window._i18n?window._i18n.t('pulse_z_codicia_ext'):'Codicia Extrema'); color='#00E676'; emoji='🤑'; }
@@ -3065,7 +3065,7 @@ async function _fetchPulseForCategory(cat) {
       var catKey = cat || 'GLOBAL';
       var catData = backendData.scores[catKey];
       if (catData && catData.value != null) {
-        var _pColor=catData.value<=20?"#C62828":catData.value<=40?"#FF6B6B":catData.value<=60?"var(--gold)":catData.value<=80?"var(--green)":"#00E676"; var _pEmoji=catData.value<=20?"😱":catData.value<=40?"😰":catData.value<=60?"😐":catData.value<=80?"😊":"🤑"; window._pulseCache[catKey]=Object.assign({},catData,{color:_pColor,emoji:_pEmoji});
+        var _pColor=catData.value<=20?"#C62828":catData.value<=40?"#FF6B6B":catData.value<=60?"var(--gold)":catData.value<=80?"var(--green)":"#00E676"; var _pEmoji=catData.value<=20?"😨":catData.value<=40?"😟":catData.value<=60?"😐":catData.value<=80?"😏":"🤑"; window._pulseCache[catKey]=Object.assign({},catData,{color:_pColor,emoji:_pEmoji});
         window._pulseTs[catKey] = Date.now();
         // Guardar raw del backend para variables modal
         if (backendData.raw) {

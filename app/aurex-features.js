@@ -73,9 +73,14 @@ window._findAssetGlobal = function(sym) {
   return null;
 };
 
+// F1 (web-1.4): locale de número según idioma activo. LATAM (es/pt/fr/it) → es-AR (coma decimal); resto (en/zh/hi/ar) → en-US (punto). = nativa lib/locale.js.
+window._numLocale = function(){ var l=(window._i18n&&window._i18n.getLang)?window._i18n.getLang():'es'; return ['es','pt','fr','it'].indexOf(l)!==-1?'es-AR':'en-US'; };
+
 function _fmt(n, tipo) {
   if (n === null || n === undefined || isNaN(n)) return '--';
-  var isLatam = true; // LATAM hardcoded - iPhone Argentina devuelve en-US
+  // F1 (web-1.4): formato según idioma activo (= nativa lib/locale.js). LATAM (es-AR/pt-BR/fr-FR/it-IT) → coma decimal; resto (en/zh/hi/ar) → punto.
+  var _lang = (window._i18n && window._i18n.getLang) ? window._i18n.getLang() : 'es';
+  var isLatam = ['es','pt','fr','it'].indexOf(_lang) !== -1;
   var sep = isLatam
     ? { thousands: '.', decimal: ',' }
     : { thousands: ',', decimal: '.' };
@@ -730,7 +735,7 @@ window.updatePortConv = function(){
   if(isCrypto(to)){
     fmt = result.toFixed(8).replace(/\.?0+$/, '') + ' ' + to;
   } else {
-    fmt = result.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + to;
+    fmt = result.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + to;
   }
   resEl.textContent = fmt;
 
@@ -749,7 +754,7 @@ window.updatePortConv = function(){
   if(isCrypto(to)){
     fmtRate = oneTo.toFixed(8).replace(/\.?0+$/,'');
   } else {
-    fmtRate = oneTo.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    fmtRate = oneTo.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
   }
   if(rateEl) rateEl.textContent = '1 ' + from + ' = ' + fmtRate + ' ' + to;
 };
@@ -930,7 +935,7 @@ function _renderPortfolioItems(items){
   window._portItems = items;
   try { localStorage.setItem('aurex_port_items_cache', JSON.stringify(items)); } catch(e){}
   var prcs = window._pcPrices || {};
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
   cnt.innerHTML = items.map(function(item, idx){
     var rowAct = window._findAssetGlobal ? window._findAssetGlobal(item.simbolo) : null;
     if(!rowAct){ var rowActs=window._IA_ACTIVOS||[]; for(var ri2=0;ri2<rowActs.length;ri2++){if(rowActs[ri2].s===item.simbolo){rowAct=rowActs[ri2];break;}} }
@@ -1026,7 +1031,7 @@ window._updatePortTotalDisplay = function() {
   var badge = document.getElementById('port-curr-badge');
   var total = window._portTotalUSD || 0;
   var cur = window._portCurrency || 'USD';
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d!==undefined?d:2,maximumFractionDigits:d!==undefined?d:2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d!==undefined?d:2,maximumFractionDigits:d!==undefined?d:2}); };
 
   if(cur === 'BTC') {
     var btcPrice = window._pcPrices && window._pcPrices['BTC'] ? window._pcPrices['BTC'] : 0;
@@ -1197,7 +1202,7 @@ function _updateTotals(items){
     var pnl = precioReal && item.precio_compra > 0 ? ((precioReal - item.precio_compra) / item.precio_compra * 100) : 0;
     if(pnl > bestPct){ bestPct = pnl; bestSym = item.simbolo; }
   });
-  var fmtNum = function(n,d){ return n.toLocaleString('es-AR',{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
+  var fmtNum = function(n,d){ return n.toLocaleString(window._numLocale(),{minimumFractionDigits:d||2,maximumFractionDigits:d||2}); };
   var el = function(id){ return document.getElementById(id); };
   // Si no hay precios reales, no sobreescribir — dejar cache del header visible
   if(!hasPrices) return;
@@ -1595,7 +1600,7 @@ window._fetchSearchPrices = function(results, idPrefix) {
             if(el){
               var dec = p > 100 ? 2 : (p > 1 ? 2 : 4);
               el.style.fontSize='12px'; el.style.fontWeight='700'; el.style.color='#111';
-              el.textContent = '$' + Number(p).toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+              el.textContent = '$' + Number(p).toLocaleString(window._numLocale(),{minimumFractionDigits:dec,maximumFractionDigits:dec});
             }
           }
         }
@@ -1641,7 +1646,7 @@ window._renderSearchResult = function(a, idx, onclickFnName) {
   var tipoLabel = a.tipo==='cripto'?t('mkt_tipo_cripto'):a.tipo==='accion'?t('mkt_tipo_accion'):a.tipo==='etf'?t('mkt_tipo_etf'):a.tipo==='bono'?t('mkt_ia_bonos'):a.tipo==='metal'?t('mkt_ia_metales'):a.tipo==='materia_prima'?t('mkt_ia_materias'):(a.tipo||t('mkt_tipo_activo'));
   var yahooTag = a._fromYahoo ? ' <span style="font-size:8px;background:#58A6FF20;color:#58A6FF;border-radius:3px;padding:1px 4px;">YAHOO</span>' : '';
   var cachedP = (window._pcPrices||{})[a.s];
-  var priceHtml = cachedP ? '<span style="font-size:12px;font-weight:700;color:#111;flex-shrink:0;">$'+Number(cachedP).toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="port-sr-p-'+idx+'" style="font-size:11px;color:#999;flex-shrink:0;">...</span>';
+  var priceHtml = cachedP ? '<span style="font-size:12px;font-weight:700;color:#111;flex-shrink:0;">$'+Number(cachedP).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="port-sr-p-'+idx+'" style="font-size:11px;color:#999;flex-shrink:0;">...</span>';
   return '<div onclick="' + onclickFnName + '(' + idx + ')" style="display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:8px;cursor:pointer;background:#f5f5f5;margin-bottom:4px;-webkit-tap-highlight-color:rgba(0,0,0,0);">' +
     logoHtml +
     '<div style="flex:1;min-width:0;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;font-weight:700;color:#111;">' + a.s + '</span><span style="font-size:13px;color:#666;">' + a.n + '</span>' + yahooTag + '</div>' +
@@ -1698,7 +1703,7 @@ window.selectPortActivo = function(sym, nombre){
   var prcs = window._pcPrices || {};
   window._paCurrentPrice = prcs[sym] || 0;
   function _renderPrice() {
-    if(previewPrice) previewPrice.textContent = window._paCurrentPrice ? '$' + window._paCurrentPrice.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}) : t('port_cargando');
+    if(previewPrice) previewPrice.textContent = window._paCurrentPrice ? '$' + window._paCurrentPrice.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}) : t('port_cargando');
   }
   _renderPrice();
   // Si no hay precio en cache, fetch del backend (igual que nativa)
@@ -1719,11 +1724,11 @@ window.selectPortActivo = function(sym, nombre){
     var mktPrice = window._paCurrentPrice || 0;
     var val = q * mktPrice;
     var pnl = (q > 0 && p > 0) ? q * (mktPrice - p) : 0;
-    if(previewValue) previewValue.textContent = '$' + val.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    if(previewValue) previewValue.textContent = '$' + val.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
     var pnlEl = document.getElementById('pa-preview-pnl');
     if(pnlEl) {
       if(q > 0 && p > 0 && mktPrice > 0) {
-        pnlEl.textContent = (pnl >= 0 ? '+' : '') + '$' + Math.abs(pnl).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+        pnlEl.textContent = (pnl >= 0 ? '+' : '') + '$' + Math.abs(pnl).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
         pnlEl.style.color = pnl >= 0 ? '#16a34a' : '#dc2626';
       } else {
         pnlEl.textContent = '$0,00';
@@ -1770,7 +1775,7 @@ window.savePortActivo = function(){
 window._showDupeModal = function(sym, existing, newQty, newPrice, sumQty, avgPrice) {
   var old = document.getElementById('dupe-modal-overlay');
   if(old) old.remove();
-  var fmt = function(v){ return v ? v.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}) : '0,00'; };
+  var fmt = function(v){ return v ? v.toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}) : '0,00'; };
   var ov = document.createElement('div');
   ov.id = 'dupe-modal-overlay';
   ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -5663,7 +5668,7 @@ window._sortCfgs = {
     {k:'senal_ia',  lk:'sort_senal_ia',  dk:'sort_senal_ia_d',  ic:'🔼', bg:'#3B82F620'},
     {k:'prob',      lk:'sort_prob',      dk:'sort_prob_d',      ic:'🎯', bg:'#ef444420'},
     {k:'ticker',    lk:'sort_ticker',    dk:'sort_ticker_d',    ic:'🔤', bg:'#3B82F620'},
-    {k:'fecha',     lk:'sort_fecha',     dk:'sort_fecha_d',     ic:'⏰', bg:'#9CA3AF20'}
+    {k:'fecha',     lk:'sort_fecha',     dk:'sort_fecha_d',     ic:'🕐', bg:'#9CA3AF20'}
   ]},
   mercados: { key:'aurex_sort_mercados', def:'default', opts:[
     {k:'default',   lk:'sort_default',   dk:'sort_default_d',   ic:'⏰', bg:'#9CA3AF20'},
@@ -6091,7 +6096,7 @@ window._lpCompartirPortfolio = function(ticker, item) {
   var pnlPct = (item && item.precio_compra > 0) ? ((precio - item.precio_compra)/item.precio_compra*100) : 0;
   var emoji = pnlPct >= 0 ? '🚀' : '📉';
   var pctStr = (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%';
-  var precioStr = '$' + precio.toLocaleString('es-AR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  var precioStr = '$' + precio.toLocaleString(window._numLocale(), { minimumFractionDigits:2, maximumFractionDigits:2 });
   var texto = ticker + ' — ' + precioStr + ' | ' + pctStr + ' en mi portfolio ' + emoji + ' vía Cobrex\n\n' +
     'https://cobrex.io';
   if (navigator.share) {
@@ -6105,7 +6110,7 @@ window._lpCompartirPortfolio = function(ticker, item) {
 window._lpCompartirMercados = function(ticker) {
   var prcs = window._pcPrices || {};
   var precio = prcs[ticker];
-  var precioStr = precio ? ' — $' + precio.toLocaleString('es-AR', { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
+  var precioStr = precio ? ' — $' + precio.toLocaleString(window._numLocale(), { minimumFractionDigits:2, maximumFractionDigits:2 }) : '';
   var texto = ticker + precioStr + ' | seguimiento en Cobrex\n\nhttps://cobrex.io';
   if (navigator.share) {
     navigator.share({ title: 'Cobrex — ' + ticker, text: texto }).catch(function(){});
