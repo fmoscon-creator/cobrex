@@ -4154,8 +4154,8 @@ document.addEventListener("DOMContentLoaded", function(){
         document.getElementById('upsell-icon').textContent = isFree ? '⚡' : '👑';
         document.getElementById('upsell-title').style.color = targetColor;
         document.getElementById('upsell-title').textContent = isFree
-          ? (window._i18n?window._i18n.t('pw_pasate_pro'):'Pasate a PRO')+' — ' + (window.__cobrexP?window.__cobrexP('PRO.mensual'):'$4.99') + '/mes'
-          : (window._i18n?window._i18n.t('pw_pasate_elite'):'Pasate a ELITE')+' — ' + (window.__cobrexP?window.__cobrexP('ELITE.mensual'):'$9.99') + '/mes';
+          ? (window._i18n?window._i18n.t('pw_pasate_pro'):'Pasate a PRO')+' — ' + (window.__cobrexP?window.__cobrexP('PRO.mensual'):'$4.99') + (window._i18n?window._i18n.t('por_mes'):'/mes')
+          : (window._i18n?window._i18n.t('pw_pasate_elite'):'Pasate a ELITE')+' — ' + (window.__cobrexP?window.__cobrexP('ELITE.mensual'):'$9.99') + (window._i18n?window._i18n.t('por_mes'):'/mes');
         document.getElementById('upsell-sub').textContent = isFree
           ? 'Activos ilimitados · 14 tipos de alertas · Telegram en tiempo real'
           : 'Cobrex Pulse completo · RSI/MACD · Alertas geopolíticas GDELT';

@@ -968,6 +968,8 @@ if(window._i18n) window._i18n.onLangChange(function(){
   try{ var hl=document.getElementById('port-hoy-label'); if(hl) hl.textContent=' '+t('hoy'); }catch(e){}
   // IA: re-dibujar la lista de señales (resumen "al precio objetivo" + motivos buildAiMotivos) en el idioma nuevo
   try{ if(window._iaSignals && window._iaSignals.length>0 && typeof _renderIALista==='function') _renderIALista(window._iaSignals); }catch(e){}
+  // IA: el sort es #ia-sort-inline (no -sort-btn) → re-traducir su valor visible
+  try{ var iasv=document.querySelector('#ia-sort-inline .sort-value'); if(iasv && window._sortCfgs && window._sortCfgs.ia){ var c=_getSort('ia'); var o=window._sortCfgs.ia.opts.find(function(x){return x.k===c;})||window._sortCfgs.ia.opts[0]; iasv.textContent=t(o.lk); } }catch(e){}
 });
 
 function _renderPortfolioItems(items){
