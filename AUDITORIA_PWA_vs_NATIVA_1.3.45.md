@@ -319,6 +319,20 @@ Escritorio revisó el documento **línea por línea contra el código real** (ra
 
 **VEREDICTO CONJUNTO (Code + Escritorio):** auditoría 100% consolidada, todos los hallazgos respaldados por código real leído línea por línea por los dos, de forma independiente. Lista para armar las correcciones de la rama `web-1.4` con el OK de Fernando.
 
+## SECCIÓN R — CONDUCTAS FUNCIONALES de primer arranque (lo que FALTÓ en la auditoría)
+Reconocido: la auditoría fue exhaustiva en visual/código/i18n, pero NO listó como ítem las **conductas funcionales de primer arranque**. Se valida acá.
+
+### R1 · Idioma del splash/onboarding según el dispositivo (8 idiomas + fallback inglés) — ✅ VALIDADO EN VIVO
+- **Código:** `aurex-i18n.js:10-15` → `_lang = localStorage.getItem('aurex_lang') || (navigator.language||'en').toLowerCase().slice(0,2)`; si está en `['es','en','pt','zh','fr','it','hi','ar']` lo usa, si no → `'en'`. El onboarding usa `T(k)=window.t(k)` que lee ese idioma (orden de scripts garantiza que i18n cargó antes del render en DOMContentLoaded).
+- **Prueba en vivo (Playwright, `?resetOnboarding=1`, navigator.language forzado):**
+  - fr-FR → **francés** ("Arrêtez de perdre de l'argent / Suivant") ✓
+  - pt-BR → **portugués** ("Pare de perder dinheiro / Próximo") ✓
+  - ar-SA → **árabe** ("توقّف عن خسارة أموالك / التالي") ✓
+  - de-DE / ja-JP / ru-RU / ko-KR (fuera de los 8) → **inglés** ("Stop losing money / Next") ✓
+- **Veredicto:** correcto — splash/onboarding en el idioma del dispositivo si es uno de los 8; inglés para cualquier otro. (= comportamiento esperado / nativa.)
+
+### R2 · PENDIENTE de prueba en dispositivo real (no headless): disparo de alerta → emergente in-app + notificación del teléfono + suma al badge (ver M6).
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
