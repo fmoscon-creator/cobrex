@@ -118,6 +118,32 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 - **H4 · "Oro/Petroleo" y demás variables IA** → `aurex-features.js:2686 var varDefs = [{k:'tendencia',l:'Tendencia 24h'},…,{k:'oro_petroleo',l:'Oro/Petroleo'},…]` **hardcodeado en español** (segundo varDefs; el de `:2333` sí usa `t('mkt_var6_label')`). → en inglés muestra "Oro/Petroleo", "Tendencia 24h", etc. AJUSTE: usar los `t('mkt_varN_label')` como en `:2333`.
 - **H5 · "Act. HH:MM"** → estático `index.html:1677 id="tf-time" data-i18n="mkt_tf_ahora">Act. ahora` SÍ tiene i18n; falta confirmar el update dinámico de la hora ("Act. " + hora) por si hardcodea el prefijo. EN PROGRESO.
 
+## SECCIÓN I — Validación Escritorio (Issue #17) incorporada + hallazgos nuevos (todos re-verificados por Code, línea por línea)
+
+### I1 · Campana por activo — líneas PWA exactas (confirma B1/B2)
+- **Portfolio:** PWA `aurex-features.js:1000` → `<span onclick="…openCreateAlert(item.simbolo…)">🔔</span>` está **en la fila del precio/eliminar (superior)**, antes de `deletePortfolioItem`. Nativa: `PortfolioScreen.js:966` en `assetBottomRow`. ❌ posición incorrecta (= B1).
+- **Watchlist:** PWA `aurex-features.js:2255` → 🔔 junto al tacho `wlRemoveAsset` (`:2256`), arriba del comentario "Bottom row" (`:2258`). Nativa: `WatchlistScreen.js:990-995` en la bottom row. ❌ posición incorrecta (= B2).
+
+### I2 · POP "Crear Alerta" (openCreateAlert) — botones Sube/Baja con color equivocado (HALLAZGO NUEVO)
+- **NATIVA:** `components/AlertCreateModal.js:74-76` → `isUp = direccion==='arriba'; accentColor = isUp ? C.green : C.red; accentBg = isUp ? ${C.green}1A : ${C.red}1A`. → ▲ Sube = **verde**, ▼ Baja = **rojo**.
+- **PWA:** `index.html:4525 function seg(active){ … border … (active?'var(--gold)':'var(--border2)') … background … (active?'var(--gold)':'var(--bg)') … }`. La MISMA `seg()` se usa para ▲ (`seg(dir==='arriba')`) y ▼ (`seg(dir==='abajo')`) → el botón seleccionado es **dorado en ambas direcciones**, sin distinguir sube/baja.
+- **DIFERENCIA:** PWA dorado para sube y baja; nativa verde (sube) / rojo (baja).
+- **AJUSTE PROPUESTO:** que `seg()` reciba la dirección y use `var(--green)` cuando es 'arriba' y `var(--red)` cuando es 'abajo' (borde+fondo+texto), como `AlertCreateModal.js:74-76`.
+
+### I3 · "Ult. cierre" hardcodeado en Watchlist (H6, confirmado)
+- **NATIVA:** usa `t('ult_cierre')` (p.ej. `PortfolioScreen.js`).
+- **PWA:** `aurex-features.js:2250 <span …>Ult. cierre</span>` hardcodeado (rama `mktClosed && !isCrypto`). → en inglés queda "Ult. cierre".
+- **AJUSTE:** `t('ult_cierre')`.
+- *(Escritorio también marcó "Accion" y "Hoy" cerca; pendiente confirmar línea exacta — los reviso.)*
+
+### I4 · Timer en header IA ("· ahora")
+- **PWA:** `index.html:1793 <span id="ia-live-time" data-i18n="ia_ahora">· ahora</span>` (está traducido, pero) → por **A2** la nativa OCULTA el timer (`HIDE_HEADER_LEGAL`); debe no mostrarse, igual que en todos los headers.
+
+### I5 · Cards de lista Watchlist (M4) — OK
+- PWA `index.html:2117-2118`: borde = `isSel?list.color:var(--border)`, nombre `color:list.color`, ⭐ si `is_primary`. = Nativa `WatchlistScreen.js:828-834`. (Pendiente confirmar el `listDot` coloreado, nativa `:854`.)
+
+> **Coincidencias Escritorio↔Code (doble verificación):** balanza headers (A1 = Escritorio brand.js:L11), campana Portfolio/Watchlist (B1/B2 = Escritorio C6/C7), colores sube/baja dorados (I2 = Escritorio L4525), "Ult. cierre"/hardcodes IA (H4/H6/G-IA = Escritorio A3 parcial). Lo de Escritorio que verifiqué línea por línea coincide; nada se da por cierto sin leer el código.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
