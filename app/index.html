@@ -194,7 +194,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .live{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--green);font-weight:700}
 .ldot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:lp 1.5s infinite}
 /* A2 (web-1.4): la nativa oculta el timer "· hace Xs" del LIVE (HIDE_HEADER_LEGAL=true). Queda solo punto verde + LIVE. */
-#liveTimePort, #liveTime, #ia-live-time { display:none !important; }
+#liveTimePort, #liveTime, #ia-live-time, #alertas-live-time { display:none !important; }
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* SUMMARY */
@@ -796,6 +796,7 @@ function calculateAlerts(){
     var dir = (sig.direccion||'').toUpperCase();
     var sym = sig.simbolo;
     var fP = precio>=1000?'$'+Math.round(precio).toLocaleString(window._numLocale()):precio>=1?'$'+precio.toFixed(2):precio>=0.01?'$'+precio.toFixed(4):'$'+precio.toFixed(6);
+    var _aT=function(k,f){ try{ if(window._i18n&&window._i18n.t){var v=window._i18n.t(k); if(v) return v;} }catch(e){} return f; };
 
     // IA: Alta Convicción (>= 85%) — idéntico a nativa línea 208
     if(toggles.ia_alta && dir.indexOf('ALTA CONV')>=0 && prob>=85)
@@ -803,36 +804,36 @@ function calculateAlerts(){
 
     // IA: Cambio de señal BAJISTA (prob >= 80) — nativa línea 213
     if(toggles.ia_cambio && dir==='BAJISTA' && prob>=80)
-      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📉',titulo:sym+' — BAJISTA '+prob+'%',desc:fP+' · Senal bajista fuerte',color:'var(--red)'});
+      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📉',titulo:sym+' — BAJISTA '+prob+'%',desc:fP+' · '+_aT('al_d_senal_bajista','Señal bajista fuerte'),color:'var(--red)'});
 
     // IA: Cambio de señal ALCISTA (prob >= 80) — nativa línea 216
     if(toggles.ia_cambio && dir==='ALCISTA' && prob>=80)
-      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📈',titulo:sym+' — ALCISTA '+prob+'%',desc:fP+' · Senal alcista fuerte',color:'var(--green)'});
+      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📈',titulo:sym+' — ALCISTA '+prob+'%',desc:fP+' · '+_aT('al_d_senal_alcista','Señal alcista fuerte'),color:'var(--green)'});
 
     // IA: Umbral probabilidad — nativa línea 221
     if(toggles.ia_umbral && prob>=probThreshold && !(dir.indexOf('ALTA CONV')>=0&&prob>=85))
-      alerts.push({tipo:'ia',sub:'umbral',sym:sym,icon:'🎯',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · Supera umbral '+probThreshold+'%',color:'#A78BFA'});
+      alerts.push({tipo:'ia',sub:'umbral',sym:sym,icon:'🎯',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · '+_aT('al_d_supera_umbral','Supera umbral {p}%').replace('{p}',probThreshold),color:'#A78BFA'});
 
     // PRECIO: Variación brusca — nativa línea 226
     if(toggles.precio_variacion && Math.abs(change)>=pctThreshold)
-      alerts.push({tipo:'precio',sub:'variacion',sym:sym,icon:change>=0?'📈':'📉',titulo:sym+' '+(change>=0?'+':'')+change.toFixed(1)+'%',desc:fP+' en 24hs',color:change>=0?'var(--green)':'var(--red)'});
+      alerts.push({tipo:'precio',sub:'variacion',sym:sym,icon:change>=0?'📈':'📉',titulo:sym+' '+(change>=0?'+':'')+change.toFixed(1)+'%',desc:fP+' '+_aT('al_d_en_24hs','en 24hs'),color:change>=0?'var(--green)':'var(--red)'});
 
     // PRECIO: Nuevo máximo/mínimo 30d (usa soporte_resist) — nativa línea 231
     if(toggles.precio_maxmin && sig.scores){
       var sr = sig.scores.soporte_resist||0;
-      if(sr < -0.03) alerts.push({tipo:'precio',sub:'maxmin',sym:sym,icon:'🔺',titulo:sym+' — Cerca de maximo 30d',desc:fP+' · Zona de resistencia',color:'var(--red)'});
-      else if(sr > 0.03) alerts.push({tipo:'precio',sub:'maxmin',sym:sym,icon:'🔻',titulo:sym+' — Cerca de minimo 30d',desc:fP+' · Zona de soporte',color:'var(--green)'});
+      if(sr < -0.03) alerts.push({tipo:'precio',sub:'maxmin',sym:sym,icon:'🔺',titulo:sym+' — '+_aT('al_d_cerca_max','Cerca de máximo 30d'),desc:fP+' · '+_aT('al_d_zona_resist','Zona de resistencia'),color:'var(--red)'});
+      else if(sr > 0.03) alerts.push({tipo:'precio',sub:'maxmin',sym:sym,icon:'🔻',titulo:sym+' — '+_aT('al_d_cerca_min','Cerca de mínimo 30d'),desc:fP+' · '+_aT('al_d_zona_soporte','Zona de soporte'),color:'var(--green)'});
     }
 
     // PRECIO: RSI Extremo — nativa línea 238
     if(toggles.precio_rsi && sig.rsi){
-      if(sig.rsi>=70) alerts.push({tipo:'precio',sub:'rsi',sym:sym,icon:'⚠️',titulo:sym+' — RSI '+sig.rsi,desc:'Sobrecompra · '+fP,color:'var(--red)'});
-      else if(sig.rsi<=30) alerts.push({tipo:'precio',sub:'rsi',sym:sym,icon:'⚠️',titulo:sym+' — RSI '+sig.rsi,desc:'Sobreventa · '+fP,color:'var(--green)'});
+      if(sig.rsi>=70) alerts.push({tipo:'precio',sub:'rsi',sym:sym,icon:'⚠️',titulo:sym+' — RSI '+sig.rsi,desc:_aT('al_d_sobrecompra','Sobrecompra')+' · '+fP,color:'var(--red)'});
+      else if(sig.rsi<=30) alerts.push({tipo:'precio',sub:'rsi',sym:sym,icon:'⚠️',titulo:sym+' — RSI '+sig.rsi,desc:_aT('al_d_sobreventa','Sobreventa')+' · '+fP,color:'var(--green)'});
     }
 
     // IA: Señal en Portfolio — nativa línea 244
     if(toggles.ia_portfolio && scope==='portfolio' && prob>=70)
-      alerts.push({tipo:'ia',sub:'portfolio',sym:sym,icon:'💼',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · En tu portfolio',color:'#A78BFA'});
+      alerts.push({tipo:'ia',sub:'portfolio',sym:sym,icon:'💼',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · '+_aT('al_d_en_portfolio','En tu portfolio'),color:'#A78BFA'});
   });
 
   var pulse = window._alertPulse||{};
@@ -1642,7 +1643,7 @@ function runConversion(){
   <circle cx="150" cy="164" r="5" fill="#F7D060"/>
 </svg>
     <span class="hn">Cobrex</span>
-    <span class="hp"> Mercados</span>
+    <span class="hp" data-i18n="tab_mercados"> Mercados</span>
   </div>
   <div class="live"><div class="ldot"></div><span id="liveLabel">LIVE</span><span id="liveTime" style="color:var(--textSec);font-weight:400;margin-left:2px;font-size:9px;"></span></div>
 </div>
@@ -2067,10 +2068,10 @@ window._mktOpenDetail = function(idx){
     <span id="alert-triggered-count" style="display:none;background:var(--red);border-radius:10px;padding:2px 6px;font-size:10px;font-weight:800;color:var(--text)">0</span>
   </div>
   <div style="display:flex;gap:6px;overflow-x:auto" id="alert-type-filters">
-    <span onclick="setAlertTypeFilter('todas')" style="padding:5px 10px;border-radius:6px;background:var(--gold);color:var(--chipTextActive);font-size:9px;font-weight:700;cursor:pointer">Todas</span>
-    <span onclick="setAlertTypeFilter('ia')" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">🤖 IA</span>
-    <span onclick="setAlertTypeFilter('precio')" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">💰 Precio</span>
-    <span onclick="setAlertTypeFilter('pulse')" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">💓 Pulse</span>
+    <span onclick="setAlertTypeFilter('todas')" data-i18n="al_filtro_todas" style="padding:5px 10px;border-radius:6px;background:var(--gold);color:var(--chipTextActive);font-size:9px;font-weight:700;cursor:pointer">Todas</span>
+    <span onclick="setAlertTypeFilter('ia')" data-i18n="al_filtro_ia" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">🤖 IA</span>
+    <span onclick="setAlertTypeFilter('precio')" data-i18n="al_filtro_precio" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">💰 Precio</span>
+    <span onclick="setAlertTypeFilter('pulse')" data-i18n="al_filtro_pulse" style="padding:5px 10px;border-radius:6px;background:var(--border);color:var(--textSec);font-size:9px;font-weight:700;cursor:pointer">💓 Pulse</span>
   </div>
 </div>
 <div id="alert-triggered-list">
@@ -3892,15 +3893,15 @@ setTimeout(function(){
   <nav class="tab-bar" id="main-tab-bar">
     <div class="tab-btn" id="btn-portfolio" onclick="navTo('portfolio')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-      <span>Portfolio</span>
+      <span data-i18n="tab_portfolio">Portfolio</span>
     </div>
     <div class="tab-btn active" id="btn-mercados" onclick="navTo('mercados')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-      <span>Mercados</span>
+      <span data-i18n="tab_mercados">Mercados</span>
     </div>
     <div class="tab-btn" id="btn-watchlist" onclick="navTo('watchlist')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      <span>Watchlist</span>
+      <span data-i18n="tab_watchlist">Watchlist</span>
     </div>
     <div class="tab-btn" id="btn-ia" onclick="navTo('ia')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
@@ -3908,11 +3909,11 @@ setTimeout(function(){
     </div>
     <div class="tab-btn" id="btn-alertas" onclick="navTo('alertas')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span>Alertas</span>
+      <span data-i18n="tab_alertas">Alertas</span>
     </div>
     <div class="tab-btn" id="btn-perfil" onclick="navTo('perfil')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Perfil</span>
+      <span data-i18n="tab_perfil">Perfil</span>
     </div>
   </nav>
 </div>
@@ -4763,6 +4764,22 @@ window.connectTelegram=function(){
   function boot(){ setTimeout(window._injectPerfilVersion,1600); setTimeout(window._injectPerfilVersion,3600); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
   var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); if(arguments[0]==='perfil') setTimeout(window._injectPerfilVersion,300); return r; }; }
+})();
+</script>
+
+<script>
+/* web-1.7: re-render de contenido dinámico de Perfil al cambiar idioma (usan claves i18n pero no se re-dibujaban):
+   upsell "Pasate a PRO" (#upsell-title/#upsell-sub vía applyPlanGating) + celular "Sin celular cargado". */
+(function(){
+  function reRenderPerfil(){
+    try{ if(window.applyPlanGating) window.applyPlanGating(); }catch(e){}
+    try{ if(window.pacInitAlertas) window.pacInitAlertas(); }catch(e){}
+    try{ if(window.pacInitCuenta) window.pacInitCuenta(); }catch(e){}
+    try{ if(window.updateUserUI) window.updateUserUI(window._currentUser); }catch(e){}
+    try{ if(window.calculateAlerts) window.calculateAlerts(); }catch(e){}  // re-genera descripciones de alertas traducidas
+  }
+  function reg(){ if(window._i18n&&window._i18n.onLangChange){ window._i18n.onLangChange(reRenderPerfil); return true; } return false; }
+  if(!reg()){ var iv=setInterval(function(){ if(reg()) clearInterval(iv); },300); setTimeout(function(){clearInterval(iv);},6000); }
 })();
 </script>
 
