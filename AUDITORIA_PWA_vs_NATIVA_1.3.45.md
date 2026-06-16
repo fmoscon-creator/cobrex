@@ -165,6 +165,31 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 - **G-AL-1 · Pop "alertas activas" con labels hardcodeados (fuga):** `index.html:950 var toggleLabels = ['Cambio de senal','Alta Conviccion','Umbral probabilidad','Senal en Portfolio','Cambio de zona','Por categoria','Termometro de Riesgo','Precio objetivo','Variacion brusca','Nuevo maximo/minimo','FED FOMC','CPI / PBI','Apertura mercados','Earnings portfolio','Geopolitica GDELT']` — **15 labels en español sin acentos**, usados en el modal de resumen (`alert-info-modal`, `:951-952`). La nativa usa `t('alert_ia_cambio')` etc. (`AlertasScreen.js:56-91`). → en inglés ese pop queda en español.
   - **AJUSTE:** reemplazar el array por `t()` de cada toggle. (También el array `sections` `:944` con títulos hardcodeados.)
 
+## SECCIÓN G-Watchlist — pantalla Watchlist
+- **OK (verificado):** colores de dirección en filas verde/rojo/dorado (`aurex-features.js:2046,2178,2626` = nativa `WatchlistScreen.js:60`); iconos 📈/📉/⚡ (`:2627` = `:62`); comparador con ⚖️ en el título (`wl_comparador_title='⚖️ Comparador Cobrex'`, `aurex-i18n.js:706`; render `aurex-features.js:2633`) = nativa (`:117 ⚖️ {comparador_aurex}`); ⭐ MEJOR PERFORMANCE (`:2661`); cards de lista con borde/nombre/⭐ por color (I5).
+- **Fugas (ya anotadas):** badge de dirección hardcodeado en la fila (`:2179`, ver **G-IA-2**); "Ult. cierre" (`:2250`, ver **I3**).
+- **Pendiente menor:** confirmar `listDot` coloreado (nativa `WatchlistScreen.js:854`).
+
+## SECCIÓN G-Perfil — pantalla Perfil
+- **OK:** bloques b1-b8 con iconos = nativa: 👤 Usuario, ⭐ Plan actual, ⚙️ Mi cuenta, 🎨 Preferencias, 🔒 Seguridad, 🔔 Alertas, 📩 Notificaciones, 💬 Soporte (`index.html:2162,2218,2240,2306,2378,2457,2530,2585` = `PerfilScreen.js:24-32`).
+- **G-P-1 · Bloque "Cómo usar" en posición incorrecta (de mi M5):** PWA `index.html:2575 #pac-comousar` está **antes de Soporte (b8)**. Nativa: bloque **b3b entre Mi cuenta (b3) y Preferencias (b4)** (`PerfilScreen.js:27`). AJUSTE: mover el bloque a esa posición.
+- **G-P-2 · Icono del bloque "Cómo usar" distinto (de mi M5):** PWA 📖 (`cu_block_title`, `aurex-i18n.js`); nativa **❓** + `t('como_usar_aurex')` (`PerfilScreen.js:27`). AJUSTE: usar ❓ y la clave/título nativo.
+
+## SECCIÓN J — BANDERAS del selector de idioma (lo que marcó Fernando: ARG vs España)
+- **NATIVA `lib/locale.js:5-12`** (`LANGUAGES`): **es-AR → 🇦🇷**, en-US → 🇺🇸, pt-BR → 🇧🇷, fr-FR → 🇫🇷, it-IT → 🇮🇹, zh-CN → 🇨🇳, hi-IN → 🇮🇳, **ar-SA → 🇸🇦**.
+- **PWA — inconsistencia:**
+  - **Español:** chip del header `aurex-features.js:5159 flags={es:'🇪🇸',…}` (y `:6414`) usa **🇪🇸** (España) ❌; el `select-idioma` de Preferencias `index.html:2348` usa **🇦🇷** "Español (Arg)" ✅ (= nativa). → en Portfolio ves 🇪🇸 y en Preferencias 🇦🇷.
+  - **Árabe:** ambos lados PWA usan **🇦🇪** (`:5159`, `:6414`, select `:2354`) ❌; nativa usa **🇸🇦**.
+  - **Códigos:** el select usa `es-ar`/`pt-br`; el header/i18n usan `es`/`pt`. Inconsistencia de valores (puede romper el match del idioma activo).
+- **AJUSTE PROPUESTO:** unificar a las banderas nativas (`es → 🇦🇷`, `ar → 🇸🇦`, resto igual) en **todos** los lugares (header chip `:5159,:6414`, select `:2347-2354`) y unificar los códigos de idioma.
+
+## SECCIÓN H (cont.) — H5 "Act. HH:MM"
+- **PWA:** `aurex-features.js:3826 upd.textContent='Act. '+ts.getHours()+':'+…+' (backend)'` y `:3972 upd.textContent='Act. '+now.getHours()+…` → prefijo **"Act." hardcodeado** (barra de actualización IA). No traduce.
+- **AJUSTE:** usar `t()` para el prefijo "Act." o replicar el formato nativo.
+
+## NOTA — PLANES formato/diseño (reconfirmado por Fernando)
+- Ver **D1/D2**: el paywall PWA (modal con pestañas + overlay translúcido) no replica el diseño nativo (pantalla con las 3 tarjetas apiladas, fondo opaco). Formato y diseño a rehacer según `SubscriptionScreen.js`.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
