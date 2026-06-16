@@ -308,6 +308,17 @@ Probado con `aurextester12` (FREE) y `fmoscon` (ELITE) en `cobrex.io/app`.
 ### Discrepancia a resaltar:
 - **Comparar activos:** Escritorio ✅ "funciona" (click en card) vs Code ❌ bug L (click en círculo). Ambos ciertos → **el círculo está roto pero la card no**, por eso uno lo vio y el otro no. Hay que arreglar el círculo (L).
 
+## SECCIÓN Q — REVISIÓN INDEPENDIENTE DE ESCRITORIO (consolidado final)
+Escritorio revisó el documento **línea por línea contra el código real** (rama main, commit live) sin asumir nada. **Confirmó TODOS los hallazgos** — no encontró nada que Code haya declarado mal. Los ítems de device (M6, F2) quedan correctamente marcados como no validables headless. Refinamientos que suma + 1 corrección a Code:
+
+- **Q1 · F1 (formato números) — raíz exacta:** `aurex-features.js:78 var isLatam = true; // LATAM hardcoded - iPhone Argentina devuelve en-US`. El propio código admite el workaround y lo deja `true` igual. → **el fix concreto es esa línea**: reemplazar `isLatam = true` por detección real del idioma activo (`_i18n.getLang()`) + tabla `LATAM_LOCALES` de la nativa. (Mi doc apuntaba a los call sites de `toLocaleString`; la raíz es L78.)
+- **Q2 · G-IA-2 — inconsistencia interna del string (no solo i18n):** las 5 apariciones usan variantes distintas: 'ALTA CONV' (`aurex-features.js:2047, 2179, 2761`) vs 'ALTA CONV-IA' (`:2319, :2351`). Al pasar a `t()` hay que **unificar la variante**.
+- **Q3 · J banderas — unificar también los CÓDIGOS:** el chip del header usa `es`/`ar` (`:5159, :6414`), el select de Preferencias usa `es-ar`/`ar` (`index.html:2348, :2354`; el `ar` del select sigue 🇦🇪). Si el código compara el valor del selector con la clave del chip para marcar el idioma activo, puede **nunca matchear**. El fix J debe **unificar los códigos en todos lados**, no solo las banderas.
+- **Q4 · M2 — causa exacta confirmada:** `onAuthStateChange` (`index.html:1089-1108`) llama `loadUserPlan()` (`:1094`) al restaurar sesión pero **NO** llama `cargarMisAlertas().then(updateBells)` → el badge queda en 0. Fix: agregar esa llamada en `onAuthStateChange` (igual que se hizo con `loadUserPlan` en C4).
+- **Q5 · CORRECCIÓN a Code (Escritorio tiene razón):** el `confirm()` de la papelera de Portfolio usa `t('port_confirm_eliminar')` (`aurex-features.js:3068`) → **NO es una fuga de i18n** (mi nota previa en F1/P decía que estaba hardcodeado en español — estaba mal). El único diff real es de **UX/diseño**: `window.confirm()` del navegador vs `Alert.alert` nativo. Queda a criterio de Fernando si se replica el modal custom.
+
+**VEREDICTO CONJUNTO (Code + Escritorio):** auditoría 100% consolidada, todos los hallazgos respaldados por código real leído línea por línea por los dos, de forma independiente. Lista para armar las correcciones de la rama `web-1.4` con el OK de Fernando.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
