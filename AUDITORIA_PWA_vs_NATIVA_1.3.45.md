@@ -190,6 +190,12 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 ## NOTA — PLANES formato/diseño (reconfirmado por Fernando)
 - Ver **D1/D2**: el paywall PWA (modal con pestañas + overlay translúcido) no replica el diseño nativo (pantalla con las 3 tarjetas apiladas, fondo opaco). Formato y diseño a rehacer según `SubscriptionScreen.js`.
 
+## SECCIÓN K — Pops restantes (ordenar, detalle de activo, listDot)
+- **K1 · Menú "Ordenar" — emoji de "fecha" distinto:** PWA `aurex-features.js:5666 {k:'fecha',…ic:'⏰'}` usa **⏰**; nativa `PortfolioScreen.js:674 { key:'date', icon:'🕐' …}` usa **🕐**. Resto de opciones/iconos coinciden (📊 valor, 📈 hoy, 💰 pnl, 💰 pnl%, 🔼 señal IA, 🎯 prob, 🔤 ticker), labels vía `t()`. AJUSTE: usar 🕐.
+  - *(Mercados/Watchlist/IA sort: revisados, iconos coinciden — `:5668-5693`.)*
+- **K2 · `listDot` Watchlist — OK:** PWA `aurex-features.js:2131 <div style="width:10px;height:10px;border-radius:5px;background:'+currentList.color+'">` = nativa `WatchlistScreen.js:854` (dot 10×10 con `currentList.color`). ✓
+- **K3 · Pop "detalle de activo" (análisis IA) — OK:** usa los colores/emojis de dirección ya verificados (verde/rojo/dorado, 📈/📉/⚡, objetivo dorado). Detalle menor: mercado cerrado en nativa usa `#FF6B6B` (`MercadosScreen.js:1039`); confirmar que la PWA use el mismo tono. Las fugas de texto del detalle ya están en G-IA / H (badges/varDefs).
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
@@ -208,6 +214,22 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 - H1-H7 — Fugas i18n: ALTA CONV, "hace Xs", "Solo favoritos", `varDefs` IA `:2686`, "Ult. cierre" `:2250`, `tipoLabel` `:4174`, "Act. HH:MM" `:3826/:3972`.
 - I5 — Cards de lista Watchlist OK.
 
-**PENDIENTE MENOR (lo cierro):** pop "detalle de activo" (emojis/colores), menú "ordenar", `listDot` Watchlist, claves i18n exactas a usar en cada fix.
+- K — Pops restantes: menú "ordenar" (emoji fecha ⏰ vs 🕐), `listDot` OK, detalle de activo OK.
 
-**Regla:** nada se aplica ni se manda a Escritorio hasta que esté 100% y con OK escrito de Fernando. Las correcciones se harán por versiones (v1, v2…) hasta quedar idéntico a v1.3.45.
+**ANÁLISIS COMPLETO.** Cubiertas las 6 pantallas (Portfolio, Mercados, Watchlist, IA, Alertas, Perfil) + headers + todos los pops (Mis Alertas, Crear Alerta, Paywall/Planes, Comparador, Ordenar, Cómo usar, detalle de activo) + banderas + formato de números + fugas i18n. Cada hallazgo con línea PWA ↔ línea nativa + ajuste técnico.
+
+**RESUMEN DE LO QUE HAY QUE CORREGIR (para la versión post-deploy):**
+1. Headers: ocultar ⚖️ y timer "hace Xs" (HIDE_HEADER_LEGAL); Portfolio sin LIVE en header. (A)
+2. Campana por activo → fila inferior izquierda (Portfolio `:1000`, Watchlist `:2255`). (B/I1)
+3. Pop Mis Alertas → borde verde/rojo por dirección + corregir strings 'arriba/abajo'. (C)
+4. Pop Crear Alerta → verde (sube)/rojo (baja) en vez de dorado. (I2)
+5. Paywall/Planes → rehacer como pantalla con 3 tarjetas apiladas + fondo opaco. (D/E)
+6. Formato de números por idioma (no `es-AR` fijo). (F1)
+7. Re-render de pantallas al cambiar idioma en runtime. (F2)
+8. Banderas: `es → 🇦🇷`, `ar → 🇸🇦` en todos lados + unificar códigos. (J)
+9. Emojis Pulse: 😨/😟 (no 😱/😰) + unificar 😏. (G-M-1)
+10. "Cómo usar": mover a b3b (entre Mi cuenta y Preferencias) + icono ❓. (G-P)
+11. Fugas i18n: badges IA, varDefs `:2686`, "Ult. cierre" `:2250`, tipoLabel `:4174`, "Solo favoritos" `:4266`, "ALTA CONV-IA" `:1807`, pop alertas activas `:950`, "Act." `:3826/:3972`, "ALTA CONV-IA" label. (G/H)
+12. Menú ordenar: emoji fecha 🕐 (no ⏰). (K1)
+
+**Regla:** nada se aplica ni se manda a Escritorio hasta el OK escrito de Fernando. Las correcciones se harán por versiones (v1, v2…) hasta quedar idéntico a v1.3.45.
