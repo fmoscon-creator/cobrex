@@ -111,7 +111,15 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 
 *(Siguen: G-Mercados, G-Watchlist, G-Alertas, G-Perfil, y cada POP — detalle de activo, comparador, crear alerta, ordenar, Pulse, Cómo usar — con sus emojis/colores/textos. EN PROGRESO.)*
 
-## SECCIÓN H — Fugas i18n (las reportadas por Escritorio + las que encuentre)
-- "ALTA CONV-IA" → ver **G-IA-1**.
-- "hace Xs" (timer LIVE) → ver **A2** (además de traducir, la nativa lo OCULTA).
-- Pendientes de localizar línea exacta: "Act. HH:MM" (barra IA), "Solo favoritos" (filtro Watchlist), "Oro:" (variable IA). EN PROGRESO.
+## SECCIÓN H — Fugas i18n (las de Escritorio + las que encuentro)
+- **H1 · "ALTA CONV-IA"** → ver **G-IA-1** (`index.html:1807` sin `data-i18n` + badges hardcode G-IA-2).
+- **H2 · "hace Xs"** (timer LIVE) → ver **A2** (además de traducir, la nativa lo OCULTA por `HIDE_HEADER_LEGAL`).
+- **H3 · "Solo favoritos"** → `index.html:4266 chip.innerHTML = '⭐ <span>Solo favoritos</span>'` hardcodeado (filtro favoritos de Mercados). AJUSTE: usar `t('solo_favoritos')` o clave equivalente.
+- **H4 · "Oro/Petroleo" y demás variables IA** → `aurex-features.js:2686 var varDefs = [{k:'tendencia',l:'Tendencia 24h'},…,{k:'oro_petroleo',l:'Oro/Petroleo'},…]` **hardcodeado en español** (segundo varDefs; el de `:2333` sí usa `t('mkt_var6_label')`). → en inglés muestra "Oro/Petroleo", "Tendencia 24h", etc. AJUSTE: usar los `t('mkt_varN_label')` como en `:2333`.
+- **H5 · "Act. HH:MM"** → estático `index.html:1677 id="tf-time" data-i18n="mkt_tf_ahora">Act. ahora` SÍ tiene i18n; falta confirmar el update dinámico de la hora ("Act. " + hora) por si hardcodea el prefijo. EN PROGRESO.
+
+---
+## ESTADO DE COBERTURA (para Escritorio)
+**Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
+**EN PROGRESO (mismo nivel de detalle + capturas):** G-Mercados · G-Watchlist (lista colores, comparador) · G-Alertas (15 toggles) · G-Perfil (elementos restantes) · cada POP (detalle de activo, comparador, crear alerta, ordenar, Pulse, Cómo usar) · H5.
+**Regla:** nada se aplica ni se manda a Escritorio hasta que esté 100% y con OK escrito de Fernando.
