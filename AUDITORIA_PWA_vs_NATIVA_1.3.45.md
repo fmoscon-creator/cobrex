@@ -251,6 +251,32 @@ Cada uno ejecutado de verdad en `cobrex.io/app`, verificando POST al backend / c
 
 **Nota de método:** los "fallos" #CrearLista y #Toggle resultaron ser **gating de plan correcto**, no bugs. Verificar antes de afirmar evita reportar falsos bugs.
 
+## SECCIÓN O — GATING POR PLAN (FREE / PRO / ELITE) — validado en código + pantalla + flujo
+Probado con `aurextester12` (FREE) y `fmoscon` (ELITE) en `cobrex.io/app`.
+
+### Config (código) — PWA vs nativa
+- **PWA** `index.html:3960-3963 PLAN_LIMITS_CLIENT`:
+  - FREE: portfolioMax 5, watchlistMax 1, alertTypes ×8.
+  - PRO: ∞ / ∞ / ×17.
+  - ELITE: ∞ / ∞ / ×18 (suma `geopolitica_gdelt`).
+- **Nativa** `lib/usePlan.js:4-6` (espejo del backend): FREE ×8, PRO ×17, ELITE ×18 — **idéntico a la PWA**. Límites FREE 5/1 = backend `server.js:1847`. ✅ Paridad.
+- *Nota:* el backend `PLAN_LIMITS` enumera 6 alertTypes para FREE (sin `precio`/`porcentaje`); la app nativa (`usePlan.js`) y la PWA enumeran 8. Es el **mismo desajuste que ya existe en la nativa** (no es una divergencia de la PWA).
+
+### Comportamiento (pantalla/flujo) — verificado
+| | FREE | ELITE |
+|---|---|---|
+| portfolioMax | 5 | ∞ |
+| watchlistMax | 1 | ∞ |
+| paywall automático al entrar | **SÍ** | NO |
+| toggles alertas desbloqueados / bloqueados | **5 / 10** | **15 / 0** |
+| badge plan | PLAN FREE | PLAN ELITE |
+
+- **FREE:** ✅ paywall aparece solo (C3); en el modal se puede pasar a PRO/ELITE (`planTab`) y muestra trial ("Quiero probar gratis 7 días / Luego $2.99/mes"); gating enforced: crear 2ª lista → bloqueada por límite 1 (`checkPlanLimit`, ver N); 10 toggles `data-locked` no se pueden activar (`applyAlertGating`).
+- **ELITE:** ✅ sin paywall forzado, 15 toggles desbloqueados, portfolio/watchlist ∞, badge ELITE.
+- **PRO:** validado solo por **código** (no hay cuenta PRO): `PLAN_LIMITS_CLIENT.PRO` = ∞/∞/×17 (todo menos `geopolitica_gdelt`). En pantalla, PRO debería mostrar 14 toggles desbloqueados (todos menos GDELT) — a confirmar con una cuenta PRO.
+
+**Veredicto gating:** ✅ correctamente seteado y alineado a la nativa para FREE y ELITE (lo que cada plan PUEDE y NO PUEDE acceder). PRO pendiente de prueba en vivo (config OK).
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
