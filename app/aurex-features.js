@@ -970,6 +970,11 @@ if(window._i18n) window._i18n.onLangChange(function(){
   try{ if(window._iaSignals && window._iaSignals.length>0 && typeof _renderIALista==='function') _renderIALista(window._iaSignals); }catch(e){}
   // IA: el sort es #ia-sort-inline (no -sort-btn) → re-traducir su valor visible
   try{ var iasv=document.querySelector('#ia-sort-inline .sort-value'); if(iasv && window._sortCfgs && window._sortCfgs.ia){ var c=_getSort('ia'); var o=window._sortCfgs.ia.opts.find(function(x){return x.k===c;})||window._sortCfgs.ia.opts[0]; iasv.textContent=t(o.lk); } }catch(e){}
+  // Watchlist (chips de tipo cripto/accion) + combo banner Mercados/Futuros
+  try{ if(window.renderWatchCnt) window.renderWatchCnt(); }catch(e){}
+  try{ if(typeof _renderComboBanner==='function') _renderComboBanner('mkt-combo-banner'); }catch(e){}
+  // Solo favoritos (chip usa t() pero no se re-dibuja)
+  try{ var fc=document.getElementById('only-favs-chip'); if(fc && window.t){ var sp=fc.querySelector('span'); if(sp) sp.textContent=window.t('solo_favoritos'); } }catch(e){}
 });
 
 function _renderPortfolioItems(items){
@@ -5504,8 +5509,8 @@ function _renderComboBanner(containerId){
   var sOff = 'display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;background:#2a2a2a;color:var(--textDim);';
 
   var html = '<div style="display:flex;gap:5px;padding:2px 10px 2px;justify-content:flex-end;">'
-    + '<div id="combo-tab-a" style="' + sOn  + '" onclick="if(window._comboActive!==0&&window._comboBannerFlip)window._comboBannerFlip()">Mercados</div>'
-    + '<div id="combo-tab-b" style="' + sOff + '" onclick="if(window._comboActive!==1&&window._comboBannerFlip)window._comboBannerFlip()">Futuros</div>'
+    + '<div id="combo-tab-a" style="' + sOn  + '" onclick="if(window._comboActive!==0&&window._comboBannerFlip)window._comboBannerFlip()">'+t('tab_mercados')+'</div>'
+    + '<div id="combo-tab-b" style="' + sOff + '" onclick="if(window._comboActive!==1&&window._comboBannerFlip)window._comboBannerFlip()">'+t('mkt_combo_futuros')+'</div>'
     + '</div>'
     + '<div id="combo-slide-a">' + slideA + '</div>'
     + '<div id="combo-slide-b" style="display:none;">' + slideB + '</div>';
