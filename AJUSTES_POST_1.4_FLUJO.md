@@ -1,6 +1,8 @@
-# Ajustes post-deploy 1.4 — Flujo de sesión + Paywall (PWA = Nativa 1.3.45)
+# Cobrex Web 1.5 — Flujo de sesión + Paywall (PWA = Nativa 1.3.45)
 
-**Rama:** `web-1.4-flow` · **Base:** `main` (= producción 1.4) · **NO deployado** (espera OK escrito de Fernando)
+Corrección sobre la 1.4 ya publicada → esta versión se etiqueta **"Cobrex Web 1.5"** (Soporte `index.html:2665` + header Perfil `index.html:4703`).
+
+**Rama:** `web-1.5` · **Base:** `main` (= producción 1.4) · **NO deployado** (espera OK escrito de Fernando)
 **Archivos tocados:** `app/index.html`, `app/aurex-i18n.js` (solo esos 2)
 **Referencia nativa:** `~/AurexApp` → `App.js`, `screens/PerfilScreen.js`, `screens/SubscriptionScreen.js`, `lib/brand.js`
 
@@ -19,6 +21,7 @@ Origen: 2 bugs de flujo que reportó Fernando + el diff de paywall de Escritorio
 | 5 | **Paywall: falta botón continuar FREE** | No había salida "seguir gratis" | `index.html:2888-2894` (dentro de `plan-panel-FREE`) | Botón gris "Continuar con el plan FREE" del card FREE nativo | Botón `background:#E7E9ED;color:#3A3F47` ancho completo, `onclick="cerrarModalPlanes()"`, `data-i18n="pw_continuar_free"` | Captura: botón gris visible bajo "Ver plan PRO →" |
 | 6 | **i18n de los textos nuevos** | — | `aurex-i18n.js:523-525` | — | 3 claves en los 8 idiomas: `pw_terminos`, `pw_privacidad`, `pw_continuar_free` | `node -c` OK |
 | 7 | **Cache-bust** | Navegadores servían el i18n viejo | `index.html:594` | — | `aurex-i18n.js?v=14 → ?v=15` (hay claves nuevas sobre la 1.4) | — |
+| 8 | **Versión** | Decía "Cobrex Web 1.4" | `index.html:2665` + `4703` | `PerfilScreen.js:957` | Etiqueta `Cobrex Web 1.4 → 1.5` en Soporte y header de Perfil | — |
 
 ---
 
@@ -38,7 +41,7 @@ Origen: 2 bugs de flujo que reportó Fernando + el diff de paywall de Escritorio
 ## Cómo revisar el diff exacto
 
 Comparación de la rama vs producción (solo 2 archivos, `app/index.html` + `app/aurex-i18n.js`):
-`https://github.com/fmoscon-creator/cobrex/compare/main...web-1.4-flow`
+`https://github.com/fmoscon-creator/cobrex/compare/main...web-1.5`
 
 ---
 
