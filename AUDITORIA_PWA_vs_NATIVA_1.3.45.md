@@ -192,6 +192,22 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
-**Hecho y verificado con líneas:** A (headers ⚖️/timer/LIVE), B (campana por activo Portfolio/Watchlist), C (pop Mis Alertas colores), D (paywall estructura+overlay+trial), E (Planes en Perfil = D), F (formato números + runtime), G-IA (contador+badges), H1-H4.
-**EN PROGRESO (mismo nivel de detalle + capturas):** G-Mercados · G-Watchlist (lista colores, comparador) · G-Alertas (15 toggles) · G-Perfil (elementos restantes) · cada POP (detalle de activo, comparador, crear alerta, ordenar, Pulse, Cómo usar) · H5.
-**Regla:** nada se aplica ni se manda a Escritorio hasta que esté 100% y con OK escrito de Fernando.
+**HECHO y verificado con líneas (cada cita leída en el código):**
+- A — Headers (⚖️ balanza, timer "hace Xs", LIVE; ocultos por `HIDE_HEADER_LEGAL=true`).
+- B / I1 — Campana por activo mal ubicada (Portfolio `:1000`, Watchlist `:2255`).
+- C — Pop Mis Alertas sin verde/rojo + dirección con strings equivocados.
+- I2 — Pop Crear Alerta: sube/baja en dorado (nativa verde/rojo).
+- D / E — Paywall: nativa pantalla 3 tarjetas vs PWA modal pestañas + overlay translúcido (lo "todo negro").
+- F — Formato de números `es-AR` fijo aun en inglés + re-render runtime.
+- G-IA — "ALTA CONV-IA" sin i18n + badges dirección hardcode.
+- G-Mercados — emojis Pulse distintos (😱/😰 vs 😨/😟; 😏/😊 inconsistente) + `tipoLabel` hardcode.
+- G-Watchlist — colores/iconos/comparador OK; fugas conocidas (dirLabel `:2179`, "Ult. cierre" `:2250`).
+- G-Alertas — iconos/colores OK; pop "alertas activas" con 15 labels hardcode (`:950`).
+- G-Perfil — bloques OK; "Cómo usar" (M5) mal ubicado + icono 📖 vs ❓.
+- J — Banderas: header 🇪🇸/🇦🇪 ❌ vs nativa 🇦🇷/🇸🇦; Preferencias 🇦🇷 ✓; códigos `es-ar` vs `es`.
+- H1-H7 — Fugas i18n: ALTA CONV, "hace Xs", "Solo favoritos", `varDefs` IA `:2686`, "Ult. cierre" `:2250`, `tipoLabel` `:4174`, "Act. HH:MM" `:3826/:3972`.
+- I5 — Cards de lista Watchlist OK.
+
+**PENDIENTE MENOR (lo cierro):** pop "detalle de activo" (emojis/colores), menú "ordenar", `listDot` Watchlist, claves i18n exactas a usar en cada fix.
+
+**Regla:** nada se aplica ni se manda a Escritorio hasta que esté 100% y con OK escrito de Fernando. Las correcciones se harán por versiones (v1, v2…) hasta quedar idéntico a v1.3.45.
