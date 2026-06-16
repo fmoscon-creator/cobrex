@@ -209,6 +209,29 @@ Colores base OK: `--green #3FB950`, `--red #F85149`, `--gold #D4A017` (`index.ht
 **AJUSTE PROPUESTO:** eliminar UNA de las dos rutas. Recomendado: quitar la rama `[data-wl-compare]` del delegador (`:2811-2812`) — la fila ya cubre el círculo por burbujeo. (O, alternativamente, hacer que el `onclick` de la fila no dispare cuando `event.target.closest('[data-wl-compare]')`.) Verificar que tras el fix, tocar el círculo marque/desmarque una sola vez.
 **Severidad:** ALTA (función no usable como se espera). No lo habíamos detectado ni Code ni Escritorio.
 
+## SECCIÓN M — FLUJO FUNCIONAL de Alertas / Mis Alertas (probado en vivo, cuenta tester)
+Probado en `cobrex.io/app` logueado (tester con 2 alertas en historial). Hallazgos reales:
+
+### M1 · Pop "Mis Alertas" se corta abajo (BUG citado por Fernando) — ALTA
+- **PWA:** overlay `index.html:~4231 'display:none;position:fixed;inset:0;…;align-items:flex-end;justify-content:center'` + card `'…max-height:85vh;border-radius:16px 16px 0 0;…'`. Bottom-sheet pegado al borde inferior **sin `padding-bottom: env(safe-area-inset-bottom)`** ni uso de `dvh`. En el teléfono el `inset:0`/`vh` llega más abajo del viewport visible → la parte de abajo (últimas alertas / contenido) queda **tapada por la barra del navegador / home bar** y se ve cortada.
+- **AJUSTE:** anclar con `padding-bottom: env(safe-area-inset-bottom)`, usar `max-height: 85dvh` (o `100dvh`-safe), y/o `bottom:0` con altura calculada del viewport visible. Verificar en mobile real.
+
+### M2 · El badge (círculo rojo) de la campana del header NO refleja las alertas sin leer — ALTA
+- **Síntoma probado:** Mis Alertas dice "2 sin leer" pero `.cobrex-bell-badge` = "0" y **oculto**.
+- **Causa:** `window.updateBells` (`index.html:4618-4620`) cuenta `_misAlertasData` sin leer, pero `cargarMisAlertas()+updateBells()` **solo se ejecutan en `boot()`** (DOMContentLoaded, `:4622`). La sesión de Supabase se restaura DESPUÉS del boot → en ese momento `_misAlertasData` está vacío → badge 0. No se vuelve a llamar al autenticar.
+- **AJUSTE:** llamar `cargarMisAlertas().then(updateBells)` en `onAuthStateChange` (SIGNED_IN / INITIAL_SESSION), igual que se hizo con `loadUserPlan` (fix C4).
+
+### M3 · El tipo de alerta se muestra crudo ("precio_objetivo")
+- **PWA:** en el card de Mis Alertas se ve "precio_objetivo" (el valor de máquina) en vez de una etiqueta legible/traducida. Render en `index.html:4190+`.
+- **AJUSTE:** mapear `tipo` → etiqueta `t()` ("Precio objetivo" / "Variación brusca" / etc.).
+
+### M4 · (cross-ref C1) ítems sin color verde/rojo por dirección + flecha '•' (strings 'arriba/abajo').
+
+### M5 · Selección por checkbox dentro del pop — OK (probado: `.ma-chk` se marca, `_misAlertasSel()` devuelve 1).
+
+### M6 · PENDIENTE de prueba en DISPOSITIVO (no validable headless):
+- Que la alerta MANUAL, al dispararse, genere: (a) el **emergente in-app**, (b) la notificación en el **centro de notificaciones del teléfono** (`showAlertNotification`, `aurex-features.js:631`, vía Service Worker), (c) que aparezca en el **listado de la campana** + sume al badge (depende de M2), y (d) marcar leída / borrar efectivamente. El disparo requiere movimiento de precio real → se valida en teléfono con una alerta puntual.
+
 ---
 ## ESTADO DE COBERTURA (para Escritorio)
 **HECHO y verificado con líneas (cada cita leída en el código):**
