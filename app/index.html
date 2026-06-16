@@ -591,7 +591,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=15"></script>
+<script src="aurex-i18n.js?v=16"></script>
 <script src="aurex-v3.js?v=150"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -1091,16 +1091,27 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     _supabase.auth.onAuthStateChange(function(event, session) {
       _currentUser = session ? session.user : null;
       updateUserUI(_currentUser);
-      // C4 (paridad 1.3.45): cargar el plan SIEMPRE que haya sesión (login o restauración),
-      // no depender del poll de DOMContentLoaded que se rendía y dejaba FREE a usuarios PRO/ELITE.
-      if (session && session.user && window.loadUserPlan) { window.loadUserPlan(); }
       // M2 (web-1.4): cargar Mis Alertas + actualizar el badge de la campana al restaurar sesión (antes solo corría en boot → badge en 0).
       if (session && session.user && window.cargarMisAlertas) { window.cargarMisAlertas().then(function(){ if(window.updateBells) window.updateBells(); }); }
       if (event === 'SIGNED_IN') {
         console.log('[Cobrex Auth] Usuario logueado:', _currentUser.email);
         upsertUserDB(_currentUser);
-        // web-1.4: tras login, entrar a la app (Mercados, = tab inicial nativa), no quedarse en Perfil/cuenta.
-        try { if (window.navTo) window.navTo('mercados'); } catch(e){}
+        // Paridad nativa (App.js:245-253): tras login, cargar el plan y —si es FREE— abrir el paywall
+        // a pantalla completa (modo 'login' con "Saltar ✕"); al cerrarlo/saltarlo se entra a Mercados.
+        // Si ya es PRO/ELITE → directo a Mercados. NO se va a Mercados primero (eso rompía el orden nativo).
+        if (window.loadUserPlan) {
+          window.loadUserPlan().then(function(plan){
+            if (plan === 'FREE' && !sessionStorage.getItem('cobrex_paywall_seen') && typeof abrirModalPlanes === 'function') {
+              sessionStorage.setItem('cobrex_paywall_seen','1');
+              setTimeout(function(){ abrirModalPlanes('login'); }, 250);
+            } else {
+              try { if (window.navTo) window.navTo('mercados'); } catch(e){}
+            }
+          }).catch(function(){ try { if (window.navTo) window.navTo('mercados'); } catch(e){} });
+        }
+      } else if (session && session.user && window.loadUserPlan) {
+        // C4: restauración de sesión (no login) → solo cargar el plan + gating, sin paywall.
+        window.loadUserPlan();
       }
       if (event === 'SIGNED_OUT') {
         console.log('[Cobrex Auth] Usuario deslogueado');
@@ -1110,6 +1121,8 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
         // (logoutUser no recarga, así que _done quedaba cacheado en memoria y el onboarding no reaparecía).
         try {
           ['aurex_onboarding_done','onboardingDone','aurex_ob_done'].forEach(function(k){ localStorage.removeItem(k); });
+          // BUG C (Escritorio): limpiar el gate del paywall para que vuelva a dispararse al re-loguear.
+          sessionStorage.removeItem('cobrex_paywall_seen');
           setTimeout(function(){ window.location.reload(); }, 150);
         } catch(e){}
       }
@@ -2241,7 +2254,7 @@ display:flex;align-items:center;justify-content:space-between}
         5 activos • 3 señales IA/día • Cobrex Pulse básico
       </div>
     </div>
-    <button onclick="abrirModalPlanes()"
+    <button onclick="abrirModalPlanes('perfil')"
       style="width:100%;background:linear-gradient(135deg,#1a0d2e,#2d1b4e);
       border:1.5px solid #A78BFA;border-radius:10px;color:#A78BFA;
       font-size:14px;font-weight:700;padding:13px;cursor:pointer;
@@ -2662,7 +2675,7 @@ display:flex;align-items:center;justify-content:space-between}
       <div style="padding:14px 0 4px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:12px;color:var(--textDim)" data-i18n="version_app">Versión de la app</span>
-          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web 1.5 &#127775;</span>
+          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web 1.6 &#127775;</span>
         </div>
         <div style="display:flex;gap:16px">
           <span onclick="pacLegal('terminos')" style="font-size:11px;color:#58A6FF;cursor:pointer;text-decoration:underline" data-i18n="terminos_uso">Términos de uso</span>
@@ -2783,7 +2796,7 @@ display:flex;align-items:center;justify-content:space-between}
       </div>
       <button onclick="cerrarModalPlanes()"
         style="background:none;border:none;color:var(--textSec);font-size:22px;
-        cursor:pointer;padding:4px 8px;line-height:1">&#215;</button>
+        cursor:pointer;padding:4px 8px;line-height:1;display:flex;align-items:center;gap:6px"><span id="pw-skip-label" data-i18n="pw_saltar" style="display:none;font-size:14px;font-weight:600">Saltar</span>&#215;</button>
     </div>
     <div style="padding:16px 14px 0">
       <div style="text-align:center;margin-bottom:16px">
@@ -2966,13 +2979,13 @@ display:flex;align-items:center;justify-content:space-between}
             </div>
           </div>
         </div>
-        <button id="btn-pro-monthly" data-pxr="PRO.mensual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-pro-monthly" data-pxr="PRO.mensual" onclick="cbxBuy('P-4JH161461V818874SNIW7UAA')"
           style="width:100%;background:linear-gradient(135deg,#7C3AED,#A78BFA);
           border:none;border-radius:10px;color:var(--text);
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="pro_mensual_btn">&#128640; PRO Mensual — $9,99/mes</span>
         </button>
-        <button id="btn-pro-annual" data-pxr="PRO.anual.year" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-pro-annual" data-pxr="PRO.anual.year" onclick="cbxBuy('P-2N0098015C849324MNIW7UAI')"
           style="width:100%;background:rgba(167,139,250,0.15);
           border:1.5px solid #A78BFA;border-radius:10px;color:#A78BFA;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
@@ -3034,13 +3047,13 @@ display:flex;align-items:center;justify-content:space-between}
             </div>
           </div>
         </div>
-        <button id="btn-elite-monthly" data-pxr="ELITE.mensual" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-elite-monthly" data-pxr="ELITE.mensual" onclick="cbxBuy('P-0AN884893H6644053NIW7UAQ')"
           style="width:100%;background:linear-gradient(135deg,#8B6208,#c9a84c);
           border:none;border-radius:10px;color:var(--chipTextActive);
           font-size:15px;font-weight:700;padding:14px;cursor:pointer">
           <span data-i18n-html="elite_mensual_btn">&#128081; ELITE Mensual — $19,99/mes</span>
         </button>
-        <button id="btn-elite-annual" data-pxr="ELITE.anual.year" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY&return_url=' + encodeURIComponent('https://cobrex.io/?paypal=success'))"
+        <button id="btn-elite-annual" data-pxr="ELITE.anual.year" onclick="cbxBuy('P-11266502KC039145PNIW7UAQ')"
           style="width:100%;background:rgba(201,168,76,0.15);
           border:1.5px solid #c9a84c;border-radius:10px;color:#c9a84c;
           font-size:14px;font-weight:700;padding:13px;cursor:pointer;margin-top:8px">
@@ -3055,28 +3068,60 @@ function pacToggle(id){
   var b=document.getElementById(id);
   if(b) b.classList.toggle('abierto');
 }
-function abrirModalPlanes(){
+// web-1.6: el modal-planes tiene 2 modos = las 2 superficies de la nativa.
+//  - 'login'  → paywall apilado a pantalla completa con "Saltar ✕" (App.js:251 navigate Subscription fromLogin)
+//  - 'stacked'→ paywall apilado normal (upsell / límite de plan)
+//  - 'perfil' → pestañas FREE/PRO/ELITE, una por vez (sección Planes de Perfil, PerfilScreen.js:414-425)
+function abrirModalPlanes(mode){
   var m=document.getElementById('modal-planes');
-  if(m){
-    if(m.parentElement!==document.body) document.body.appendChild(m); // BUG1 (web-1.4): overlay global (estaba dentro de #screen-perfil → solo se veía en Perfil)
-    m.style.display='block';_showAllPlans();
-    try{ m.scrollTop=0; }catch(e){}
-  }
+  if(!m) return;
+  if(m.parentElement!==document.body) document.body.appendChild(m); // overlay global a nivel body
+  window._planMode = (mode==='login') ? 'login' : (mode==='perfil') ? 'perfil' : 'stacked';
+  m.style.display='block';
+  if(window._planMode==='perfil') _showPlanTabs('FREE'); else _showAllPlans();
+  _applyPaywallHeader();
+  try{ m.scrollTop=0; }catch(e){}
 }
 function cerrarModalPlanes(){
   var m=document.getElementById('modal-planes');
   if(m) m.style.display='none';
+  // Nativa: al cerrar/saltar el paywall que se auto-abrió tras login → entra a la app (Mercados).
+  if(window._planMode==='login'){ try{ if(window.navTo) window.navTo('mercados'); }catch(e){} }
+  window._planMode=null;
 }
-// D1 (web-1.4): paywall = 3 tarjetas apiladas (FREE/PRO/ELITE) sin pestañas, = nativa SubscriptionScreen.
+// "Saltar ✕" arriba si el paywall viene del login (nativa SubscriptionScreen.js:209-217); si no, × normal.
+function _applyPaywallHeader(){
+  var sk=document.getElementById('pw-skip-label');
+  if(sk) sk.style.display=(window._planMode==='login')?'inline':'none';
+}
+// Paywall apilado FREE/PRO/ELITE = nativa SubscriptionScreen (post-login / upsell / límite).
 function _showAllPlans(){
   var tabs=document.getElementById('plan-tabs'); if(tabs) tabs.style.display='none';
   ['FREE','PRO','ELITE'].forEach(function(k){ var panel=document.getElementById('plan-panel-'+k); if(panel){ panel.style.display='block'; panel.style.marginBottom='14px'; } });
 }
+// Pestañas (una por vez) = sección Planes de Perfil nativa.
+function _showPlanTabs(active){
+  var tabs=document.getElementById('plan-tabs'); if(tabs) tabs.style.display='flex';
+  var COL={FREE:'#8B949E',PRO:'#A78BFA',ELITE:'#c9a84c'};
+  ['FREE','PRO','ELITE'].forEach(function(k){
+    var panel=document.getElementById('plan-panel-'+k);
+    if(panel){ panel.style.display=(k===active)?'block':'none'; panel.style.marginBottom='14px'; }
+    var tb=document.getElementById('ptab-'+k);
+    if(tb){ if(k===active){ tb.style.background=COL[k]+'33'; tb.style.color=COL[k]; tb.style.border='1.5px solid '+COL[k]; }
+            else { tb.style.background='transparent'; tb.style.color='var(--textSec)'; tb.style.border='1.5px solid var(--border)'; } }
+  });
+}
 function planTab(p){
-  // Mantiene las 3 apiladas y scrollea a la elegida (los botones "Quiero PRO/ELITE" siguen funcionando).
+  if(window._planMode==='perfil'){ _showPlanTabs(p); var mm=document.getElementById('modal-planes'); if(mm) mm.scrollTop=0; return; }
   _showAllPlans();
   var panel=document.getElementById('plan-panel-'+p);
   if(panel) panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+// Compra: en modo Perfil (pestañas) abre el paywall apilado primero (= nativa navigate('Subscription'));
+// en el paywall apilado va a PayPal apuntando a Cobrex (el plan_id lo reescribe el sistema dinámico por región).
+function cbxBuy(planId){
+  if(window._planMode==='perfil'){ window._planMode='stacked'; _showAllPlans(); _applyPaywallHeader(); var mm=document.getElementById('modal-planes'); if(mm) mm.scrollTop=0; return; }
+  window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/?paypal=success'),'_blank');
 }
 function pacInitCuenta(){
   var u=window._currentUser;
@@ -3791,8 +3836,8 @@ setTimeout(function(){
       <div class="feat ok">Soporte prioritario</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-64Y46051CU7251058NHMGG4Y')" data-pxr="PRO.mensual">PRO Mensual $9.99</button>
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-3FG40467BU710103WNHMGJSA')" data-pxr="PRO.anual">PRO Anual $89.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-4JH161461V818874SNIW7UAA')" data-pxr="PRO.mensual">PRO Mensual $9.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-2N0098015C849324MNIW7UAI')" data-pxr="PRO.anual">PRO Anual $89.99</button>
     </div>
   </div>
 
@@ -3821,8 +3866,8 @@ setTimeout(function(){
       <div class="feat ok">Acceso anticipado a funciones</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-9T718444CV910321WNHMGOWY')" data-pxr="ELITE.mensual">ELITE Mensual $19.99</button>
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-1WB81912S68516031NHMGRPY')" data-pxr="ELITE.anual">ELITE Anual $179.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-0AN884893H6644053NIW7UAQ')" data-pxr="ELITE.mensual">ELITE Mensual $19.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-11266502KC039145PNIW7UAQ')" data-pxr="ELITE.anual">ELITE Anual $179.99</button>
     </div>
   </div>
 
@@ -3998,8 +4043,8 @@ document.addEventListener("DOMContentLoaded", function(){
       try { localStorage.setItem('aurex_plan', p); } catch(e){}
       console.log('[CobrexGating] Plan cargado:', p);
       window.applyPlanGating();
-      // C3 (paridad 1.3.45 App.js:251): usuario logueado FREE → auto-abrir el paywall (1 vez por sesión).
-      if (p === 'FREE') { try { if (!sessionStorage.getItem('cobrex_paywall_seen') && typeof abrirModalPlanes === 'function') { sessionStorage.setItem('cobrex_paywall_seen','1'); setTimeout(abrirModalPlanes, 1500); } } catch(e){} }
+      // C3 (web-1.6): el auto-abrir del paywall tras login ahora lo maneja el handler SIGNED_IN
+      // (abre en modo 'login' con "Saltar ✕", sin ir a Mercados primero). Acá solo se carga el plan.
       return p;
     } catch(e) {
       console.error('[CobrexGating] error loadUserPlan:', e.message);
@@ -4700,7 +4745,7 @@ window.connectTelegram=function(){
     if(hdr.querySelector('#cobrex-perfil-version')) return;
     var v=document.createElement('span'); v.id='cobrex-perfil-version';
     v.style.cssText='font-size:10px;color:var(--textSec);font-weight:600;margin-left:8px;white-space:nowrap';
-    v.textContent='Cobrex Web 1.5';
+    v.textContent='Cobrex Web 1.6';
     hdr.appendChild(v);
   };
   function boot(){ setTimeout(window._injectPerfilVersion,1600); setTimeout(window._injectPerfilVersion,3600); }

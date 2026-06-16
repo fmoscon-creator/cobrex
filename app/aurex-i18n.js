@@ -523,6 +523,7 @@
     pw_terminos: { es: 'Términos de uso', en: 'Terms of use', pt: 'Termos de uso', zh: '使用条款', fr: "Conditions d'utilisation", it: "Termini d'uso", hi: 'उपयोग की शर्तें', ar: 'شروط الاستخدام' },
     pw_privacidad: { es: 'Política de privacidad', en: 'Privacy policy', pt: 'Política de privacidade', zh: '隐私政策', fr: 'Politique de confidentialité', it: 'Informativa sulla privacy', hi: 'गोपनीयता नीति', ar: 'سياسة الخصوصية' },
     pw_continuar_free: { es: 'Continuar con el plan FREE', en: 'Continue with the FREE plan', pt: 'Continuar com o plano FREE', zh: '继续使用 FREE 套餐', fr: 'Continuer avec le plan FREE', it: 'Continua con il piano FREE', hi: 'FREE प्लान के साथ जारी रखें', ar: 'المتابعة بالخطة المجانية FREE' },
+    pw_saltar: { es: 'Saltar', en: 'Skip', pt: 'Pular', zh: '跳过', fr: 'Passer', it: 'Salta', hi: 'छोड़ें', ar: 'تخطّي' },
     cu_block_title: { es: '❓ Cómo usar Cobrex', en: '❓ How to use Cobrex', pt: '❓ Como usar o Cobrex', zh: '❓ 如何使用 Cobrex', fr: '❓ Comment utiliser Cobrex', it: '❓ Come usare Cobrex', hi: '❓ Cobrex कैसे उपयोग करें', ar: '❓ كيفية استخدام Cobrex' },
     portfolio: { es: 'Portfolio', en: 'Portfolio', pt: 'Portfólio', zh: '投资组合' , fr: 'Portfolio', it: 'Portfolio', hi: 'Portfolio', ar: 'Portfolio' },
     mercados: { es: 'Mercados', en: 'Markets', pt: 'Mercados', zh: '市场' , fr: 'Marchés', it: 'Mercati', hi: 'बाज़ार', ar: 'الأسواق' },
