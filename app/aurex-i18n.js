@@ -758,6 +758,7 @@
     wl_cmp_stop: { es: 'Stop', en: 'Stop', pt: 'Stop', zh: 'Stop', fr: 'Stop', it: 'Stop', hi: 'Stop', ar: 'Stop' },
     wl_cmp_resumen: { es: 'Resumen', en: 'Summary', pt: 'Resumo', zh: '摘要', fr: 'Résumé', it: 'Riepilogo', hi: 'सारांश', ar: 'ملخص' },
     wl_cmp_cambio: { es: 'Cambio', en: 'Change', pt: 'Variação', zh: '变化', fr: 'Variation', it: 'Variazione', hi: 'परिवर्तन', ar: 'التغيّر' },
+    por_anio: { es: '/año', en: '/yr', pt: '/ano', zh: '/年', fr: '/an', it: '/anno', hi: '/वर्ष', ar: '/سنة' },
     px_anual: { es: 'ANUAL', en: 'ANNUAL', pt: 'ANUAL', zh: '年付', fr: 'ANNUEL', it: 'ANNUALE', hi: 'वार्षिक', ar: 'سنوي' },
     px_ahorras: { es: 'Ahorrás', en: 'Save', pt: 'Economize', zh: '省', fr: 'Économisez', it: 'Risparmi', hi: 'बचाएँ', ar: 'وفّر' },
     pro_anual_lbl: { es: '⭐ PRO Anual', en: '⭐ PRO Annual', pt: '⭐ PRO Anual', zh: '⭐ PRO 年付', fr: '⭐ PRO Annuel', it: '⭐ PRO Annuale', hi: '⭐ PRO वार्षिक', ar: '⭐ PRO سنوي' },
