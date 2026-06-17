@@ -4430,13 +4430,13 @@ window._compartirSenal = function(info) {
     overlay.id = 'ia-share-overlay';
     overlay.style.cssText='position:fixed;inset:0;background:#000000CC;z-index:9999;display:flex;align-items:flex-end;justify-content:center';
     overlay.innerHTML='<div style="background:var(--card);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:420px">' +
-      '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px;text-align:center">Compartir señal '+sig.simbolo+'</div>' +
+      '<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px;text-align:center">'+t('ia_compartir_senal_de')+' '+sig.simbolo+'</div>' +
       '<div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px">' +
         '<a href="'+wa+'" target="_blank" style="flex:1;background:#25D36620;border:1px solid #25D36660;border-radius:10px;padding:12px 8px;text-align:center;text-decoration:none"><div style="font-size:22px">💬</div><div style="font-size:10px;color:#25D366;margin-top:4px">WhatsApp</div></a>' +
         '<a href="'+tg+'" target="_blank" style="flex:1;background:#229ED920;border:1px solid #229ED960;border-radius:10px;padding:12px 8px;text-align:center;text-decoration:none"><div style="width:28px;height:28px;border-radius:50%;background:#229ED9;display:inline-flex;align-items:center;justify-content:center;margin-bottom:2px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8.5l9-5-3 9-2-3-4 2z" fill="#fff"/></svg></div><div style="font-size:10px;color:#229ED9;margin-top:4px">Telegram</div></a>' +
         '<a href="'+ml+'" style="flex:1;background:var(--goldBg);border:1px solid var(--gold40);border-radius:10px;padding:12px 8px;text-align:center;text-decoration:none"><div style="font-size:22px">📧</div><div style="font-size:10px;color:var(--gold);margin-top:4px">Mail</div></a>' +
       '</div>' +
-      '<button onclick="var o=document.getElementById(&apos;ia-share-overlay&apos;);if(o)o.remove();" style="width:100%;background:var(--border);border:1px solid var(--border2);border-radius:8px;padding:10px;color:var(--textSec);font-size:12px;cursor:pointer">Cancelar</button>' +
+      '<button onclick="var o=document.getElementById(&apos;ia-share-overlay&apos;);if(o)o.remove();" style="width:100%;background:var(--border);border:1px solid var(--border2);border-radius:8px;padding:10px;color:var(--textSec);font-size:12px;cursor:pointer">'+t('cancelar')+'</button>' +
     '</div>';
     overlay.onclick=function(e){if(e.target===overlay){var o=document.getElementById('ia-share-overlay');if(o)o.remove();}};
     document.body.appendChild(overlay);
