@@ -4293,7 +4293,7 @@ function _buildIADetail(s) {
   html += '<div style="background:'+dirColor+'15;border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:10px">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
   html += '<span style="font-size:13px;font-weight:700;color:'+dirColor+'">'+signo+' '+dirLabel+'</span>';
-  html += '<span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">PRINCIPAL '+s.prob_principal+'%</span>';
+  html += '<span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">'+t('iad_principal')+' '+s.prob_principal+'%</span>';
   html += '</div>';
   html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';
   (window.buildAiMotivos?window.buildAiMotivos(s):(s.motivos||[])).slice(0,5).forEach(function(m) {
@@ -4363,7 +4363,7 @@ function _buildIADetail(s) {
   // TIMEFRAME CONTEXT — default 24h, contexto 7d/30d
   html += '<div style="margin-bottom:10px">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
-  html += '<span style="font-size:10px;color:var(--textSec);font-weight:600">CONTEXTO TENDENCIA</span>';
+  html += '<span style="font-size:10px;color:var(--textSec);font-weight:600">'+t('iad_ctx_tendencia')+'</span>';
   html += '<div style="display:flex;gap:4px">';
   ['24h','7d','30d'].forEach(function(tf) {
     var isDefault = tf==='24h';
