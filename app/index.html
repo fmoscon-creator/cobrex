@@ -594,7 +594,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=20"></script>
+<script src="aurex-i18n.js?v=21"></script>
 <script src="aurex-v3.js?v=151"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -797,22 +797,23 @@ function calculateAlerts(){
     var sym = sig.simbolo;
     var fP = precio>=1000?'$'+Math.round(precio).toLocaleString(window._numLocale()):precio>=1?'$'+precio.toFixed(2):precio>=0.01?'$'+precio.toFixed(4):'$'+precio.toFixed(6);
     var _aT=function(k,f){ try{ if(window._i18n&&window._i18n.t){var v=window._i18n.t(k); if(v) return v;} }catch(e){} return f; };
+    var _dirL=function(d){ d=(d||'').toUpperCase(); if(d==='BAJISTA')return _aT('ia_w_bajista','BAJISTA'); if(d.indexOf('ALTA')>=0||d.indexOf('CONV')>=0)return _aT('ia_w_altaconf','ALTA CONV-IA'); return _aT('ia_w_alcista','ALCISTA'); };
 
     // IA: Alta Convicción (>= 85%) — idéntico a nativa línea 208
     if(toggles.ia_alta && dir.indexOf('ALTA CONV')>=0 && prob>=85)
-      alerts.push({tipo:'ia',sub:'alta_conv',sym:sym,icon:'⚡',titulo:sym+' — ALTA CONV '+prob+'%',desc:fP+' · '+(change>=0?'+':'')+change.toFixed(1)+'%',color:'var(--gold)'});
+      alerts.push({tipo:'ia',sub:'alta_conv',sym:sym,icon:'⚡',titulo:sym+' — '+_dirL('ALTA CONV')+' '+prob+'%',desc:fP+' · '+(change>=0?'+':'')+change.toFixed(1)+'%',color:'var(--gold)'});
 
     // IA: Cambio de señal BAJISTA (prob >= 80) — nativa línea 213
     if(toggles.ia_cambio && dir==='BAJISTA' && prob>=80)
-      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📉',titulo:sym+' — BAJISTA '+prob+'%',desc:fP+' · '+_aT('al_d_senal_bajista','Señal bajista fuerte'),color:'var(--red)'});
+      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📉',titulo:sym+' — '+_dirL('BAJISTA')+' '+prob+'%',desc:fP+' · '+_aT('al_d_senal_bajista','Señal bajista fuerte'),color:'var(--red)'});
 
     // IA: Cambio de señal ALCISTA (prob >= 80) — nativa línea 216
     if(toggles.ia_cambio && dir==='ALCISTA' && prob>=80)
-      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📈',titulo:sym+' — ALCISTA '+prob+'%',desc:fP+' · '+_aT('al_d_senal_alcista','Señal alcista fuerte'),color:'var(--green)'});
+      alerts.push({tipo:'ia',sub:'cambio',sym:sym,icon:'📈',titulo:sym+' — '+_dirL('ALCISTA')+' '+prob+'%',desc:fP+' · '+_aT('al_d_senal_alcista','Señal alcista fuerte'),color:'var(--green)'});
 
     // IA: Umbral probabilidad — nativa línea 221
     if(toggles.ia_umbral && prob>=probThreshold && !(dir.indexOf('ALTA CONV')>=0&&prob>=85))
-      alerts.push({tipo:'ia',sub:'umbral',sym:sym,icon:'🎯',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · '+_aT('al_d_supera_umbral','Supera umbral {p}%').replace('{p}',probThreshold),color:'#A78BFA'});
+      alerts.push({tipo:'ia',sub:'umbral',sym:sym,icon:'🎯',titulo:sym+' — '+_dirL(dir)+' '+prob+'%',desc:fP+' · '+_aT('al_d_supera_umbral','Supera umbral {p}%').replace('{p}',probThreshold),color:'#A78BFA'});
 
     // PRECIO: Variación brusca — nativa línea 226
     if(toggles.precio_variacion && Math.abs(change)>=pctThreshold)
@@ -833,7 +834,7 @@ function calculateAlerts(){
 
     // IA: Señal en Portfolio — nativa línea 244
     if(toggles.ia_portfolio && scope==='portfolio' && prob>=70)
-      alerts.push({tipo:'ia',sub:'portfolio',sym:sym,icon:'💼',titulo:sym+' — '+dir+' '+prob+'%',desc:fP+' · '+_aT('al_d_en_portfolio','En tu portfolio'),color:'#A78BFA'});
+      alerts.push({tipo:'ia',sub:'portfolio',sym:sym,icon:'💼',titulo:sym+' — '+_dirL(dir)+' '+prob+'%',desc:fP+' · '+_aT('al_d_en_portfolio','En tu portfolio'),color:'#A78BFA'});
   });
 
   var pulse = window._alertPulse||{};
