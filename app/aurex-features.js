@@ -4223,10 +4223,18 @@ function _renderIALista(signals, keepLoadingBar) {
     if(filtro==='alcista') return s.direccion==='alcista';
     if(filtro==='bajista') return s.direccion==='bajista';
     if(filtro==='alta_conf') return s.direccion==='alta_conf';
-    return s.tipo === filtro;
+    // tipo: backend devuelve capitalizado/ES ("Cripto","Accion","Commodity"...) — normalizar como la nativa
+    var _t = (s.tipo||'').toLowerCase();
+    if(filtro==='cripto') return _t==='cripto' || _t==='stable';
+    if(filtro==='accion') return _t==='accion';
+    if(filtro==='etf') return _t==='etf';
+    if(filtro==='metal') return _t==='metal';
+    if(filtro==='materia_prima') return _t==='commodity' || _t==='materia_prima';
+    if(filtro==='bono') return _t==='bono';
+    return _t === filtro;
   });
   if (!filtered.length) {
-    listEl.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--textSec);font-size:13px">No hay senales para este filtro</div>';
+    listEl.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--textSec);font-size:13px">'+t('ia_sin_senales')+'</div>';
     return;
   }
   var lb = document.getElementById('ia-loading-bar');

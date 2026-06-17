@@ -560,6 +560,7 @@
     iad_lbl_tendencia: { es: 'Tendencia 24h', en: '24h Trend', pt: 'Tendência 24h', zh: '24小时趋势', fr: 'Tendance 24h', it: 'Tendenza 24h', hi: '24घं रुझान', ar: 'اتجاه 24 ساعة' },
     iad_ctx_tendencia: { es: 'CONTEXTO TENDENCIA', en: 'TREND CONTEXT', pt: 'CONTEXTO TENDÊNCIA', zh: '趋势背景', fr: 'CONTEXTE TENDANCE', it: 'CONTESTO TENDENZA', hi: 'रुझान संदर्भ', ar: 'سياق الاتجاه' },
     iad_principal: { es: 'PRINCIPAL', en: 'MAIN', pt: 'PRINCIPAL', zh: '主要', fr: 'PRINCIPAL', it: 'PRINCIPALE', hi: 'मुख्य', ar: 'رئيسي' },
+    ia_sin_senales: { es: 'No hay señales para este filtro', en: 'No signals for this filter', pt: 'Não há sinais para este filtro', zh: '此筛选无信号', fr: 'Aucun signal pour ce filtre', it: 'Nessun segnale per questo filtro', hi: 'इस फ़िल्टर के लिए कोई सिग्नल नहीं', ar: 'لا توجد إشارات لهذا الفلتر' },
     iad_lbl_rsi: { es: 'RSI14', en: 'RSI14', pt: 'RSI14', zh: 'RSI14', fr: 'RSI14', it: 'RSI14', hi: 'RSI14', ar: 'RSI14' },
     iad_lbl_volumen: { es: 'Volumen', en: 'Volume', pt: 'Volume', zh: '成交量', fr: 'Volume', it: 'Volume', hi: 'वॉल्यूम', ar: 'الحجم' },
     iad_lbl_volatilidad: { es: 'Volatilidad', en: 'Volatility', pt: 'Volatilidade', zh: '波动性', fr: 'Volatilité', it: 'Volatilità', hi: 'अस्थिरता', ar: 'التقلب' },
