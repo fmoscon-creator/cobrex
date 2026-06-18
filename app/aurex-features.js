@@ -2690,10 +2690,15 @@ window.wlShowCompare = function(){
   var getDir = function(sym){ var s=getSig(sym); return s?(s.direccion==='alcista'?'ALCISTA':s.direccion==='bajista'?'BAJISTA':'ALTA CONV'):'---'; };
   var getProb = function(sym){ var s=getSig(sym); return s?(s.confianza||50):0; };
   var getChange = function(sym){
-    if(_curPer === '24h') return chg[sym]||0;
+    if(_curPer === '24h'){
+      if(chg[sym] !== undefined && chg[sym] !== null) return chg[sym];           // live ticker de seguidos
+      var s = getSig(sym); if(s && s.precio24h > 0 && s.precio) return (s.precio - s.precio24h) / s.precio24h * 100; // respaldo señal IA (todos los activos)
+      return 0;
+    }
     return (hist[sym] && hist[sym][_curPer] !== undefined) ? hist[sym][_curPer] : 0;
   };
-  var getPrice = function(sym){ return prcs[sym]||0; };
+  // Precio real para CUALQUIER activo (503 actuales y futuros): _pcPrices (live ticker de seguidos) → sig.precio (backend IA, tiene a todos)
+  var getPrice = function(sym){ var p = prcs[sym]; if(!p){ var s = getSig(sym); p = s && s.precio; } return p || 0; };
   var dirColor = function(d){return d==='ALCISTA'?'var(--green)':d==='BAJISTA'?'var(--red)':'var(--gold)';};
   var dirIcon = function(d){return d==='ALCISTA'?'📈':d==='BAJISTA'?'📉':'⚡';};
 
@@ -2784,14 +2789,21 @@ window.wlShowCompare = function(){
 
   html += '</div>';
 
-  var old2 = document.getElementById('wl-compare-overlay'); if(old2) old2.remove();
-  var overlay = document.createElement('div');
-  overlay.id = 'wl-compare-overlay';
-  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:9999;overflow-y:auto';
+  // Reusar el overlay si ya existe → preservar scrollTop (evita el salto al re-render por datos async,
+  // que impedía llegar al botón Compartir). Paridad nativa: setState re-renderiza in-place sin resetear scroll.
+  var overlay = document.getElementById('wl-compare-overlay');
+  var _savedScroll = overlay ? overlay.scrollTop : 0;
+  var _isNew = !overlay;
+  if(_isNew){
+    overlay = document.createElement('div');
+    overlay.id = 'wl-compare-overlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:9999;overflow-y:auto';
+    document.body.appendChild(overlay);
+  }
   overlay.innerHTML = html;
-  document.body.appendChild(overlay);
-  // Cargar datos históricos en background
-  window.wlLoadCompareHist();
+  overlay.scrollTop = _savedScroll;
+  // Cargar datos históricos en background SOLO en la apertura inicial (evita el loop de re-fetch en cada refresh)
+  if(_isNew) window.wlLoadCompareHist();
   } catch(err) { alert('Error comparador: ' + err.message); }
 };
 
