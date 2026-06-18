@@ -4898,6 +4898,18 @@ window.showFearGreedInfo = function() {
     }
     return '<tr style="border-bottom:1px solid #eee;"><td style="padding:6px 4px;color:'+r[5]+';font-weight:600;font-size:11px;">'+r[0]+' '+r[1]+'</td><td style="color:#888;font-size:10px;padding:6px 4px;">'+r[2]+'</td><td style="color:#555;font-size:11px;padding:6px 4px;">'+r[3]+'</td><td style="color:'+valColor+';font-weight:700;font-size:11px;padding:6px 4px;">'+valStr+'</td></tr>';
   }).join('');
+  // #13 auditoría: caja ELITE — Análisis profundo (paridad nativa MercadosScreen L1211-1227, solo ELITE)
+  var _pulsePlan = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
+  var _eliteBox = (_pulsePlan==='ELITE') ?
+    '<div style="margin-top:14px;padding:12px;background:rgba(212,160,23,0.10);border:1px solid rgba(212,160,23,0.40);border-radius:10px;">' +
+      '<div style="font-size:11px;font-weight:800;color:#8A6D0F;margin-bottom:6px;letter-spacing:0.3px;">'+t('pulse_elite_titulo')+'</div>' +
+      '<div style="font-size:10px;color:#222;line-height:1.5;margin-bottom:8px;">'+t('pulse_elite_p1')+'</div>' +
+      '<div style="font-size:10px;color:#222;line-height:1.5;margin-bottom:8px;">'+t('pulse_elite_p2')+'</div>' +
+      '<div style="margin-top:6px;padding:8px;background:#f5f5f5;border-radius:6px;">' +
+        '<div style="font-size:9px;color:#666;font-weight:600;">&#128202; '+t('grafico_hist_pulse')+'</div>' +
+        '<div style="font-size:9px;color:#999;margin-top:2px;">'+t('disp_prox_bloque')+'</div>' +
+      '</div>' +
+    '</div>' : '';
   ov.innerHTML =
     '<div style="background:#fff;border:3px solid var(--gold);border-radius:18px;padding:22px;width:calc(100% - 32px);max-width:420px;margin:auto;">' +
       '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:4px;">'+t('mkt_pulse_info_title')+'</div>' +
@@ -4913,6 +4925,7 @@ window.showFearGreedInfo = function() {
         tableRows +
       '</table>' +
       '<div style="font-size:8px;color:#999;margin-top:10px;line-height:1.4;font-style:italic;">'+t('mkt_pulse_disclaimer')+'</div>' +
+      _eliteBox +
       '<div id="pulse-info-close" style="margin-top:18px;text-align:center;padding:16px;background:var(--gold);border-radius:14px;color:#111;font-weight:700;cursor:pointer;font-size:16px;">'+t('port_entendido')+'</div>' +
     '</div>';
   document.body.appendChild(ov);
