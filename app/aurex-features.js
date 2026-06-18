@@ -4296,16 +4296,25 @@ function _buildIADetail(s) {
   var dirColor = s.direccion==='alcista'?'var(--green)':s.direccion==='bajista'?'var(--red)':'var(--gold)';
   var dirLabel = s.direccion==='alcista'?t('ia_w_alcista'):s.direccion==='bajista'?t('ia_w_bajista'):t('ia_w_altaconf');
   var signo = s.direccion==='alcista'?'+':s.direccion==='bajista'?'-':'&#9889;';
+  // Gating por plan (paridad nativa IAScreen.js: justificación solo PRO/ELITE, variables modelo solo ELITE)
+  var _plan = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
+  var _isPro = _plan==='PRO' || _plan==='ELITE';
+  var _isElite = _plan==='ELITE';
+  var _iaLock = function(titKey){ return '<div onclick="event.stopPropagation();if(window.abrirModalPlanes)abrirModalPlanes(\'ia\')" style="margin-bottom:10px;padding:10px;border-radius:8px;background:var(--goldBg);border:1px solid var(--gold40);display:flex;align-items:center;gap:8px;cursor:pointer"><span style="font-size:14px">&#128274;</span><div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--gold)">'+t(titKey)+'</div><div style="font-size:10px;color:var(--textSec);margin-top:2px">'+t('disponible_elite')+'</div></div></div>'; };
   var html = '<div style="padding-top:12px">';
   html += '<div style="background:'+dirColor+'15;border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:10px">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
   html += '<span style="font-size:13px;font-weight:700;color:'+dirColor+'">'+signo+' '+dirLabel+'</span>';
   html += '<span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">'+t('iad_principal')+' '+s.prob_principal+'%</span>';
   html += '</div>';
-  html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';
-  (window.buildAiMotivos?window.buildAiMotivos(s):(s.motivos||[])).slice(0,5).forEach(function(m) {
-    html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';flex-shrink:0;font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';
-  });
+  if(_isPro){
+    html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';
+    (window.buildAiMotivos?window.buildAiMotivos(s):(s.motivos||[])).slice(0,5).forEach(function(m) {
+      html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';flex-shrink:0;font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';
+    });
+  } else {
+    html += _iaLock('ia_razonamiento_lock');
+  }
   html += '</div>';
   html += '<div style="display:flex;gap:8px;margin-bottom:10px">';
   var _cObj=s.direccion==='bajista'?'var(--red)':'var(--green)';
@@ -4318,8 +4327,8 @@ function _buildIADetail(s) {
   html += '<div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">'+_uLabel+'</div><div style="font-size:12px;font-weight:700;color:'+_uColor+'">'+_uSign+s.upside.toFixed(1)+'%</div></div>';
   html += '</div>';
 
-  // VARIABLES DEL MODELO — lista con colores verde/rojo
-  if(s.scores) {
+  // VARIABLES DEL MODELO — solo ELITE (paridad nativa: análisis técnico avanzado RSI/MACD)
+  if(s.scores && _isElite) {
     var sc = s.scores;
     var T=function(k){ return window._i18n&&window._i18n.t?window._i18n.t(k):k; };
     var varDefs = [
@@ -4365,9 +4374,12 @@ function _buildIADetail(s) {
       html += '</div>';
     }
     html += '</div>';
+  } else if(s.scores) {
+    html += _iaLock('analisis_tecnico_avanzado');
   }
 
-  // TIMEFRAME CONTEXT — default 24h, contexto 7d/30d
+  // TIMEFRAME CONTEXT — solo PRO/ELITE (paridad nativa IAScreen L604: contexto tendencia gateado a isPro)
+  if(_isPro){
   html += '<div style="margin-bottom:10px">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
   html += '<span style="font-size:10px;color:var(--textSec);font-weight:600">'+t('iad_ctx_tendencia')+'</span>';
@@ -4386,6 +4398,7 @@ function _buildIADetail(s) {
     html += '</div>';
   });
   html += '</div></div></div>';
+  }
 
   html += '<div style="font-size:10px;color:var(--textSec);margin-bottom:6px;font-weight:600">'+t('ia_otros_escenarios')+'</div>';
   html += '<div style="display:flex;gap:6px">';
