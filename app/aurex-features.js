@@ -2759,7 +2759,8 @@ window.wlShowCompare = function(){
 
   // Variables IA
   html += '<div style="font-size:11px;font-weight:700;color:var(--textSec);margin-top:14px;margin-bottom:8px">VARIABLES IA (10)</div>';
-  var varDefs = [{k:'tendencia',l:t('mkt_var1_label')},{k:'rsi',l:t('mkt_var2_label')},{k:'volumen',l:t('mkt_var3_label')},{k:'volatilidad',l:t('mkt_var4_label')},{k:'correlacion',l:t('mkt_var5_label')},{k:'oro_petroleo',l:t('mkt_var6_label')},{k:'macro',l:t('mkt_var7_label')},{k:'earnings',l:t('mkt_var8_label')},{k:'macd',l:t('mkt_var9_label')},{k:'soporte_resist',l:t('mkt_var10_label')}];
+  // Nombres CORTOS de la nativa (ComparadorModal varDefsT) — sin el prefijo "N." de los labels de PULSE (que se cortaban en la columna de 100px). #8 auditoría.
+  var varDefs = [{k:'tendencia',l:t('v_tendencia_name')},{k:'rsi',l:t('v_rsi_name')},{k:'volumen',l:t('v_volumen_name')},{k:'volatilidad',l:t('v_volat_name')},{k:'correlacion',l:t('v_corr_name')},{k:'oro_petroleo',l:t('v_oro_name')},{k:'macro',l:t('v_macro_name')},{k:'earnings',l:t('v_earnings_name')},{k:'macd',l:t('v_macd_name')},{k:'soporte_resist',l:t('v_sr_name')}];
   varDefs.forEach(function(v){
     html += '<div style="display:flex;align-items:center;padding:4px 0;border-bottom:0.5px solid #21262D80"><div style="width:100px;font-size:9px;color:var(--textSec)">'+v.l+'</div>';
     items.forEach(function(t){
