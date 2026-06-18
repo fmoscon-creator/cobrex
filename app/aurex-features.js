@@ -2722,7 +2722,7 @@ window.wlShowCompare = function(){
     if(isBest) html += '</div>';
     html += '<div style="font-size:14px;font-weight:800;color:var(--text);margin-top:4px">'+t+'</div>';
     html += '<div style="font-size:9px;color:var(--textSec)">'+(act?act.n:'')+'</div>';
-    if(isBest) html += '<div style="background:rgba(212,160,23,0.19);border:1px solid var(--gold);border-radius:6px;padding:2px 6px;margin-top:4px;display:inline-block"><span style="font-size:7px;font-weight:800;color:var(--gold)">'+t('wl_mejor_performance')+'</span></div>';
+    if(isBest) html += '<div style="background:rgba(212,160,23,0.19);border:1px solid var(--gold);border-radius:6px;padding:2px 6px;margin-top:4px;display:inline-block"><span style="font-size:7px;font-weight:800;color:var(--gold)">'+(window._i18n&&window._i18n.t?window._i18n.t('wl_mejor_performance'):'⭐ MEJOR PERFORMANCE')+'</span></div>';
     html += '</div>';
   });
   html += '</div>';
