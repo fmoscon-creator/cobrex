@@ -594,7 +594,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=23"></script>
+<script src="aurex-i18n.js?v=24"></script>
 <script src="aurex-v3.js?v=151"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -4612,48 +4612,91 @@ window.connectTelegram=function(){
     var old=document.getElementById('cobrex-ca-modal'); if(old) old.remove();
     var ov=document.createElement('div'); ov.id='cobrex-ca-modal'; ov.dir=dirRtl;
     ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100080;display:flex;align-items:center;justify-content:center;padding:20px';
-    function seg(active, c){ c=c||'var(--gold)'; return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid '+(active?c:'var(--border2)')+';background:'+(active?c:'var(--bg)')+';color:'+(active?'#000':'var(--text)'); }
+    // Tema por dirección (paridad nativa AlertCreateModal: verde Arriba / rojo Abajo)
+    function aCol(){ return dir==='arriba'?'var(--green)':'var(--red)'; }
+    function aBg(){ return dir==='arriba'?'rgba(63,185,80,0.12)':'rgba(248,81,73,0.12)'; }
+    function aBd(){ return dir==='arriba'?'rgba(63,185,80,0.4)':'rgba(248,81,73,0.4)'; }
+    function dirBtn(active, c){ return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:12px;font-weight:800;cursor:pointer;border:1.5px solid '+(active?c:'var(--border)')+';background:'+(active?c:'var(--bg)')+';color:'+(active?'#fff':'var(--text)'); }
+    function tipoBtn(active){ var c=aCol(); return 'flex:1;padding:10px;border-radius:10px;text-align:center;font-size:12px;font-weight:800;cursor:pointer;border:1.5px solid '+(active?c:'var(--border)')+';background:'+(active?c:'var(--bg)')+';color:'+(active?'#fff':'var(--text)'); }
     function render(){
-      var pct = tipo==='variacion_brusca';
-      ov.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:360px;padding:22px">'+
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><div style="font-size:17px;font-weight:800;color:var(--text)">'+T('al_ca_titulo','Nueva alerta')+' · '+sym+'</div><div id="ca-x" style="font-size:20px;color:var(--textDim);cursor:pointer">✕</div></div>'+
-        '<div style="font-size:11px;color:var(--textSec);margin-bottom:14px">'+T('al_ca_actual','Precio actual')+': '+fmt(cur)+'</div>'+
-        '<div style="display:flex;gap:8px;margin-bottom:10px"><div id="ca-up" style="'+seg(dir==="arriba",'var(--green)')+'">▲ '+T('al_ca_sube','Sube')+'</div><div id="ca-down" style="'+seg(dir==="abajo",'var(--red)')+'">▼ '+T('al_ca_baja','Baja')+'</div></div>'+
-        '<div style="display:flex;gap:8px;margin-bottom:12px"><div id="ca-tp" style="'+seg(!pct)+'">'+T('al_ca_precio_obj','Precio objetivo')+'</div><div id="ca-tv" style="'+seg(pct)+'">'+T('al_ca_variacion','Variación %')+'</div></div>'+
-        '<input id="ca-val" type="number" inputmode="decimal" placeholder="'+(pct?'%':'$')+'" style="width:100%;box-sizing:border-box;padding:13px;border-radius:10px;border:1.5px solid var(--border2);background:var(--bg);color:var(--text);font-size:16px;font-weight:700;margin-bottom:8px">'+
-        '<div id="ca-prev" style="font-size:11px;color:var(--gold);font-weight:600;min-height:16px;margin-bottom:14px"></div>'+
-        '<button id="ca-go" style="width:100%;padding:14px;border:none;border-radius:12px;background:var(--gold);color:#000;font-size:15px;font-weight:800;cursor:pointer">'+T('al_ca_crear','Crear alerta')+'</button>'+
+      var pct = tipo==='variacion_brusca'; var accent=aCol();
+      var lbl='font-size:11px;color:var(--textSec);font-weight:700;letter-spacing:0.3px;margin-bottom:6px';
+      ov.innerHTML='<div style="background:var(--card);border:2.5px solid '+accent+';border-radius:16px;width:100%;max-width:320px;padding:18px;box-sizing:border-box">'+
+        // header — título en color de acento
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:14px;font-weight:800;color:'+accent+';letter-spacing:0.3px">\u{1F514} '+T('crear_alerta_precio','Crear alerta de precio')+'</div><div id="ca-x" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</div></div>'+
+        // tarjeta de activo con fondo de acento
+        '<div style="background:'+aBg()+';padding:10px;border-radius:8px;margin-bottom:12px;text-align:center"><div style="font-size:16px;font-weight:800;color:var(--text)">'+sym+'</div>'+(cur>0?'<div style="font-size:11px;color:var(--textSec);margin-top:2px">'+fmt(cur)+'</div>':'')+'</div>'+
+        // DIRECCIÓN
+        '<div style="'+lbl+'">'+T('alerta_direccion','Dirección').toUpperCase()+'</div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:12px"><div id="ca-up" style="'+dirBtn(dir==='arriba','var(--green)')+'">'+T('alerta_arriba','Arriba')+'</div><div id="ca-down" style="'+dirBtn(dir==='abajo','var(--red)')+'">'+T('alerta_abajo','Abajo')+'</div></div>'+
+        // TIPO + ⓘ ¿Cómo funciona?
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-size:11px;color:var(--textSec);font-weight:700;letter-spacing:0.3px">'+T('alerta_tipo','Tipo').toUpperCase()+'</div><div id="ca-info" style="font-size:13px;color:var(--gold);font-weight:700;cursor:pointer">ⓘ '+T('como_funciona_q','¿Cómo funciona?')+'</div></div>'+
+        '<div style="display:flex;gap:8px;margin-bottom:12px"><div id="ca-tp" style="'+tipoBtn(!pct)+'">'+T('alerta_tipo_precio','Precio $')+'</div><div id="ca-tv" style="'+tipoBtn(pct)+'">'+T('alerta_tipo_porcentaje','Porcentaje %')+'</div></div>'+
+        // VALOR (input con $/% y borde de acento)
+        '<div style="'+lbl+'">'+T('alerta_valor_label','Valor').toUpperCase()+'</div>'+
+        '<div style="display:flex;align-items:center;border:1.5px solid '+accent+';border-radius:10px;padding:4px 10px"><span style="font-size:16px;color:var(--textSec);min-width:14px">'+(pct?'':'$')+'</span><input id="ca-val" type="number" inputmode="decimal" placeholder="0.00" style="flex:1;border:none;background:transparent;color:var(--text);font-size:18px;font-weight:700;text-align:center;outline:none;padding:4px 0">'+'<span style="font-size:16px;color:var(--textSec);min-width:14px;text-align:right">'+(pct?'%':'')+'</span></div>'+
+        '<div id="ca-prev"></div>'+
+        // footer: Cancelar + Crear alerta (acento)
+        '<div style="display:flex;gap:8px;margin-top:14px"><div id="ca-cancel" style="border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:13px;font-weight:700;color:var(--textSec);cursor:pointer">'+T('cancelar','Cancelar')+'</div><div id="ca-go" style="flex:1;background:'+accent+';border-radius:10px;padding:12px;text-align:center;font-size:13px;font-weight:800;color:#fff;cursor:pointer">\u{1F514} '+T('crear_alerta_corto','Crear alerta')+'</div></div>'+
         '</div>';
-      wire();
+      wire(); preview();
     }
     function preview(){
-      var v=parseFloat(document.getElementById('ca-val').value); var pv=document.getElementById('ca-prev'); if(!v||v<=0){pv.textContent='';return;}
-      var target = tipo==='variacion_brusca' ? (dir==='arriba'?cur*(1+v/100):cur*(1-v/100)) : v;
-      pv.textContent=T('al_ca_objetivo','Se dispara en')+': '+fmt(target);
+      var el=document.getElementById('ca-val'); if(!el) return;
+      var v=parseFloat(el.value); var pv=document.getElementById('ca-prev'); if(!pv) return;
+      var pct=tipo==='variacion_brusca'; var isUp=dir==='arriba';
+      if(!v||v<=0||!cur){ pv.innerHTML=''; return; }
+      var target = pct ? (isUp?cur*(1+v/100):cur*(1-v/100)) : (isUp?cur+v:cur-v);
+      pv.innerHTML='<div style="background:'+aBg()+';border:1px solid '+aBd()+';border-radius:8px;padding:8px;margin-top:6px">'+
+        '<div style="font-size:11px;color:var(--textSec);text-align:center;margin-bottom:2px">'+T('al_ca_actual','Precio actual')+': <span style="font-weight:700;color:var(--text)">'+fmt(cur)+'</span></div>'+
+        '<div style="font-size:13px;color:'+aCol()+';text-align:center;font-weight:800">'+T('al_ca_objetivo','Se dispara en')+' '+fmt(target)+'</div>'+
+        '</div>';
+    }
+    function showInfo(){
+      var iv=document.getElementById('cobrex-ca-info'); if(iv) iv.remove();
+      iv=document.createElement('div'); iv.id='cobrex-ca-info'; iv.dir=dirRtl;
+      iv.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100090;display:flex;align-items:center;justify-content:center;padding:16px';
+      var ex=function(s){ return (s||'').replace('{sym}',sym).replace('{now}',fmt(cur)).replace('{target}',''); };
+      var ejP=(T('alert_precio_ej','')||'').replace('{sym}',sym).replace('{now}',fmt(cur)).replace('{target}',fmt(cur?cur+1:0));
+      var ejPct=(T('alert_pct_ej','')||'').replace('{sym}',sym).replace('{now}',fmt(cur)).replace('{target}',fmt(cur?cur*1.01:0));
+      iv.innerHTML='<div style="background:var(--card);border:2px solid var(--gold);border-radius:16px;width:100%;max-width:320px;padding:18px;box-sizing:border-box;max-height:70%;overflow-y:auto">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:14px;font-weight:800;color:var(--gold)">ⓘ '+T('como_funciona_q','¿Cómo funciona?')+'</div><div id="cai-x" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</div></div>'+
+        '<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px">'+
+          '<div style="font-size:12px;color:var(--text);line-height:1.5;margin-bottom:8px"><span style="font-weight:800;color:'+aCol()+'">$ '+T('precio_label','Precio')+'</span>: '+T('alert_precio_expl','')+'<br><span style="font-style:italic;color:var(--textSec)">'+ejP+'</span></div>'+
+          '<div style="font-size:12px;color:var(--text);line-height:1.5"><span style="font-weight:800;color:'+aCol()+'">% '+T('porcentaje_label','Porcentaje')+'</span>: '+T('alert_pct_expl','')+'<br><span style="font-style:italic;color:var(--textSec)">'+ejPct+'</span></div>'+
+        '</div></div>';
+      iv.onclick=function(e){ if(e.target===iv) iv.remove(); };
+      document.body.appendChild(iv);
+      document.getElementById('cai-x').onclick=function(){ iv.remove(); };
     }
     function wire(){
       document.getElementById('ca-x').onclick=function(){ov.remove();};
+      document.getElementById('ca-cancel').onclick=function(){ov.remove();};
       ov.onclick=function(e){if(e.target===ov)ov.remove();};
       document.getElementById('ca-up').onclick=function(){dir='arriba';render();};
       document.getElementById('ca-down').onclick=function(){dir='abajo';render();};
       document.getElementById('ca-tp').onclick=function(){tipo='precio_objetivo';render();};
       document.getElementById('ca-tv').onclick=function(){tipo='variacion_brusca';render();};
+      document.getElementById('ca-info').onclick=showInfo;
       document.getElementById('ca-val').oninput=preview;
       document.getElementById('ca-go').onclick=submit;
     }
+    var _caSubmitting=false;
     function submit(){
+      if(_caSubmitting) return;
       var v=parseFloat(document.getElementById('ca-val').value);
       if(!v||v<=0){ toast(T('al_ca_invalido','Ingresá un valor válido'),false); return; }
       var valorBackend;
       if(tipo==='precio_objetivo'){ valorBackend=+(v-cur).toFixed(8); }   // DELTA con signo (backend snapshotea precio_base)
       else { valorBackend=+(dir==='arriba'?cur*(1+v/100):cur*(1-v/100)).toFixed(8); }  // variacion_brusca: precio absoluto
-      var btn=document.getElementById('ca-go'); btn.disabled=true; btn.textContent='...';
+      _caSubmitting=true;
+      var btn=document.getElementById('ca-go'); btn.style.opacity='0.5'; btn.textContent='...';
       var body={user_id:uid,simbolo:sym,tipo_activo:tipoActivo,tipo:tipo,valor_objetivo:valorBackend,direccion:dir};
       function send(tok){
         fetch(BACK+'/api/alertas',{method:'POST',headers:Object.assign({'Content-Type':'application/json'},tok?{'Authorization':'Bearer '+tok}:{}),body:JSON.stringify(body)})
         .then(function(r){ if(r.status===403){ return r.json().then(function(e){ ov.remove(); if(window.showPaywall) window.showPaywall(e); }); }
-          if(!r.ok) throw new Error('HTTP '+r.status); return r.json().then(function(){ ov.remove(); toast(T('al_ca_creada','✓ Alerta creada'),true); }); })
-        .catch(function(){ btn.disabled=false; btn.textContent=T('al_ca_crear','Crear alerta'); toast('Error',false); });
+          if(!r.ok) throw new Error('HTTP '+r.status); return r.json().then(function(){ ov.remove(); toast(T('alerta_creada','Alerta creada. La verás aquí 🔔 cuando se dispare.'),true); }); })
+        .catch(function(){ _caSubmitting=false; btn.style.opacity='1'; btn.textContent='\u{1F514} '+T('crear_alerta_corto','Crear alerta'); toast('Error',false); });
       }
       try{ window._supabase.auth.getSession().then(function(r){ send(r&&r.data&&r.data.session?r.data.session.access_token:null); }); }catch(e){ send(null); }
     }
