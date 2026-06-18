@@ -4779,6 +4779,38 @@ window.connectTelegram=function(){
 
 
 <script>
+/* #6+#7 auditoría: orden del header igual a la nativa. Grupo derecho = [bandera][LIVE][campana] (campana SIEMPRE última).
+   Nativa: MercadosScreen L869-883 / PortfolioScreen L695-704 → grupo derecho flex con LIVE/bandera antes del BellButton. */
+(function(){
+  function liveGroupFor(scr, timeId){ var t=scr.querySelector('#'+timeId); if(!t) return null; return t.closest('.live') || t.parentElement; }
+  window.cobrexFixHeaders=function(){
+    var map={ portfolio:null, mercados:'liveTime', ia:'ia-live-time', alertas:'alertas-live-time' };
+    Object.keys(map).forEach(function(sn){
+      var scr=document.getElementById('screen-'+sn); if(!scr) return;
+      var bell=scr.querySelector('.cobrex-bell'); if(!bell) return;
+      var logo=Array.prototype.slice.call(scr.querySelectorAll('span')).filter(function(s){ return /^Cobrex$/.test((s.textContent||'').trim()); })[0];
+      var titleGroup=logo?logo.closest('div'):null;
+      // headerTop = ancestro común del título y la campana (robusto ante headers JS-render como .aurex-hdr-added)
+      var headerTop=bell.parentElement;
+      if(titleGroup){ var a=titleGroup; while(a && !a.contains(bell)) a=a.parentElement; if(a) headerTop=a; }
+      if(!headerTop) return;
+      var rg=headerTop.querySelector(':scope > .cbx-hdr-right');
+      if(!rg){ rg=document.createElement('div'); rg.className='cbx-hdr-right'; rg.style.cssText='margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0'; headerTop.appendChild(rg); }
+      var flag = scr.querySelector('.lang-chip');                 // bandera (solo Portfolio)
+      var live = (sn==='portfolio') ? null : liveGroupFor(scr, map[sn]);   // Portfolio: el LIVE va en la barra de Sort, no en el header
+      // Orden nativo dentro del grupo derecho: [bandera][LIVE][campana] — campana última
+      [flag, live, bell].forEach(function(el){ if(el){ el.style.marginLeft='0'; rg.appendChild(el); } });
+    });
+  };
+  function run(){ try{ window.cobrexFixHeaders(); }catch(e){} }
+  if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded', run);
+  setTimeout(run,1700); setTimeout(run,3700);
+  var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); setTimeout(run,400); return r; }; }
+})();
+</script>
+
+
+<script>
 /* D3: banner upsell de Portfolio plan-aware (FREE→señales/PRO, PRO→análisis/ELITE, ELITE→oculto) */
 (function(){
   window._updatePfBanner=function(){
