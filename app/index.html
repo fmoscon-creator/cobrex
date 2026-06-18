@@ -594,7 +594,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=26"></script>
+<script src="aurex-i18n.js?v=27"></script>
 <script src="aurex-v3.js?v=151"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -1923,33 +1923,32 @@ window._mktOpenDetail = function(idx){
 <div class="screen" id="screen-alertas" style="flex-direction:column;flex:1;min-height:0;overflow:hidden">
 <div class="cnt" id="alertas-cnt" style="overflow-y:auto;flex:1;padding-bottom:20px">
 
-<!-- Banner WhatsApp — fondo #0D2818 como nativa -->
-<div style="display:flex;align-items:center;gap:10px;margin:10px 11px;background:#0D2818;border-radius:10px;padding:10px;border:1px solid #25D36640">
-  <span style="font-size:20px">💬</span>
-  <div style="flex:1">
-    <div style="font-size:12px;font-weight:700;color:#25D366" id="wa-title" data-i18n="al_wa_title">Alertas por WhatsApp</div>
+<!-- Canales: 3 en fila WhatsApp/Telegram/Push (paridad nativa AlertasScreen: 3 cards con icono arriba + label abajo) -->
+<div style="display:flex;gap:8px;margin:10px 11px">
+  <!-- WhatsApp (SOON, sin toggle) -->
+  <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">💬</span><span style="font-size:8px;font-weight:800;color:var(--textSec);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px;letter-spacing:0.5px">SOON</span></div>
+    <div style="font-size:12px;font-weight:800;color:#25D366;text-align:center;margin-top:8px">WhatsApp</div>
   </div>
-  <span style="font-size:9px;font-weight:800;color:var(--textSec);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:3px 8px;letter-spacing:0.5px">SOON</span>
-</div>
-
-<!-- Resumen — numeros grandes, clickeables -->
-<!-- Canal Telegram (paridad nativa AlertasScreen.js:453: TOGGLE que activa la conexión, no un botón de texto) -->
-<div style="display:flex;align-items:center;gap:10px;margin:10px 11px;background:#0A2A3A;border-radius:10px;padding:10px;border:1px solid #2AABEE55">
-  <div style="font-size:22px">✈️</div>
-  <div style="flex:1">
-    <div style="font-size:12px;font-weight:700;color:#2AABEE" data-i18n="al_tg_title">Alertas por Telegram</div>
-    <div style="font-size:10px;color:var(--textSec);margin-top:2px" data-i18n="al_tg_desc">Conectá el bot para recibir tus alertas al instante</div>
+  <!-- Telegram (toggle conecta el bot) -->
+  <div style="flex:1;background:#2AABEE12;border:1px solid #2AABEE55;border-radius:12px;padding:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">✈️</span><label class="toggle-sw"><input type="checkbox" id="tg-toggle" onchange="if(this.checked){ if(window.connectTelegram) connectTelegram(); } else { try{localStorage.removeItem('cobrex_tg_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
+    <div style="font-size:12px;font-weight:800;color:#2AABEE;text-align:center;margin-top:8px">Telegram</div>
   </div>
-  <label class="toggle-sw"><input type="checkbox" id="tg-toggle" onchange="if(this.checked){ if(window.connectTelegram) connectTelegram(); } else { try{localStorage.removeItem('cobrex_tg_on');}catch(e){} }"><span class="toggle-slider"></span></label>
+  <!-- Push (toggle pide permiso de notificaciones del navegador) -->
+  <div style="flex:1;background:var(--goldBg,rgba(212,160,23,0.12));border:1px solid var(--gold);border-radius:12px;padding:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">🔔</span><label class="toggle-sw"><input type="checkbox" id="push-toggle" onchange="if(this.checked){ if(window.requestPushPermission) requestPushPermission(); } else { try{localStorage.removeItem('cobrex_push_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
+    <div style="font-size:12px;font-weight:800;color:var(--gold);text-align:center;margin-top:8px">Push</div>
+  </div>
 </div>
-<script>(function(){try{var tg=document.getElementById('tg-toggle');if(tg&&localStorage.getItem('cobrex_tg_on')==='1')tg.checked=true;}catch(e){}})();</script>
+<script>(function(){try{var tg=document.getElementById('tg-toggle');if(tg&&localStorage.getItem('cobrex_tg_on')==='1')tg.checked=true;var pu=document.getElementById('push-toggle');if(pu&&('Notification'in window)&&Notification.permission==='granted')pu.checked=true;}catch(e){}})();</script>
 <div style="margin:10px 11px;background:var(--card);border-radius:12px;padding:14px;border:1.5px solid var(--gold)">
   <div style="display:flex;align-items:center">
     <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('alertas')"><div style="font-size:28px;font-weight:900;color:var(--green)" id="alert-active">15</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_alertas_on">ALERTAS ON</div></div>
     <div style="width:1px;height:28px;background:var(--border)"></div>
-    <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('activos')"><div style="font-size:28px;font-weight:900;color:var(--gold)" id="alert-scope-count">350</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_activos_upper">ACTIVOS</div></div>
+    <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('activos')"><div style="font-size:28px;font-weight:900;color:var(--gold)" id="alert-scope-count">503</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_activos_upper">ACTIVOS</div></div>
     <div style="width:1px;height:28px;background:var(--border)"></div>
-    <div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--textDim)" id="wa-check">—</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px">WHATSAPP <span style="font-size:7px;color:var(--gold)">SOON</span></div></div>
+    <div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--green)" id="push-check">✓</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px">PUSH</div></div>
   </div>
 </div>
 
@@ -1957,9 +1956,9 @@ window._mktOpenDetail = function(idx){
 <div style="margin:10px 11px;background:var(--card);border-radius:12px;padding:12px;border:1.5px solid var(--gold)">
   <div style="font-size:10px;color:var(--gold);font-weight:800;margin-bottom:10px;text-align:center;letter-spacing:1px" data-i18n="al_alertas_sobre">ALERTAS SOBRE</div>
   <div style="display:flex;gap:8px" id="alert-scope-btns">
-    <div onclick="setAlertScope('portfolio')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="portfolio"><div style="font-size:20px;margin-bottom:4px">💼</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_portfolio">Mi Portfolio</div><div id="scope-count-portfolio" style="font-size:14px;font-weight:900;color:var(--gold);margin-top:4px">—</div></div>
-    <div onclick="setAlertScope('watchlist')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="watchlist"><div style="font-size:20px;margin-bottom:4px">👀</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_watchlist">Mi Watchlist</div><div id="scope-count-watchlist" style="font-size:14px;font-weight:900;color:var(--gold);margin-top:4px">—</div></div>
-    <div onclick="setAlertScope('todos')" style="flex:1;background:var(--gold);border:1.5px solid var(--gold);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="todos"><div style="font-size:20px;margin-bottom:4px">🌍</div><div style="font-size:11px;font-weight:800;color:#000" data-i18n="al_todos">Todos (350)</div><div id="scope-count-todos" style="font-size:14px;font-weight:900;color:#000;margin-top:4px">—</div></div>
+    <div onclick="setAlertScope('portfolio')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="portfolio"><div style="font-size:20px;margin-bottom:4px">💼</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_portfolio">Mi Portfolio</div></div>
+    <div onclick="setAlertScope('watchlist')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="watchlist"><div style="font-size:20px;margin-bottom:4px">👀</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_watchlist">Mi Watchlist</div></div>
+    <div onclick="setAlertScope('todos')" style="flex:1;background:var(--gold);border:1.5px solid var(--gold);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="todos"><div style="font-size:20px;margin-bottom:4px">🌍</div><div style="font-size:11px;font-weight:800;color:#000" data-i18n="al_todos">Todos (503)</div></div>
   </div>
 </div>
 
@@ -4301,14 +4300,8 @@ document.addEventListener("DOMContentLoaded", function(){
   };
   (function(){
     function initMA(){
-      var cnt = document.getElementById('alertas-cnt');
-      if (cnt && !document.getElementById('mis-alertas-btn')){
-        var bar = document.createElement('div');
-        bar.id = 'mis-alertas-btn'; bar.onclick = window.abrirMisAlertas;
-        bar.style.cssText = 'display:flex;align-items:center;gap:10px;margin:10px 11px;background:var(--card);border-radius:10px;padding:12px;border:1px solid var(--border);cursor:pointer';
-        bar.innerHTML = '<span style="font-size:20px;position:relative;display:inline-block">🔔<span id="mis-alertas-badge" style="display:none;position:absolute;top:-6px;right:-8px;background:#EF4444;color:#fff;font-size:9px;font-weight:800;min-width:15px;height:15px;border-radius:8px;align-items:center;justify-content:center;padding:0 3px">0</span></span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+(window.t?window.t('mis_al_titulo'):'Mis Alertas')+'</div><div style="font-size:10px;color:var(--textSec)">'+(window.t?window.t('mis_al_historial'):'Historial de alertas disparadas')+'</div></div><span style="font-size:14px;color:var(--gold)">→</span>';
-        cnt.insertBefore(bar, cnt.firstChild);
-      }
+      // #11 auditoría: la nativa NO muestra una card "Mis Alertas" en la pantalla Alertas;
+      // el historial se abre con la campana del header (badge de no-leídas). Card removida para paridad.
       if (!document.getElementById('mis-alertas-modal')){
         var ov = document.createElement('div');
         ov.id = 'mis-alertas-modal';

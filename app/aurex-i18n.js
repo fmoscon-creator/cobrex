@@ -875,7 +875,7 @@
     al_alertas_sobre: { es: 'ALERTAS SOBRE', en: 'ALERTS FOR', pt: 'ALERTAS SOBRE', zh: '提醒范围', fr: 'ALERTES SUR', it: 'AVVISI SU', hi: 'अलर्ट:', ar: 'تنبيهات حول' },
     al_mi_portfolio: { es: 'Mi Portfolio', en: 'My Portfolio', pt: 'Meu Portfólio', zh: '我的投资组合', fr: 'Mon Portfolio', it: 'Il mio Portfolio', hi: 'मेरा Portfolio', ar: 'Portfolio الخاص بي' },
     al_mi_watchlist: { es: 'Mi Watchlist', en: 'My Watchlist', pt: 'Minha Watchlist', zh: '我的自选列表', fr: 'Ma Watchlist', it: 'La mia Watchlist', hi: 'मेरी Watchlist', ar: 'قائمة المتابعة' },
-    al_todos: { es: 'Todos (350)', en: 'All (350)', pt: 'Todos (350)', zh: '全部 (350)', fr: 'Tous (350)', it: 'Tutti (350)', hi: 'सभी (350)', ar: 'الكل (350)' },
+    al_todos: { es: 'Todos (503)', en: 'All (503)', pt: 'Todos (503)', zh: '全部 (503)', fr: 'Tous (503)', it: 'Tutti (503)', hi: 'सभी (503)', ar: 'الكل (503)' },
 
     // Motor IA + Pulse buttons
     al_motor_ia: { es: 'Motor IA', en: 'AI Engine', pt: 'Motor IA', zh: 'AI引擎', fr: 'Moteur IA', it: 'Motore IA', hi: 'AI इंजन', ar: 'محرك AI' },
