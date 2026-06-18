@@ -2250,22 +2250,13 @@ display:flex;align-items:center;justify-content:space-between}
     <span data-i18n-html="b2_plan_actual">&#11088; Plan actual</span><span class="pac-chevron">&#9660;</span>
   </div>
   <div class="pac-cuerpo">
-    <div id="plan-actual-card" style="background:var(--card);border-radius:8px;padding:12px 14px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <span id="plan-actual-nombre" style="font-size:15px;font-weight:700;color:var(--textSec)">FREE</span>
-        <span id="plan-actual-subtitle" style="font-size:12px;color:var(--textSec)" data-i18n="plan_gratuito">Plan gratuito</span>
-      </div>
-      <div id="plan-actual-desc" style="font-size:12px;color:var(--textSec)" data-i18n="plan_free_desc">
-        5 activos • 3 señales IA/día • Cobrex Pulse básico
-      </div>
+    <!-- #12b: chooser inline FREE/PRO/ELITE (paridad nativa PerfilScreen b2 L410-505). La card resumen queda oculta solo para los updaters de plan. -->
+    <div id="plan-actual-card" style="display:none">
+      <span id="plan-actual-nombre">FREE</span><span id="plan-actual-subtitle" data-i18n="plan_gratuito">Plan gratuito</span><div id="plan-actual-desc" data-i18n="plan_free_desc">5 activos</div>
     </div>
-    <button onclick="abrirModalPlanes('perfil')"
-      style="width:100%;background:linear-gradient(135deg,#1a0d2e,#2d1b4e);
-      border:1.5px solid #A78BFA;border-radius:10px;color:#A78BFA;
-      font-size:14px;font-weight:700;padding:13px;cursor:pointer;
-      display:flex;align-items:center;justify-content:center;gap:8px">
-      <span data-i18n-html="ver_planes_btn">&#128640; Ver planes y ventajas</span>
-    </button>
+    <div style="text-align:center;margin-bottom:4px;font-size:15px;font-weight:700;color:var(--text)" data-i18n="elegir_plan">Elegir tu plan</div>
+    <div style="text-align:center;margin-bottom:12px;font-size:11px;color:var(--textSec)" data-i18n="planes_incluyen_pulse">Todos los planes incluyen Cobrex Pulse</div>
+    <div id="pf-plan-chooser"></div>
   </div>
 </div>
 <div class="pac-bloque" id="pac-b3">
@@ -4799,6 +4790,45 @@ window.connectTelegram=function(){
   if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded', run);
   setTimeout(run,1700); setTimeout(run,3700);
   var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); setTimeout(run,400); return r; }; }
+})();
+</script>
+
+
+<script>
+/* #12b: chooser inline FREE/PRO/ELITE en Perfil > Plan actual (paridad nativa). Clona los tabs+paneles del modal de planes (mismos features/precios/botones cbxBuy). */
+(function(){
+  function stripIds(root){ try{ root.querySelectorAll('[id]').forEach(function(e){ e.removeAttribute('id'); }); }catch(e){} }
+  window.pfPlanTab=function(p){
+    ['FREE','PRO','ELITE'].forEach(function(k){
+      var panel=document.getElementById('pf-panel-'+k); if(panel) panel.style.display = (k===p)?'block':'none';
+      var tab=document.getElementById('pf-ptab-'+k);
+      if(tab){ var on=(k===p); var col=(k==='FREE')?'var(--textSec)':(k==='PRO')?'#A78BFA':'#c9a84c';
+        tab.style.background = on? col : 'var(--card)';
+        tab.style.color = on? ((k==='FREE')?'var(--chipTextActive)':'#000') : col;
+        tab.style.border = '1px solid '+col; }
+    });
+  };
+  window.pfRenderPlanChooser=function(){
+    var host=document.getElementById('pf-plan-chooser'); if(!host || host._rendered) return;
+    var tabs=document.getElementById('plan-tabs'); if(!tabs) return;
+    var keys=['FREE','PRO','ELITE'];
+    var tabsClone=tabs.cloneNode(true); stripIds(tabsClone); tabsClone.removeAttribute('id'); tabsClone.style.display='flex'; tabsClone.style.marginBottom='14px';
+    var tdivs=tabsClone.children;
+    for(var i=0;i<tdivs.length && i<3;i++){ tdivs[i].id='pf-ptab-'+keys[i]; tdivs[i].setAttribute('onclick',"pfPlanTab('"+keys[i]+"')"); }
+    host.appendChild(tabsClone);
+    keys.forEach(function(k){
+      var pan=document.getElementById('plan-panel-'+k); if(!pan) return;
+      var c=pan.cloneNode(true); stripIds(c); c.id='pf-panel-'+k; c.style.display='none'; c.style.marginBottom='14px';
+      // nativa: el panel FREE solo muestra features (sin botones "Ver plan PRO"/"Continuar"). PRO/ELITE sí llevan su botón de compra.
+      if(k==='FREE'){ try{ c.querySelectorAll('button').forEach(function(b){ b.remove(); }); }catch(e){} }
+      host.appendChild(c);
+    });
+    host._rendered=true;
+    window.pfPlanTab('FREE'); // nativa: planTab default 'FREE'
+  };
+  function boot(){ try{ window.pfRenderPlanChooser(); }catch(e){} }
+  if(document.readyState!=='loading') setTimeout(boot,1600); else document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot,1600); });
+  setTimeout(boot,3600);
 })();
 </script>
 
