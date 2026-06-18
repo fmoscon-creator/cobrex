@@ -1072,6 +1072,7 @@
     v_earnings_name: { es: 'Earnings', en: 'Earnings', pt: 'Earnings', zh: '财报', fr: 'Earnings', it: 'Earnings', hi: 'Earnings', ar: 'Earnings' },
     v_macd_name: { es: 'MACD (12/26)', en: 'MACD (12/26)', pt: 'MACD (12/26)', zh: 'MACD (12/26)', fr: 'MACD (12/26)', it: 'MACD (12/26)', hi: 'MACD (12/26)', ar: 'MACD (12/26)' },
     v_sr_name: { es: 'Soporte / Resist. 30d', en: 'Support / Resist. 30d', pt: 'Suporte / Resist. 30d', zh: '支撑/阻力 30日', fr: 'Support / Résist. 30j', it: 'Supporto / Resist. 30g', hi: 'सपोर्ट / रेज़िस्ट. 30 दिन', ar: 'دعم / مقاومة 30 يوم' },
+    variables_modelo: { es: 'Variables del modelo', en: 'Model variables', pt: 'Variáveis do modelo', zh: '模型变量', fr: 'Variables du modèle', it: 'Variabili del modello', hi: 'मॉडल वेरिएबल', ar: 'متغيرات النموذج' },
     al_ca_login: { es: 'Iniciá sesión para crear alertas', en: 'Sign in to create alerts', pt: 'Entre para criar alertas', zh: '登录以创建提醒', fr: 'Connectez-vous pour créer des alertes', it: 'Accedi per creare avvisi', hi: 'अलर्ट बनाने के लिए साइन इन करें', ar: 'سجّل الدخول لإنشاء التنبيهات' },
     al_ca_invalido: { es: 'Ingresá un valor válido', en: 'Enter a valid value', pt: 'Insira um valor válido', zh: '请输入有效值', fr: 'Entrez une valeur valide', it: 'Inserisci un valore valido', hi: 'मान्य मान दर्ज करें', ar: 'أدخل قيمة صحيحة' },
     al_crear_alerta_menu: { es: 'Crear alerta de precio', en: 'Create price alert', pt: 'Criar alerta de preço', zh: '创建价格提醒', fr: 'Créer une alerte de prix', it: 'Crea avviso di prezzo', hi: 'मूल्य अलर्ट बनाएं', ar: 'إنشاء تنبيه سعر' },
