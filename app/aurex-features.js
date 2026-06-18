@@ -371,6 +371,13 @@ function _appendMktRow(cnt, item, tab) {
       dotsHtml+
     '<div style="display:flex;gap:2px;margin-top:2px;">'+['24h','7d','1m','3m','1a'].map(function(p){return '<span class="mkt-tf-btn" data-tf="'+p+'" ontouchstart="stf(null,\''+p+'\')" onclick="stf(null,\''+p+'\')" style="font-size:9px;padding:1px 3px;border-radius:3px;background:'+(p==='24h'?'var(--gold)':'var(--border)')+';color:'+(p==='24h'?'#111':'var(--textSec)')+';cursor:pointer;touch-action:manipulation;">'+p+'</span>';}).join('')+'</div>'+
     '</div>';
+  // TAP → tarjeta de detalle (paridad nativa MercadosScreen L1294 onPress → showSearchDetail).
+  // Long-press (menú de acciones) se engancha aparte en _attachAllMercadosLP.
+  row.addEventListener('click', function(e){
+    if(e.target && e.target.closest && e.target.closest('.mkt-tf-btn')) return; // botones de timeframe
+    if(document.getElementById('longpress-overlay')) return;                    // si el long-press acaba de abrir el menú
+    if(window._mktShowDetailCard) window._mktShowDetailCard(item);
+  });
   cnt.appendChild(row);
 }
 
@@ -6225,6 +6232,53 @@ function _refreshFavStars() {
 }
 
 // Long press Mercados — réplica EXACTA de nativa MercadosScreen L1300-1363
+// POP detalle de activo (TAP en Mercados / búsqueda / "Análisis IA" del menú) — paridad nativa MercadosScreen.js showSearchDetail (L944-1019)
+window._closeMktDetail = function(){ var o=document.getElementById('mkt-detail-overlay'); if(o) o.remove(); };
+window._mktShowDetailCard = function(act) {
+  if(typeof act === 'string'){ var _tk=act, _l=window._IA_ACTIVOS||[]; act=null; for(var _i=0;_i<_l.length;_i++){ if(_l[_i].s===_tk){ act=_l[_i]; break; } } if(!act) act={s:_tk}; }
+  if(!act || !act.s) return;
+  window._closeMktDetail();
+  var ticker = act.s, name = act.n || act.nombre || '', tipo = act.t || act.tipo || '';
+  var sig = (typeof _getSignalForSym==='function') ? _getSignalForSym(ticker) : null;
+  var precio = (sig && sig.precio) || (window._pcPrices && window._pcPrices[ticker]) || null;
+  var pct24 = (sig && sig.precio24h>0 && precio) ? ((precio - sig.precio24h)/sig.precio24h*100)
+            : (window._pcChange24 && window._pcChange24[ticker] !== undefined ? window._pcChange24[ticker] : null);
+  var objetivo = sig && sig.objetivo;
+  var dir = sig && sig.direccion;
+  var dirColor = dir==='alcista'?'var(--green)':dir==='bajista'?'var(--red)':dir==='alta_conf'?'var(--gold)':'var(--textSec)';
+  var dirLabel = dir==='alcista'?t('ia_w_alcista'):dir==='bajista'?t('ia_w_bajista'):dir==='alta_conf'?t('ia_w_altaconf'):'--';
+  var prob = sig && (sig.confianza || sig.prob_principal);
+  var isFav = _isFavorito(ticker);
+  var _logoSrc = act.logo || ((typeof _getMktLogo==='function') ? _getMktLogo(act, act.tab) : '');
+  var _ini = (ticker[0]||'?');
+  var logoHtml = _logoSrc
+    ? '<img src="'+_logoSrc+'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.outerHTML=\'<div style=&quot;width:40px;height:40px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff&quot;>'+_ini+'</div>\'"/>'
+    : '<div style="width:40px;height:40px;border-radius:50%;background:'+(act.color||'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">'+_ini+'</div>';
+  var boxCss='flex:1;background:var(--bg);border-radius:10px;padding:10px;text-align:center;', lblCss='font-size:9px;color:var(--textSec);margin-bottom:4px;', valCss='font-size:16px;font-weight:700;';
+  var ov = document.createElement('div');
+  ov.id = 'mkt-detail-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;-webkit-tap-highlight-color:rgba(0,0,0,0);';
+  var h = '<div style="background:var(--card);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:320px;padding:16px;box-sizing:border-box;">';
+  h += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:18px;font-weight:700;color:var(--text);">'+ticker+'</div><div style="font-size:12px;color:var(--textSec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(name?name:ticker)+(tipo?' · '+tipo:'')+'</div></div><div id="mkt-det-x" style="font-size:22px;color:var(--textSec);cursor:pointer;padding:0 4px;">✕</div></div>';
+  h += '<div style="display:flex;gap:10px;margin-bottom:14px;">';
+  h += '<div style="'+boxCss+'"><div style="'+lblCss+'">'+t('precio_row')+'</div><div style="'+valCss+'color:var(--text);">'+(precio?_fmt(precio,'precio'):'--')+'</div></div>';
+  h += '<div style="'+boxCss+'"><div style="'+lblCss+'">24h</div><div style="'+valCss+'color:'+(pct24!=null&&pct24>=0?'var(--green)':'var(--red)')+';">'+(pct24!=null?_fmt(pct24,'pct'):'--')+'</div></div>';
+  h += '<div style="'+boxCss+'"><div style="'+lblCss+'">'+t('mkt_lp_objetivo_ia')+'</div><div style="'+valCss+'color:var(--gold);">'+(objetivo?_fmt(objetivo,'precio'):'--')+'</div></div>';
+  h += '</div>';
+  h += '<div style="display:flex;gap:10px;margin-bottom:16px;"><div style="'+boxCss+'"><div style="'+lblCss+'">'+t('senal_ia_row')+'</div><div style="'+valCss+'color:'+dirColor+';">'+dirLabel+(prob?' '+prob+'%':'')+'</div></div></div>';
+  h += '<div id="mkt-det-fav" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:'+(isFav?'var(--gold)':'var(--goldBg)')+';border:1px solid var(--gold);cursor:pointer;margin-bottom:8px;"><span style="font-size:16px;">'+(isFav?'★':'☆')+'</span><span style="font-size:13px;font-weight:700;color:'+(isFav?'#000':'var(--gold)')+';">'+(isFav?t('mkt_lp_quitar_fav').replace('★ ',''):t('mkt_lp_agregar_fav').replace('★ ',''))+'</span></div>';
+  h += '<div id="mkt-det-port" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#3B82F618;border:1px solid #3B82F680;cursor:pointer;margin-bottom:8px;"><span style="font-size:16px;">💼</span><span style="font-size:13px;font-weight:700;color:#3B82F6;">'+t('mkt_lp_agregar_portfolio')+'</span></div>';
+  h += '<div id="mkt-det-close" style="padding:11px;border-radius:10px;border:1px solid var(--border2);text-align:center;cursor:pointer;"><span style="font-size:12px;font-weight:600;color:var(--textSec);">'+t('mkt_lp_cerrar')+'</span></div>';
+  h += '</div>';
+  ov.innerHTML = h;
+  ov.addEventListener('click', function(e){ if(e.target===ov) window._closeMktDetail(); });
+  document.body.appendChild(ov);
+  document.getElementById('mkt-det-x').addEventListener('click', window._closeMktDetail);
+  document.getElementById('mkt-det-close').addEventListener('click', window._closeMktDetail);
+  document.getElementById('mkt-det-fav').addEventListener('click', function(){ if(isFav){ if(window._lpQuitarFavorito) window._lpQuitarFavorito(ticker); } else { if(window._lpAgregarFavorito) window._lpAgregarFavorito(ticker); } window._closeMktDetail(); });
+  document.getElementById('mkt-det-port').addEventListener('click', function(){ window._closeMktDetail(); setTimeout(function(){ if(window.openPortModal) window.openPortModal(ticker); }, 50); });
+};
+
 window._showMercadosLPSheet = function(ticker, meta) {
   window._closeLPSheet();
   // Protección: si ticker es objeto, extraer .s
@@ -6253,9 +6307,8 @@ window._showMercadosLPSheet = function(ticker, meta) {
     var acts = window._IA_ACTIVOS || [];
     var act = null;
     for(var i=0;i<acts.length;i++){ if(acts[i].s===ticker){ act=acts[i]; break; } }
-    if(!act) act = {s:ticker, n:name, tipo:'accion'};
-    window._mktSearchActs = [act];
-    if(window._mktOpenDetail) window._mktOpenDetail(0);
+    if(!act) act = (meta && typeof meta==='object') ? meta : {s:ticker, n:name, tipo:'accion'};
+    if(window._mktShowDetailCard) window._mktShowDetailCard(act);
   });
   modal.appendChild(analisisBtn);
 

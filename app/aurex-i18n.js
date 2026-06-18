@@ -729,6 +729,8 @@
     mkt_lp_precio: { es: 'Precio', en: 'Price', pt: 'Preço', zh: '价格', fr: 'Prix', it: 'Prezzo', hi: 'मूल्य', ar: 'السعر' },
     mkt_lp_objetivo_ia: { es: 'Objetivo IA', en: 'AI Target', pt: 'Objetivo IA', zh: 'AI目标', fr: 'Objectif IA', it: 'Obiettivo IA', hi: 'AI लक्ष्य', ar: 'هدف AI' },
     mkt_lp_senal_ia: { es: 'Señal IA ', en: 'AI Signal ', pt: 'Sinal IA ', zh: 'AI信号 ', fr: 'Signal IA ', it: 'Segnale IA ', hi: 'AI सिग्नल ', ar: 'إشارة AI ' },
+    senal_ia_row: { es: 'Señal IA', en: 'AI Signal', pt: 'Sinal IA', zh: 'AI信号', fr: 'Signal IA', it: 'Segnale IA', hi: 'AI सिग्नल', ar: 'إشارة AI' },
+    precio_row: { es: 'Precio', en: 'Price', pt: 'Preço', zh: '价格', fr: 'Prix', it: 'Prezzo', hi: 'मूल्य', ar: 'السعر' },
     mkt_lp_quitar_fav: { es: '★ Quitar de Favoritos', en: '★ Remove from Favorites', pt: '★ Remover dos Favoritos', zh: '★ 从收藏中移除', fr: '★ Retirer des Favoris', it: '★ Rimuovi dai Preferiti', hi: '★ पसंदीदा से हटाएँ', ar: '★ إزالة من المفضلة' },
     mkt_lp_agregar_fav: { es: '★ Agregar a Favoritos', en: '★ Add to Favorites', pt: '★ Adicionar aos Favoritos', zh: '★ 添加到收藏', fr: '★ Ajouter aux Favoris', it: '★ Aggiungi ai Preferiti', hi: '★ पसंदीदा में जोड़ें', ar: '★ إضافة إلى المفضلة' },
     mkt_lp_agregar_portfolio: { es: 'Agregar a Portfolio', en: 'Add to Portfolio', pt: 'Adicionar ao Portfólio', zh: '添加到投资组合', fr: 'Ajouter au Portfolio', it: 'Aggiungi al Portfolio', hi: 'Portfolio में जोड़ें', ar: 'إضافة إلى Portfolio' },
