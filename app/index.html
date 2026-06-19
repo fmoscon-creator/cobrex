@@ -2682,7 +2682,7 @@ display:flex;align-items:center;justify-content:space-between}
       <div style="padding:14px 0 4px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:12px;color:var(--textDim)" data-i18n="version_app">Versión de la app</span>
-          <span style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web v1.3.45 &#11088;</span>
+          <span id="cobrex-web-ver-row" style="font-size:12px;color:var(--textSec);font-weight:600">Cobrex Web &#11088;</span>
         </div>
         <div style="display:flex;gap:16px">
           <span onclick="pacLegal('terminos')" style="font-size:11px;color:#58A6FF;cursor:pointer;text-decoration:underline" data-i18n="terminos_uso">Términos de uso</span>
@@ -4850,15 +4850,23 @@ window.connectTelegram=function(){
 
 
 <script>
-/* A2: versión "Cobrex Web 1.3" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957 */
+/* A2: versión "Cobrex Web v1.3.45" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957. Bumpear manual al sincronizar a nuevo build nativo. */
 (function(){
+  // ⛳ ÚNICA FUENTE de la versión web (espejo de la nativa). Bumpear SOLO acá al sincronizar la PWA a un build nativo nuevo.
+  window.COBREX_WEB_VERSION = '1.3.45';
+  function _verLabel(){ return 'Cobrex Web v' + window.COBREX_WEB_VERSION; }
   window._injectPerfilVersion=function(){
-    var hdr=document.querySelector('#screen-perfil .aurex-hdr-added'); if(!hdr) return;
-    if(hdr.querySelector('#cobrex-perfil-version')) return;
-    var v=document.createElement('span'); v.id='cobrex-perfil-version';
-    v.style.cssText='font-size:10px;color:var(--textSec);font-weight:600;margin-left:8px;white-space:nowrap';
-    v.textContent='Cobrex Web 1.7';
-    hdr.appendChild(v);
+    // 1) header de Perfil
+    var hdr=document.querySelector('#screen-perfil .aurex-hdr-added');
+    if(hdr && !hdr.querySelector('#cobrex-perfil-version')){
+      var v=document.createElement('span'); v.id='cobrex-perfil-version';
+      v.style.cssText='font-size:10px;color:var(--textSec);font-weight:600;margin-left:8px;white-space:nowrap';
+      v.textContent=_verLabel();
+      hdr.appendChild(v);
+    }
+    // 2) row "Versión de la app" (misma fuente, con ⭐)
+    var row=document.getElementById('cobrex-web-ver-row');
+    if(row) row.textContent=_verLabel()+' ⭐';
   };
   function boot(){ setTimeout(window._injectPerfilVersion,1600); setTimeout(window._injectPerfilVersion,3600); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded', boot);
