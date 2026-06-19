@@ -4819,10 +4819,12 @@ function _renderFearGreed(containerId) {
   var cats = ['GLOBAL','CRIPTO','ACCIONES','COMOD','FUTUROS'];
   var catLabels = {GLOBAL:'🟩 '+t('mkt_pulse_cat_global'),CRIPTO:'🪙 '+t('mkt_pulse_cat_cripto'),ACCIONES:'📈 '+t('mkt_pulse_cat_acciones'),COMOD:'🟤 '+t('mkt_pulse_cat_comod'),FUTUROS:'⚡ '+t('mkt_pulse_cat_futuros')};
   var filterBtns = '';
+  // #1 auditoría: el chip activo usa el color del SCORE (pulseColor), no siempre verde. Paridad nativa MercadosScreen L41/L1096.
+  var _pulseColor = function(s){ return s<=20?'#C62828':s<=40?'#FF6B6B':s<=60?'var(--gold)':s<=80?'var(--green)':'#00E676'; };
   cats.forEach(function(c) {
     var active = c===cat;
-    var bg = active ? (d.color||'var(--green)') : '#e0e0e0';
-    var col = active ? '#fff' : '#222';
+    var bg = active ? _pulseColor(d.value) : '#e0e0e0';
+    var col = active ? '#111' : '#222';
     var fw = active ? '700' : '600';
     var bdr = 'none';
     filterBtns += '<div data-pulse-cat="'+c+'" data-pulse-el="'+elId+'" style="font-size:9px;font-weight:'+fw+';color:'+col+';background:'+bg+';border-radius:10px;padding:4px 8px;cursor:pointer;white-space:nowrap;flex-shrink:0;border:'+bdr+';">'+catLabels[c]+'</div>';
