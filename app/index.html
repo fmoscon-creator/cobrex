@@ -4324,24 +4324,8 @@ document.addEventListener("DOMContentLoaded", function(){
     if (b){ b.style.background = window._onlyFavs ? 'var(--gold)' : 'var(--card)'; b.style.color = window._onlyFavs ? '#000' : 'var(--text)'; }
     window._applyOnlyFavs();
   };
-  (function(){
-    function initFav(){
-      var bar = document.getElementById('mkt-search-bar');
-      if (bar && !document.getElementById('only-favs-chip')){
-        var chip = document.createElement('div');
-        chip.id = 'only-favs-chip'; chip.onclick = window.toggleOnlyFavs;
-        chip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;width:fit-content';
-        chip.innerHTML = '⭐ <span>'+(window.t?window.t('solo_favoritos'):'Solo favoritos')+'</span>';
-        bar.appendChild(chip);
-      }
-      var cnt = document.getElementById('cnt');
-      if (cnt && !window._favObserver){
-        window._favObserver = new MutationObserver(function(){ if (window._onlyFavs) window._applyOnlyFavs(); });
-        window._favObserver.observe(cnt, { childList:true });
-      }
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initFav); else initFav();
-  })();
+  // Chip "⭐ Solo favoritos" REMOVIDO: la nativa NO lo muestra (tiene la variable onlyFavs pero
+  // nunca llama setOnlyFavs en el render → no hay botón). Era un invento de la web. (Reportado por Fernando.)
 
   // Muestra un paywall simple cuando se intenta una accion bloqueada
   // Modal de límite (estructura del PlanLimitModal nativo) PERO TRADUCIDO en los 8 idiomas.
@@ -4696,7 +4680,7 @@ window.connectTelegram=function(){
     return '<div class="cobrex-bell" title="Mis Alertas" onclick="if(window.abrirMisAlertas)window.abrirMisAlertas()" '+
       'style="position:relative;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:18px;line-height:1;flex-shrink:0;margin-left:auto">'+
       '\u{1F514}'+
-      '<span class="cobrex-bell-badge" style="display:none;position:absolute;top:-6px;right:-7px;background:#EF4444;color:#fff;font-size:8px;font-weight:800;min-width:14px;height:14px;border-radius:7px;text-align:center;line-height:14px;padding:0 2px">0</span>'+
+      '<span class="cobrex-bell-badge" style="display:none;position:absolute;top:-2px;right:0;background:#EF4444;color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:8px;box-sizing:border-box;border:2px solid var(--bg);align-items:center;justify-content:center;text-align:center;padding:0 4px;line-height:16px">0</span>'+
       '</div>';
   }
   function headerOf(sName, scr){

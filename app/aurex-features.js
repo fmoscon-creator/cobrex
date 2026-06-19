@@ -4814,7 +4814,7 @@ function _renderFearGreed(containerId) {
   if(raw.vix)              bits.push('VIX: <b style="color:var(--text)">'+_fmt(raw.vix.price,'precio')+'</b>');
   if(raw.btcPct!==undefined)bits.push('BTC: <b style="color:'+(raw.btcPct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.btcPct,'pct')+'</b>');
   if(raw.sp500)            bits.push('S&P: <b style="color:'+(raw.sp500.pct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.sp500.pct,'pct')+'</b>');
-  if(raw.gcf)              bits.push('Oro: <b style="color:'+(raw.gcf.pct<=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.gcf.pct,'pct')+'</b>');
+  if(raw.gcf)              bits.push('Oro: <b style="color:'+(raw.gcf.pct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.gcf.pct,'pct')+'</b>');
   var dataLine = '<div style="display:flex;flex-wrap:wrap;gap:5px;font-size:9px;color:var(--textSec);margin-top:3px;">'+bits.join('')+'</div>';
   var cats = ['GLOBAL','CRIPTO','ACCIONES','COMOD','FUTUROS'];
   var catLabels = {GLOBAL:'🟩 '+t('mkt_pulse_cat_global'),CRIPTO:'🪙 '+t('mkt_pulse_cat_cripto'),ACCIONES:'📈 '+t('mkt_pulse_cat_acciones'),COMOD:'🟤 '+t('mkt_pulse_cat_comod'),FUTUROS:'⚡ '+t('mkt_pulse_cat_futuros')};
@@ -6608,9 +6608,18 @@ window._initSortMenus = function() { try {
     var mktCnt = document.getElementById('cnt');
     if (tabs && mktCnt && tabs.parentElement) {
       var mw = document.createElement('div');
-      mw.style.cssText = 'display:flex;justify-content:flex-end;padding:4px 14px 2px;';
+      mw.id = 'mercados-sort-wrap';
+      mw.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:4px 14px 2px;gap:8px;';
+      // ★ Solo favoritos — chip a la IZQUIERDA, misma fila que Ordenar (decisión Fernando: separado de los filtros de tipo de activo, que son otra cosa).
+      var favChip = document.createElement('div');
+      favChip.id = 'only-favs-chip'; favChip.onclick = window.toggleOnlyFavs;
+      favChip.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--card);color:var(--text);font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:rgba(0,0,0,0)';
+      favChip.innerHTML = '⭐ <span>'+(window.t?window.t('solo_favoritos'):'Solo favoritos')+'</span>';
+      mw.appendChild(favChip);
       mw.appendChild(_buildSortBtn('mercados', function(k){ try { window._applyMercadosSort(k); } catch(e){ console.error('sort mkt', e); } }));
       tabs.parentElement.insertBefore(mw, mktCnt);
+      // re-aplicar el filtro de favoritos cuando se agregan filas nuevas a la lista
+      if (!window._favObserver) { window._favObserver = new MutationObserver(function(){ if (window._onlyFavs && window._applyOnlyFavs) window._applyOnlyFavs(); }); window._favObserver.observe(mktCnt, { childList:true }); }
     }
   }
 
