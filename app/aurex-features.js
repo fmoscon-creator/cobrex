@@ -640,7 +640,7 @@ var swReg=null;
 function initPushNotifications(){if(!('serviceWorker' in navigator))return;navigator.serviceWorker.register('/app/service-worker.js').then(function(r){swReg=r;if(Notification.permission==='granted')updateNotifButton(true);}).catch(function(){});}
 function requestPushPermission(){if(!('Notification' in window)){alert((window._i18n?window._i18n.t('pw_safari_pwa'):'Agrega Cobrex a pantalla de inicio desde Safari.'));return;}if(Notification.permission==='granted'){showTestNotification();return;}Notification.requestPermission().then(function(p){if(p==='granted'){updateNotifButton(true);showTestNotification();}}).catch(function(){});}
 function showTestNotification(){if(swReg&&Notification.permission==='granted')swReg.showNotification((window._i18n?window._i18n.t('pw_alertas_activas_t'):'Cobrex - Alertas Activas'),{body:(window._i18n?window._i18n.t('pw_recibiras_alertas'):'Recibirás alertas de precio.'),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-test'});}
-function showAlertNotification(s,p,o){if(swReg&&Notification.permission==='granted')swReg.showNotification((window._i18n?window._i18n.t('pw_alerta_disp'):'ALERTA - ')+s,{body:'$'+p.toLocaleString('en')+' obj:$'+o.toLocaleString('en'),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-'+s,renotify:true});}
+function showAlertNotification(s,p,o){if(swReg&&Notification.permission==='granted')swReg.showNotification((window._i18n?window._i18n.t('pw_alerta_disp'):'ALERTA - ')+s,{body:'$'+p.toLocaleString(window._numLocale())+' obj:$'+o.toLocaleString(window._numLocale()),icon:'https://fmoscon-creator.github.io/aurex-app/icon-192.png',tag:'aurex-'+s,renotify:true});}
 function updateNotifButton(on){var b=document.getElementById('notif-btn');if(!b)return;b.style.background=on?'#16A34A':'var(--gold)';b.textContent=on?(window._i18n?window._i18n.t('pw_activas'):'Activas'):(window._i18n?window._i18n.t('pw_activar'):'Activar');}
 initPushNotifications();
 function checkAlertasLocal(){if(typeof ALERTAS==='undefined')return;ALERTAS.forEach(function(a){if(!a.activa)return;var actual=typeof getAlertActual==='function'?getAlertActual(a):null;if(!actual)return;if((a.cond==='mayor'&&actual>=a.precio)||(a.cond==='menor'&&actual<=a.precio)){if(!a._disparada){a._disparada=true;var b=document.createElement('div');b.style.cssText='position:fixed;top:60px;left:0;right:0;z-index:9999;margin:0 12px;background:#16A34A;border-radius:12px;padding:12px 16px;color:white;font-size:13px;font-weight:600';b.textContent=(window._i18n?window._i18n.t('pw_alerta_disp'):'ALERTA - ')+a.s;document.body.appendChild(b);setTimeout(function(){b.remove();},5000);if(typeof showAlertNotification==='function')showAlertNotification(a.s,actual,a.precio);}}});}
@@ -4452,7 +4452,7 @@ window._compartirSenal = function(info) {
   if(!sig) return;
   var dirEmoji = sig.direccion==='alcista'?'📈':sig.direccion==='bajista'?'📉':'⚡';
   var dirLabel = sig.direccion==='alcista'?t('ia_w_alcista'):sig.direccion==='bajista'?t('ia_w_bajista'):t('ia_w_altaconf');
-  var precioFmt = sig.precio>=1000?'$'+Math.round(sig.precio).toLocaleString('en'):sig.precio>=1?'$'+sig.precio.toFixed(2):'$'+sig.precio.toFixed(4);
+  var precioFmt = sig.precio>=1000?'$'+Math.round(sig.precio).toLocaleString(window._numLocale()):sig.precio>=1?'$'+sig.precio.toFixed(2):'$'+sig.precio.toFixed(4);
   var cambio = sig.precio24h>0?((sig.precio-sig.precio24h)/sig.precio24h*100):0;
   var texto = '🤖 Cobrex IA — SEÑAL '+dirEmoji+'\n';
   texto += sig.simbolo+' ('+sig.nombre+')\n';
