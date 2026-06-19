@@ -94,8 +94,9 @@
     auth_2fa: { es: '📱 Autenticación en 2 pasos', en: '📱 Two-factor authentication', pt: '📱 Autenticação em 2 etapas', zh: '📱 两步验证', fr: '📱 Authentification en 2 étapes', it: '📱 Autenticazione a 2 fattori', hi: '📱 2-चरण प्रमाणीकरण', ar: '📱 المصادقة بخطوتين' },
     soon_badge: { es: 'SOON', en: 'SOON', pt: 'SOON', zh: 'SOON', fr: 'SOON', it: 'SOON', hi: 'SOON', ar: 'SOON' },
     auth_2fa_desc: { es: 'Protección extra al iniciar sesión', en: 'Extra protection when logging in', pt: 'Proteção extra ao iniciar sessão', zh: '登录时的额外保护', fr: 'Protection supplémentaire à la connexion', it: 'Protezione extra al login', hi: 'लॉगिन पर अतिरिक्त सुरक्षा', ar: 'حماية إضافية عند تسجيل الدخول' },
-    acceso_biometrico: { es: '👁 Acceso biométrico', en: '👁 Biometric access', pt: '👁 Acesso biométrico', zh: '👁 生物识别访问', fr: '👁 Accès biométrique', it: '👁 Accesso biometrico', hi: '👁 बायोमेट्रिक एक्सेस', ar: '👁 الوصول البيومتري' },
+    acceso_biometrico: { es: '👁 Face ID / Touch ID', en: '👁 Face ID / Touch ID', pt: '👁 Face ID / Touch ID', zh: '👁 Face ID / Touch ID', fr: '👁 Face ID / Touch ID', it: '👁 Face ID / Touch ID', hi: '👁 Face ID / Touch ID', ar: '👁 Face ID / Touch ID' },
     face_touch_id: { es: 'Face ID / Touch ID', en: 'Face ID / Touch ID', pt: 'Face ID / Touch ID', zh: 'Face ID / Touch ID', fr: 'Face ID / Touch ID', it: 'Face ID / Touch ID', hi: 'Face ID / Touch ID', ar: 'Face ID / Touch ID' },
+    no_disponible_dispositivo: { es: 'No disponible en este dispositivo', en: 'Not available on this device', pt: 'Não disponível neste dispositivo', zh: '此设备不可用', fr: 'Non disponible sur cet appareil', it: 'Non disponibile su questo dispositivo', hi: 'इस डिवाइस पर उपलब्ध नहीं', ar: 'غير متاح على هذا الجهاز' },
     sesion_activa: { es: '👨‍💻 Sesión activa', en: '👨‍💻 Active session', pt: '👨‍💻 Sessão ativa', zh: '👨‍💻 活跃会话', fr: '👨‍💻 Session active', it: '👨‍💻 Sessione attiva', hi: '👨‍💻 सक्रिय सत्र', ar: '👨‍💻 جلسة نشطة' },
     este_dispositivo: { es: 'Este dispositivo', en: 'This device', pt: 'Este dispositivo', zh: '此设备', fr: 'Cet appareil', it: 'Questo dispositivo', hi: 'यह डिवाइस', ar: 'هذا الجهاز' },
     sesion_actual: { es: 'Sesión actual', en: 'Current session', pt: 'Sessão atual', zh: '当前会话', fr: 'Session actuelle', it: 'Sessione attuale', hi: 'वर्तमान सत्र', ar: 'الجلسة الحالية' },
@@ -264,7 +265,7 @@
     port_period_buy: { es: 'Desde compra', en: 'Since purchase', pt: 'Desde compra', zh: '自购买', fr: "Depuis l'achat", it: "Dall'acquisto", hi: 'खरीद से', ar: 'منذ الشراء' },
     port_activos_label: { es: 'Activos', en: 'Assets', pt: 'Ativos', zh: '资产', fr: 'Actifs', it: 'Asset', hi: 'एसेट', ar: 'أصول' },
     port_mejor_24h: { es: '🏆 Mejor 24h', en: '🏆 Best 24h', pt: '🏆 Melhor 24h', zh: '🏆 最佳24h', fr: '🏆 Meilleur 24h', it: '🏆 Migliore 24h', hi: '🏆 श्रेष्ठ 24h', ar: '🏆 الأفضل 24س' },
-    port_agregar_activos: { es: 'Agregar Activos ＋', en: 'Add Assets ＋', pt: 'Adicionar Ativos ＋', zh: '添加资产 ＋', fr: 'Ajouter Actifs ＋', it: 'Aggiungi Asset ＋', hi: 'एसेट जोड़ें ＋', ar: 'إضافة أصول ＋' },
+    port_agregar_activos: { es: '＋ Agregar', en: '＋ Add', pt: '＋ Adicionar', zh: '＋ 添加', fr: '＋ Ajouter', it: '＋ Aggiungi', hi: '＋ जोड़ें', ar: '＋ إضافة' },
     port_conv_btn: { es: '⇄ Conv.', en: '⇄ Conv.', pt: '⇄ Conv.', zh: '⇄ 换算', fr: '⇄ Conv.', it: '⇄ Conv.', hi: '⇄ कन्व.', ar: '⇄ تحويل' },
 
     // Modal Detalle
@@ -769,7 +770,7 @@
     // === WATCHLIST ===
 
     wl_header_title: { es: 'Watchlist', en: 'Watchlist', pt: 'Watchlist', zh: '自选列表', fr: 'Watchlist', it: 'Watchlist', hi: 'Watchlist', ar: 'قائمة المتابعة' },
-    wl_nueva_lista: { es: '+ Nueva lista', en: '+ New list', pt: '+ Nova lista', zh: '+ 新建列表', fr: '+ Nouvelle liste', it: '+ Nuova lista', hi: '+ नई सूची', ar: '+ قائمة جديدة' },
+    wl_nueva_lista: { es: '+ Lista', en: '+ List', pt: '+ Lista', zh: '+ 列表', fr: '+ Liste', it: '+ Lista', hi: '+ सूची', ar: '+ قائمة' },
     wl_vacia_title: { es: 'Tu Watchlist esta vacia', en: 'Your Watchlist is empty', pt: 'Sua Watchlist está vazia', zh: '您的自选列表为空', fr: 'Votre Watchlist est vide', it: 'La tua Watchlist è vuota', hi: 'आपकी Watchlist खाली है', ar: 'قائمة المتابعة فارغة' },
     wl_vacia_desc: { es: 'Crea tu primera lista para seguir activos con senales IA en tiempo real', en: 'Create your first list to follow assets with real-time AI signals', pt: 'Crie sua primeira lista para acompanhar ativos com sinais IA em tempo real', zh: '创建您的第一个列表，实时跟踪AI信号资产', fr: 'Créez votre première liste pour suivre des actifs avec des signaux IA en temps réel', it: 'Crea la tua prima lista per seguire asset con segnali IA in tempo reale', hi: 'रियल-टाइम AI सिग्नल के साथ एसेट ट्रैक करने के लिए अपनी पहली सूची बनाएँ', ar: 'أنشئ قائمتك الأولى لمتابعة الأصول بإشارات AI في الوقت الحقيقي' },
     wl_crear_primera: { es: 'Crear primera lista', en: 'Create first list', pt: 'Criar primeira lista', zh: '创建第一个列表', fr: 'Créer la première liste', it: 'Crea prima lista', hi: 'पहली सूची बनाएँ', ar: 'إنشاء القائمة الأولى' },
