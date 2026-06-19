@@ -83,6 +83,8 @@
     tema_auto: { es: 'Auto', en: 'Auto', pt: 'Auto', zh: '自动', fr: 'Auto', it: 'Auto', hi: 'स्वचालित', ar: 'تلقائي' },
     tema_claro: { es: 'Claro', en: 'Light', pt: 'Claro', zh: '浅色', fr: 'Clair', it: 'Chiaro', hi: 'लाइट', ar: 'فاتح' },
     tema_oscuro: { es: 'Oscuro', en: 'Dark', pt: 'Escuro', zh: '深色', fr: 'Sombre', it: 'Scuro', hi: 'डार्क', ar: 'داكن' },
+    modo_oscuro: { es: 'Modo oscuro', en: 'Dark mode', pt: 'Modo escuro', zh: '深色模式', fr: 'Mode sombre', it: 'Modalità scura', hi: 'डार्क मोड', ar: 'الوضع الداكن' },
+    modo_oscuro_desc: { es: 'Activo por defecto en Cobrex', en: 'Active by default in Cobrex', pt: 'Ativo por padrão no Cobrex', zh: 'Cobrex 默认开启', fr: 'Actif par défaut dans Cobrex', it: 'Attivo di default in Cobrex', hi: 'Cobrex में डिफ़ॉल्ट रूप से सक्रिय', ar: 'مفعّل افتراضياً في Cobrex' },
     idioma_label: { es: '🌐 Idioma', en: '🌐 Language', pt: '🌐 Idioma', zh: '🌐 语言', fr: '🌐 Langue', it: '🌐 Lingua', hi: '🌐 भाषा', ar: '🌐 اللغة' },
     pulse_indicador: { es: '🔴 Indicador Cobrex Pulse', en: '🔴 Cobrex Pulse Indicator', pt: '🔴 Indicador Cobrex Pulse', zh: '🔴 Cobrex Pulse 指标', fr: '🔴 Indicateur Cobrex Pulse', it: '🔴 Indicatore Cobrex Pulse', hi: '🔴 Cobrex Pulse संकेतक', ar: '🔴 مؤشر Cobrex Pulse' },
     pulse_indicador_desc: { es: 'Visible en tab Mercados', en: 'Visible in Markets tab', pt: 'Visível na aba Mercados', zh: '在市场标签页中可见', fr: "Visible dans l'onglet Marchés", it: 'Visibile nella scheda Mercati', hi: 'बाज़ार टैब में दिखाई देता है', ar: 'مرئي في تبويب الأسواق' },

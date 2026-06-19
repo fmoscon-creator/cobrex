@@ -18,7 +18,7 @@
 (function(){
   try{
     var pref = localStorage.getItem('aurex_theme');
-    if(pref !== 'light' && pref !== 'dark' && pref !== 'system') pref = 'dark';
+    if(pref !== 'light' && pref !== 'dark' && pref !== 'system') pref = 'light'; // #6: default CLARO = nativa (Fernando)
     var mode;
     if(pref === 'system'){
       mode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
@@ -30,7 +30,7 @@
     var meta = document.getElementById('aurex-theme-color-meta');
     if(meta) meta.setAttribute('content', mode === 'light' ? '#EEF1F7' : '#0D1117');
   } catch(e){
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 })();
 </script>
@@ -594,7 +594,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=28"></script>
+<script src="aurex-i18n.js?v=29"></script>
 <script src="aurex-v3.js?v=151"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -2339,6 +2339,15 @@ display:flex;align-items:center;justify-content:space-between}
   </div>
   <div class="pac-cuerpo">
     <div style="display:flex;flex-direction:column;gap:0;padding-top:4px">
+      <!-- #6 auditoría: toggle "Modo oscuro" separado (paridad nativa PerfilScreen Preferencias: Dark mode arriba del selector Theme) -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <div style="font-size:14px;color:var(--text);font-weight:500">🌙 <span data-i18n="modo_oscuro">Modo oscuro</span></div>
+          <div style="font-size:11px;color:var(--textSec);margin-top:2px" data-i18n="modo_oscuro_desc">Activo por defecto en Cobrex</div>
+        </div>
+        <label class="toggle-sw"><input type="checkbox" id="dark-mode-toggle" onchange="if(window.aurexSetTheme)aurexSetTheme(this.checked?'dark':'light')"><span class="toggle-slider"></span></label>
+      </div>
+      <script>(function(){function sync(){try{var t=document.getElementById('dark-mode-toggle');if(t)t.checked=document.documentElement.getAttribute('data-theme')==='dark';}catch(e){}}sync();try{new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});}catch(e){}})();</script>
       <div style="display:flex;flex-direction:column;padding:12px 0;border-bottom:1px solid var(--border);gap:10px">
         <div>
           <div style="font-size:14px;color:var(--text);font-weight:500">
