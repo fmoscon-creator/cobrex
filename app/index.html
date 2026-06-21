@@ -1654,7 +1654,7 @@ function runConversion(){
   <input id="mkt-universal-search" type="text" placeholder="Buscar cualquier activo... (IBIT, HOOD, MSTR, BTC...)" data-i18n="mkt_search_placeholder" data-i18n-attr="placeholder" autocomplete="off"
     style="width:100%;box-sizing:border-box;background:var(--card);border:1px solid var(--border2);border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;"
     oninput="filterMktSearch()" />
-  <div id="mkt-search-results" style="display:none;background:var(--card);border:3px solid var(--gold);border-radius:12px;margin-top:4px;max-height:260px;overflow-y:auto;position:relative;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,0.12);"></div>
+  <div id="mkt-search-results" style="display:none;background:var(--card);border:1px solid var(--border2);border-radius:10px;margin-top:4px;max-height:260px;overflow-y:auto;position:relative;z-index:20;box-shadow:0 4px 16px rgba(0,0,0,0.12);"></div>
 </div>
 <!-- SUMMARY -->
 <div class="sumrow" id="sumrow" style="display:none;padding:0;border:none;"></div>
@@ -1740,7 +1740,7 @@ function filterMktSearch(){
         var tag = a._fromYahoo ? ' <span style="font-size:8px;background:#58A6FF20;color:#58A6FF;border-radius:3px;padding:1px 3px;">YAHOO</span>' : '';
         var cachedP = (window._pcPrices||{})[a.s];
         var priceHtml = cachedP ? '<span style="font-size:13px;font-weight:700;color:var(--text);">$'+Number(cachedP).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="mkt-sr-p-'+i+'" style="font-size:11px;color:var(--textSec);">...</span>';
-        return '<div onclick="window._mktOpenDetail('+i+')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;background:#f5f5f5;-webkit-tap-highlight-color:rgba(0,0,0,0);">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:var(--text);">'+a.s+tag+'</div><div style="font-size:11px;color:var(--textSec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+a.n+' <span style="color:'+tipoColor+'">&#9830; '+tipoLabel+'</span></div></div>'+priceHtml+'</div>';
+        return '<div onclick="window._mktOpenDetail('+i+')" style="display:flex;align-items:center;gap:8px;padding:7px;border-radius:7px;cursor:pointer;background:var(--bg);border:0.5px solid var(--border);-webkit-tap-highlight-color:rgba(0,0,0,0);">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:var(--text);">'+a.s+tag+'</div><div style="font-size:11px;color:var(--textSec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+a.n+' <span style="color:'+tipoColor+'">&#9830; '+tipoLabel+'</span></div></div>'+priceHtml+'</div>';
       }).join('');
       // Fetch precios para resultados sin cache
       var toFetch = results.filter(function(a,i){ return !(window._pcPrices||{})[a.s]; });
@@ -1758,7 +1758,7 @@ function filterMktSearch(){
                   var el=document.getElementById('mkt-sr-p-'+origIdx);
                   if(el){
                     var dec=p>100?2:(p>1?2:4);
-                    el.style.fontSize='13px';el.style.fontWeight='700';el.style.color='#111';
+                    el.style.fontSize='13px';el.style.fontWeight='700';el.style.color='var(--text)';
                     el.textContent='$'+Number(p).toLocaleString(window._numLocale(),{minimumFractionDigits:dec,maximumFractionDigits:dec});
                   }
                 }
