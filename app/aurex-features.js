@@ -2211,10 +2211,8 @@ window.renderWatchCnt = function(){
     html += '<div style="display:flex;align-items:center;gap:10px">';
     var _cmpLabel = t('wl_comparar');
     var _cmpStyle = 'font-size:12px;font-weight:800;color:#000;background:var(--gold);padding:8px 14px;border-radius:8px;text-decoration:none;cursor:pointer';
-    if(window._wlCompareMode && window._wlCompareItems && window._wlCompareItems.length >= 2){
-      _cmpLabel = t('wl_comparar') + ' ' + window._wlCompareItems.length;
-      _cmpStyle = 'font-size:12px;font-weight:800;color:#000;background:var(--gold);padding:8px 14px;border-radius:8px;text-decoration:none;cursor:pointer';
-    } else if(window._wlCompareMode){
+    if(window._wlCompareMode){
+      // En modo comparar el botón de arriba siempre es "Cancelar" (nativa). El "Comparar N" es el botón flotante de abajo.
       _cmpLabel = t('wl_cancelar_modo');
       _cmpStyle = 'font-size:12px;font-weight:700;color:var(--red);background:#F8514920;padding:8px 14px;border-radius:8px;border:1px solid #F8514940;text-decoration:none;cursor:pointer';
     }
@@ -2355,6 +2353,7 @@ window.renderWatchCnt = function(){
 
   var oldFb = document.getElementById('wl-compare-float'); if(oldFb) oldFb.remove();
   cnt.innerHTML = html;
+  if(window._wlRenderCompareFloat) window._wlRenderCompareFloat();
 
   // Fetch prices for items without prices
   var cryptoList = ['BTC','ETH','SOL','BNB','XRP','ADA','AVAX','DOT','LINK','MATIC','DOGE','SHIB','LTC','ATOM','UNI','NEAR','APT','ARB','OP','TRX','TON','SUI','PEPE','WIF','FIL','INJ','RUNE'];
@@ -2397,8 +2396,8 @@ window.wlOpenDetail = function(sym){
   var html = '';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="display:flex;align-items:center;gap:12px">'+logoHtml+'<div><div style="font-size:18px;font-weight:700;color:var(--text)">'+sym+'</div><div style="font-size:11px;color:var(--textSec)">'+(act?act.n:sym)+' · '+(act?window._tipoLabel(act.tipo):'')+'</div></div></div><div onclick="wlCloseDetail()" style="width:36px;height:36px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text);cursor:pointer">✕</div></div>';
   html += '<div style="display:flex;gap:10px;margin-bottom:14px"><div style="flex:1;background:var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:4px">'+t('sort_precio')+'</div><div style="font-size:16px;font-weight:700;color:var(--text)">'+_fmt(precio)+'</div></div><div style="flex:1;background:var(--border);border-radius:10px;padding:10px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:4px">24h</div><div style="font-size:16px;font-weight:700;color:'+(cambio>=0?'var(--green)':'var(--red)')+'">'+_fmt(cambio,'pct')+'</div></div></div>';
-  html += '<div style="background:'+dirBg+';border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:'+dirColor+'">'+dirLabel+'</span><span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">'+t('wl_prob_prefix')+' '+prob+'%</span></div>';
-  if(sig && sig.motivos && sig.motivos.length>0){html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';(window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,5).forEach(function(m){html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';});}
+  html += '<div style="background:'+dirBg+';border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:700;color:'+dirColor+'">'+dirLabel+'</span><span style="background:'+dirColor+';color:var(--chipTextActive);font-size:11px;font-weight:800;border-radius:6px;padding:2px 8px">'+t('wl_prob_prefix')+' '+prob+'%</span></div><div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:2px"><div style="height:100%;width:'+(parseFloat(prob)||0)+'%;background:'+dirColor+';border-radius:3px"></div></div>';
+  if(sig && sig.motivos && sig.motivos.length>0){html += '<div style="font-size:11px;font-weight:600;color:var(--textSec);letter-spacing:0.5px;margin-top:10px;margin-bottom:6px">'+t('ia_justificacion')+'</div>';(window.buildAiMotivos?window.buildAiMotivos(sig):(sig.motivos||[])).slice(0,5).forEach(function(m){html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';});}
   html += '</div>';
   if(sig){var objC=dir==='bajista'?'var(--red)':'var(--green)';var stC=dir==='bajista'?'#FF9500':'var(--red)';var up=sig.upside||0;html += '<div style="display:flex;gap:8px;margin-bottom:12px"><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">'+(window._i18n&&window._i18n.t?window._i18n.t('wl_cmp_objetivo'):'Objetivo')+'</div><div style="font-size:12px;font-weight:700;color:'+objC+'">'+_fmt(sig.objetivo)+'</div></div><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">Stop</div><div style="font-size:12px;font-weight:700;color:'+stC+'">'+_fmt(sig.stop)+'</div></div><div style="flex:1;background:var(--border);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px">'+(up<0?'Downside':'Upside')+'</div><div style="font-size:12px;font-weight:700;color:'+(up<0?'var(--red)':'var(--green)')+'">'+(up>=0?'+':'')+up.toFixed(1)+'%</div></div></div>';}
   // Variables del modelo — lista plana en orden, label + peso + ●/○ (paridad nativa WatchlistScreen L1060-1077, NO agrupado pos/neg)
@@ -2408,9 +2407,8 @@ window.wlOpenDetail = function(sym){
     html+='<div style="margin-bottom:12px"><div style="font-size:9px;font-weight:700;color:var(--textDim);margin-bottom:6px">'+t('variables_modelo')+'</div>';
     vdefs.forEach(function(v){var s=sc[v.k]||0;var col=s>0.01?'var(--green)':s<-0.01?'var(--red)':'var(--textDim)';var dot=(s>0.01||s<-0.01)?'●':'○';html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 8px;border-left:2px solid '+col+';border-radius:0 6px 6px 0;margin-bottom:3px;background:var(--border)"><span style="font-size:11px;color:var(--text)">'+v.l+'</span><span style="display:flex;align-items:center;gap:4px"><span style="font-size:9px;color:'+col+';font-weight:700">'+v.p+'</span><span style="font-size:10px;color:'+col+'">'+dot+'</span></span></div>';});
     html+='</div>';}
-  if(sig){html+='<div style="font-size:10px;color:var(--textSec);margin-bottom:6px;font-weight:600">'+t('ia_otros_escenarios')+'</div><div style="display:flex;gap:6px;margin-bottom:12px">';if(dir!=='alcista')html+='<div style="flex:1;background:#3FB95015;border:1px solid #3FB95040;border-radius:8px;padding:6px;text-align:center"><div style="font-size:9px;color:var(--green)">'+t('port_signal_alcista')+'</div><div style="font-size:13px;font-weight:700;color:var(--green)">'+(sig.prob_alcista||'--')+'%</div></div>';if(dir!=='bajista')html+='<div style="flex:1;background:#F8514915;border:1px solid #F8514940;border-radius:8px;padding:6px;text-align:center"><div style="font-size:9px;color:var(--red)">'+t('port_signal_bajista')+'</div><div style="font-size:13px;font-weight:700;color:var(--red)">'+(sig.prob_bajista||'--')+'%</div></div>';if(dir!=='alta_conf')html+='<div style="flex:1;background:var(--goldBg);border:1px solid var(--gold40);border-radius:8px;padding:6px;text-align:center"><div style="font-size:9px;color:var(--gold)">'+t('port_signal_alta_conv')+'</div><div style="font-size:13px;font-weight:700;color:var(--gold)">'+(sig.prob_alta_conf||'--')+'%</div></div>';html+='</div>';}
-  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--card);border-radius:10px;border:1px solid #25D36630;margin-bottom:12px"><div><div style="font-size:12px;font-weight:600;color:#25D366">'+t('wl_alerta_whatsapp')+'</div><div style="font-size:9px;color:var(--textSec);margin-top:2px">'+t('wl_recibir_cambios')+' '+sym+'</div></div><label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label></div>';
-  html += '<div onclick="event.stopPropagation();if(typeof _compartirSenal===\'function\')_compartirSenal(\''+sym+'\')" style="width:100%;background:var(--border);border:1px solid var(--border2);border-radius:8px;padding:10px;text-align:center;color:var(--text);font-size:12px;font-weight:600;cursor:pointer">'+t('ia_compartir_senal')+'</div>';
+  // (nativa WatchlistScreen: la ficha NO tiene card de "otros escenarios" ni toggle de alerta WhatsApp; solo el botón Compartir que abre el POP)
+  html += '<div onclick="event.stopPropagation();window.wlShowShareSignal(\''+sym+'\')" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--border);border-radius:10px;padding:12px;cursor:pointer;margin-bottom:12px"><span style="font-size:14px">📤</span><span style="font-size:12px;font-weight:600;color:var(--text)">'+t('ia_compartir_senal')+'</span></div>';
   body.innerHTML = html;
   modal.style.cssText = 'display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:110;align-items:flex-end;justify-content:center';
   modal.onclick = function(e){ if(e.target===modal) wlCloseDetail(); };
@@ -2545,6 +2543,19 @@ window.wlSetPeriod = function(ticker, period){
 window._wlCompareMode = false;
 window._wlCompareItems = [];
 
+// Botón flotante "Comparar N" abajo (paridad nativa WatchlistScreen L1097: aparece con >=2 seleccionados, dorado/texto negro)
+window._wlRenderCompareFloat = function(){
+  var old = document.getElementById('wl-compare-float'); if(old) old.remove();
+  if(!(window._wlCompareMode && window._wlCompareItems && window._wlCompareItems.length >= 2)) return;
+  var scr = document.getElementById('screen-watchlist'); if(!scr) return;
+  var fb = document.createElement('div');
+  fb.id = 'wl-compare-float';
+  fb.style.cssText = 'position:fixed;bottom:76px;left:16px;right:16px;background:var(--gold);border-radius:12px;padding:14px;text-align:center;z-index:50;cursor:pointer;box-shadow:0 4px 8px rgba(0,0,0,0.3)';
+  fb.innerHTML = '<span style="color:#000;font-size:14px;font-weight:700">'+t('wl_comparar')+' '+window._wlCompareItems.length+'</span>';
+  fb.onclick = function(e){ e.stopPropagation(); window.wlShowCompare(); };
+  scr.appendChild(fb);
+};
+
 window.wlStartCompare = function(){
   // Si ya estamos en modo comparar y hay 2+ seleccionados → abrir popup
   if(window._wlCompareMode && window._wlCompareItems && window._wlCompareItems.length >= 2){
@@ -2581,9 +2592,8 @@ window.wlToggleCompare = function(sym){
   var _cc = window._wlCompareItems.length;
   var counterEl = document.querySelector('#watch-cnt [style*="text-align:center"] span');
   if(counterEl) counterEl.textContent = _cc >= 2 ? '✓ '+_cc+t('wl_seleccionados') : t('wl_selecciona_2_5');
-  // Update compare button label
-  var cmpBtn = document.querySelector('[data-wl="compareMode"]');
-  if(cmpBtn && _cc >= 2) cmpBtn.textContent = t('wl_comparar') + ' ' + _cc;
+  // Mostrar/actualizar el botón flotante "Comparar N" abajo (nativa)
+  if(window._wlRenderCompareFloat) window._wlRenderCompareFloat();
 };
 
 window._wlCompareHist = {}; // { ticker: { '24h': change, '7d': change, ... } }
