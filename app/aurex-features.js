@@ -4302,10 +4302,17 @@ function _renderIALista(signals, keepLoadingBar) {
     var pctStr = _fmt(cambio24h,'pct');
     var abbr = s.abbr || s.simbolo.substring(0,3);
     var actColor = s.color || 'var(--textDim)';
-    var logoHtml = s.logo ?
-      '<img src="'+s.logo+'" style="width:22px;height:22px;border-radius:50%;object-fit:cover;background:#161B22" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+
-      '<span style="display:none;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:'+actColor+'">'+abbr+'</span>' :
-      '<span style="display:flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:'+actColor+'">'+abbr+'</span>';
+    // Logo: resolver como nativa getLogoUrl (cripto→coincap, resto→catálogo o FMP). s.logo casi siempre viene vacío.
+    var _iaAct = (window._IA_ACTIVOS||[]).find(function(a){return a.s===s.simbolo;});
+    var _iaTp = (s.tipo || (_iaAct&&_iaAct.tab) || '').toLowerCase();
+    var _iaLogo = s.logo ? s.logo
+      : (_iaTp==='cripto'||_iaTp==='stable')
+        ? 'https://assets.coincap.io/assets/icons/'+s.simbolo.toLowerCase().replace('=f','').replace('=x','')+'@2x.png'
+        : (_iaAct && _iaAct.logo && _iaAct.logo.indexOf('data:')!==0 ? _iaAct.logo
+           : 'https://financialmodelingprep.com/image-stock/'+s.simbolo.replace('=F','').replace('=X','')+'.png');
+    var logoHtml =
+      '<img src="'+_iaLogo+'" style="width:22px;height:22px;border-radius:50%;object-fit:cover;background:#161B22" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">'+
+      '<span style="display:none;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:'+actColor+'">'+abbr+'</span>';
     // Dots IA (5x5 como nativa, posición derecha debajo del %)
     var dotsHtml = (function(){var sc=s.scores||{};var keys=['tendencia','rsi','volumen','volatilidad','correlacion','oro_petroleo','macro','earnings','macd','soporte_resist'];var dots='';keys.forEach(function(k){var v=sc[k]||0;if(v>0.01)dots+='<span style="display:inline-block;width:5px;height:5px;border-radius:2.5px;background:var(--green);margin:0 1px"></span>';else if(v<-0.01)dots+='<span style="display:inline-block;width:5px;height:5px;border-radius:2.5px;background:var(--red);margin:0 1px"></span>';});return dots?'<span style="display:inline-flex;flex-wrap:wrap;gap:2px;justify-content:flex-end;margin-top:3px">'+dots+'</span>':'';})();
     // Upside al objetivo (como nativa — compacto en misma línea)
