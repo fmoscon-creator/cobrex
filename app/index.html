@@ -1927,24 +1927,24 @@ window._mktOpenDetail = function(idx){
 <div class="cnt" id="alertas-cnt" style="overflow-y:auto;flex:1;padding-bottom:20px">
 
 <!-- Canales: 3 en fila WhatsApp/Telegram/Push (paridad nativa AlertasScreen: 3 cards con icono arriba + label abajo) -->
-<div style="display:flex;gap:8px;margin:10px 11px">
-  <!-- WhatsApp (SOON, sin toggle) -->
-  <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">💬</span><span style="font-size:8px;font-weight:800;color:var(--textSec);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px;letter-spacing:0.5px" data-i18n="al_pronto">PRONTO</span></div>
-    <div style="font-size:12px;font-weight:800;color:#25D366;text-align:center;margin-top:8px">WhatsApp</div>
+<div style="display:flex;gap:6px;margin:10px 11px">
+  <!-- WhatsApp (PRONTO, sin toggle) — nativa: card icono+badge, label DEBAJO -->
+  <div style="flex:1">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;opacity:0.55;display:flex;align-items:center;justify-content:space-between;min-height:46px;box-sizing:border-box"><span style="font-size:22px">💬</span><span style="font-size:8px;font-weight:800;color:var(--textSec);background:var(--border);border-radius:4px;padding:3px 5px;letter-spacing:0.4px" data-i18n="al_pronto">PRONTO</span></div>
+    <div style="font-size:11px;font-weight:700;color:#25D366;text-align:center;margin-top:4px;letter-spacing:0.3px">WhatsApp</div>
   </div>
   <!-- Telegram (toggle conecta el bot) -->
-  <div style="flex:1;background:#2AABEE12;border:1px solid #2AABEE55;border-radius:12px;padding:10px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">✈️</span><label class="toggle-sw"><input type="checkbox" id="tg-toggle" onchange="if(this.checked){ if(window.connectTelegram) connectTelegram(); } else { try{localStorage.removeItem('cobrex_tg_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
-    <div style="font-size:12px;font-weight:800;color:#2AABEE;text-align:center;margin-top:8px">Telegram</div>
+  <div style="flex:1">
+    <div id="tg-card" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:space-between;min-height:46px;box-sizing:border-box"><span style="font-size:22px">✈️</span><label class="toggle-sw"><input type="checkbox" id="tg-toggle" onchange="window._alSetChanTint&&_alSetChanTint('tg',this.checked);if(this.checked){ if(window.connectTelegram) connectTelegram(); } else { try{localStorage.removeItem('cobrex_tg_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
+    <div style="font-size:11px;font-weight:700;color:#229ED9;text-align:center;margin-top:4px;letter-spacing:0.3px">Telegram</div>
   </div>
   <!-- Push (toggle pide permiso de notificaciones del navegador) -->
-  <div style="flex:1;background:var(--goldBg,rgba(212,160,23,0.12));border:1px solid var(--gold);border-radius:12px;padding:10px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">🔔</span><label class="toggle-sw"><input type="checkbox" id="push-toggle" onchange="if(this.checked){ if(window.requestPushPermission) requestPushPermission(); } else { try{localStorage.removeItem('cobrex_push_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
-    <div style="font-size:12px;font-weight:800;color:var(--gold);text-align:center;margin-top:8px">Push</div>
+  <div style="flex:1">
+    <div id="push-card" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;display:flex;align-items:center;justify-content:space-between;min-height:46px;box-sizing:border-box"><span style="font-size:22px">🔔</span><label class="toggle-sw"><input type="checkbox" id="push-toggle" onchange="window._alSetChanTint&&_alSetChanTint('push',this.checked);if(this.checked){ if(window.requestPushPermission) requestPushPermission(); } else { try{localStorage.removeItem('cobrex_push_on');}catch(e){} }"><span class="toggle-slider"></span></label></div>
+    <div style="font-size:11px;font-weight:700;color:var(--gold);text-align:center;margin-top:4px;letter-spacing:0.3px">Push</div>
   </div>
 </div>
-<script>(function(){try{var tg=document.getElementById('tg-toggle');if(tg&&localStorage.getItem('cobrex_tg_on')==='1')tg.checked=true;var pu=document.getElementById('push-toggle');if(pu&&('Notification'in window)&&Notification.permission==='granted')pu.checked=true;}catch(e){}})();</script>
+<script>(function(){window._alSetChanTint=function(which,on){var c=document.getElementById(which==='tg'?'tg-card':'push-card');if(!c)return;if(which==='tg'){c.style.background=on?'#229ED920':'var(--card)';c.style.borderColor=on?'#229ED9':'var(--border)';}else{c.style.background=on?'rgba(212,160,23,0.2)':'var(--card)';c.style.borderColor=on?'var(--gold)':'var(--border)';}};try{var tg=document.getElementById('tg-toggle');if(tg&&localStorage.getItem('cobrex_tg_on')==='1'){tg.checked=true;_alSetChanTint('tg',true);}var pu=document.getElementById('push-toggle');if(pu&&('Notification'in window)&&Notification.permission==='granted'){pu.checked=true;_alSetChanTint('push',true);}}catch(e){}})();</script>
 <div style="margin:10px 11px;background:var(--card);border-radius:12px;padding:14px;border:1.5px solid var(--gold)">
   <div style="display:flex;align-items:center">
     <div style="flex:1;text-align:center;cursor:pointer" onclick="showAlertInfoModal('alertas')"><div style="font-size:28px;font-weight:900;color:var(--green)" id="alert-active">15</div><div style="font-size:9px;font-weight:700;color:var(--textSec);margin-top:2px" data-i18n="al_alertas_on">ALERTAS ON</div></div>
