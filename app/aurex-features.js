@@ -3042,7 +3042,7 @@ window.openPortItemDetail = function(itemId){
     '<div style="background:var(--bg);border-radius:7px;padding:7px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_sim_pnl_activo')+'</div><div id="pd-sim-pnl" style="font-size:12px;color:var(--text);font-weight:600;">' + pnlSign + '$' + fmtP(Math.abs(pnlUsd)) + '</div></div>' +
     '<div style="background:var(--bg);border-radius:7px;padding:7px;grid-column:span 2;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_sim_impacto_total')+'</div><div id="pd-sim-portimpact" style="font-size:12px;color:var(--text);font-weight:600;">--</div></div>' +
     '' +
-    '<div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;">' +
+    '<div style="grid-column:1/-1;border-top:1px solid var(--border);margin-top:12px;padding-top:12px;">' +
     '<div style="font-size:10px;color:var(--textSec);margin-bottom:8px;text-align:center;">'+t('port_compartir')+'</div>' +
     (function(){
   var _txt2 = item.simbolo + ' - ' + item.nombre + '\n' +
@@ -3052,7 +3052,7 @@ window.openPortItemDetail = function(itemId){
   var _waUrl = 'https://wa.me/?text=' + encodeURIComponent(_txt2);
   var _tgUrl = 'https://t.me/share/url?url=https://cobrex.io&text=' + encodeURIComponent(_txt2);
   var _mlUrl = 'mailto:?subject=Cobrex+-+' + encodeURIComponent(item.simbolo) + '&body=' + encodeURIComponent(_txt2);
-  return '<div style="display:flex;justify-content:center;gap:40px;align-items:center;padding:0 12px;">'
+  return '<div style="display:flex;justify-content:space-around;align-items:flex-start;width:100%;padding:0 4px;">'
     + '<a href="' + _mlUrl + '" onclick="event.stopPropagation()" style="display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--textSec);font-size:10px;font-weight:600;"><div style="font-size:26px;">&#x1F4E7;</div>Mail</a>'
     + '<a href="' + _waUrl + '" target="_blank" onclick="event.stopPropagation()" style="display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:#25D366;font-size:10px;font-weight:600;"><div style="font-size:26px;">&#x1F4AC;</div>WhatsApp</a>'
     + '<a href="' + _tgUrl + '" target="_blank" onclick="event.stopPropagation()" style="display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:#229ED9;font-size:10px;font-weight:600;"><div style="width:28px;height:28px;border-radius:50%;background:#229ED9;display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 8.5l9-5-3 9-2-3-4 2z" fill="#fff"/></svg></div>Telegram</a>'
