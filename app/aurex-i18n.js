@@ -982,6 +982,8 @@
     al_leg_commodities: { es: 'Commodities', en: 'Commodities', pt: 'Commodities', zh: '商品', fr: 'Matières', it: 'Materie', hi: 'कमोडिटी', ar: 'السلع' },
     al_leg_macro: { es: 'Macro', en: 'Macro', pt: 'Macro', zh: '宏观', fr: 'Macro', it: 'Macro', hi: 'मैक्रो', ar: 'ماكرو' },
     al_leg_riesgo: { es: 'Riesgo', en: 'Risk', pt: 'Risco', zh: '风险', fr: 'Risque', it: 'Rischio', hi: 'जोखिम', ar: 'مخاطر' },
+    al_precio_rsi: { es: 'RSI Extremo', en: 'Extreme RSI', pt: 'RSI Extremo', zh: 'RSI极端值', fr: 'RSI Extrême', it: 'RSI Estremo', hi: 'चरम RSI', ar: 'RSI متطرف' },
+    al_precio_rsi_desc: { es: 'Sobrecompra (RSI > 70) o sobreventa (RSI < 30)', en: 'Overbought (RSI > 70) or oversold (RSI < 30)', pt: 'Sobrecompra (RSI > 70) ou sobrevenda (RSI < 30)', zh: '超买（RSI > 70）或超卖（RSI < 30）', fr: 'Surachat (RSI > 70) ou survente (RSI < 30)', it: 'Ipercomprato (RSI > 70) o ipervenduto (RSI < 30)', hi: 'ओवरबॉट (RSI > 70) या ओवरसोल्ड (RSI < 30)', ar: 'ذروة شراء (RSI > 70) أو ذروة بيع (RSI < 30)' },
 
     // === ONBOARDING ===
     ob_comenzar: { es: 'Comenzar', en: 'Get started', pt: 'Começar', zh: '开始', fr: 'Commencer', it: 'Inizia', hi: 'शुरू करें', ar: 'البدء' },
