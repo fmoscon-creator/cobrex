@@ -4218,7 +4218,7 @@ window.showIAVariablesPopup = function() {
   var alcCount = signals.filter(function(s){return s.direccion==='alcista';}).length;
   var bajCount = signals.filter(function(s){return s.direccion==='bajista';}).length;
   var summaryMkt = '<div style="background:var(--bg);border-radius:8px;padding:10px;margin-bottom:10px;border:0.5px solid var(--border)"><span style="font-size:11px;color:var(--textSec)">'+t('mkt_vars_mercado_ahora')+'  <span style="color:var(--green);font-weight:700">→ '+alcCount+t('mkt_vars_al_alza')+'</span>  ·  <span style="color:var(--red);font-weight:700">↓ '+bajCount+t('mkt_vars_a_la_baja')+'</span></span></div>';
-  overlay.innerHTML = '<div style="background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:20px;width:92%;max-width:420px;max-height:85vh;overflow-y:auto">' +
+  overlay.innerHTML = '<div style="background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:20px;width:92%;max-width:420px;max-height:85vh;overflow-y:auto">' +
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">' +
       '<span style="font-size:16px;font-weight:700;color:var(--text)">'+t('mkt_vars_title')+'</span>' +
       '<div onclick="window._closeIAVarsPopup()" style="width:32px;height:32px;border-radius:6px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--textSec);cursor:pointer">✕</div>' +
