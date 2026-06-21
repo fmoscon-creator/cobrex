@@ -1471,7 +1471,7 @@ window.editMarketBanner = function(){
   popup.id = 'aurex-mkt-edit-popup';
   popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
   popup.innerHTML =
-    '<div style="background:#fff;border:3px solid var(--gold);border-radius:16px;padding:20px;width:calc(100% - 40px);max-width:340px;max-height:85vh;overflow-y:auto;">' +
+    '<div style="background:var(--card);border:3px solid var(--gold);border-radius:16px;padding:20px;width:calc(100% - 40px);max-width:340px;max-height:85vh;overflow-y:auto;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
         '<span style="font-size:16px;font-weight:700;color:#111;">'+t('mkt_edit_banner_title')+'</span>' +
         '<span onclick="document.getElementById(&apos;aurex-mkt-edit-popup&apos;).remove()" style="font-size:20px;cursor:pointer;color:#999;padding:4px 8px;">&#x2715;</span>' +
@@ -1513,23 +1513,23 @@ window.showThermoInfo = function(){
   if(!body||!modal) return;
   // Idéntico a nativa PortfolioScreen.js líneas 1143-1191
   body.innerHTML = '<div style="color:#111;font-size:15px;font-weight:700;margin-bottom:12px;">'+t('port_thermo_title')+'</div>' +
-    '<div style="font-size:12px;color:#888;line-height:1.6;margin-bottom:14px;">'+t('port_thermo_desc')+'</div>' +
+    '<div style="font-size:12px;color:var(--textSec);line-height:1.6;margin-bottom:14px;">'+t('port_thermo_desc')+'</div>' +
     '<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">' +
     '<div style="display:flex;gap:10px;align-items:flex-start;">' +
       '<div style="width:4px;border-radius:2px;background:#16a34a;min-height:40px;flex-shrink:0;"></div>' +
-      '<div style="flex:1;"><div style="color:#16a34a;font-size:13px;font-weight:700;">'+t('port_signal_alcista')+'</div><div style="color:#888;font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_alcista_desc')+'</div></div>' +
+      '<div style="flex:1;"><div style="color:#16a34a;font-size:13px;font-weight:700;">'+t('port_signal_alcista')+'</div><div style="color:var(--textSec);font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_alcista_desc')+'</div></div>' +
     '</div>' +
     '<div style="display:flex;gap:10px;align-items:flex-start;">' +
       '<div style="width:4px;border-radius:2px;background:var(--gold);min-height:40px;flex-shrink:0;"></div>' +
-      '<div style="flex:1;"><div style="color:var(--gold);font-size:13px;font-weight:700;">'+t('port_signal_alta_conv')+'</div><div style="color:#888;font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_conv_desc')+'</div></div>' +
+      '<div style="flex:1;"><div style="color:var(--gold);font-size:13px;font-weight:700;">'+t('port_signal_alta_conv')+'</div><div style="color:var(--textSec);font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_conv_desc')+'</div></div>' +
     '</div>' +
     '<div style="display:flex;gap:10px;align-items:flex-start;">' +
       '<div style="width:4px;border-radius:2px;background:#dc2626;min-height:40px;flex-shrink:0;"></div>' +
-      '<div style="flex:1;"><div style="color:#dc2626;font-size:13px;font-weight:700;">'+t('port_signal_bajista')+'</div><div style="color:#888;font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_bajista_desc')+'</div></div>' +
+      '<div style="flex:1;"><div style="color:var(--red);font-size:13px;font-weight:700;">'+t('port_signal_bajista')+'</div><div style="color:var(--textSec);font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_bajista_desc')+'</div></div>' +
     '</div>' +
     '<div style="display:flex;gap:10px;align-items:flex-start;">' +
       '<div style="width:4px;border-radius:2px;background:#999;min-height:40px;flex-shrink:0;"></div>' +
-      '<div style="flex:1;"><div style="color:#888;font-size:13px;font-weight:700;">'+t('port_signal_sin_senal')+'</div><div style="color:#888;font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_sin_senal_desc')+'</div></div>' +
+      '<div style="flex:1;"><div style="color:var(--textSec);font-size:13px;font-weight:700;">'+t('port_signal_sin_senal')+'</div><div style="color:var(--textSec);font-size:11px;line-height:1.5;margin-top:2px;">'+t('port_thermo_sin_senal_desc')+'</div></div>' +
     '</div>' +
     '</div>' +
     '<div onclick="closePortModal()" style="background:var(--gold);color:#111;border-radius:10px;padding:12px;text-align:center;font-size:14px;font-weight:700;cursor:pointer;">'+t('port_entendido')+'</div>';
@@ -1611,14 +1611,14 @@ function _openAddActivoModal(prefillTicker){
   if(title) title.textContent = t('port_agregar_activo');
   body.innerHTML =
     '<div style="display:flex;flex-direction:column;gap:10px;">' +
-    '<div><input id="pa-search" type="text" placeholder="'+t('port_search_placeholder')+'" autocomplete="off" style="width:100%;box-sizing:border-box;background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px 12px;color:#111;font-size:14px;outline:none;" oninput="filterPortSearch()" /></div>' +
+    '<div><input id="pa-search" type="text" placeholder="'+t('port_search_placeholder')+'" autocomplete="off" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:#111;font-size:14px;outline:none;" oninput="filterPortSearch()" /></div>' +
     '<div id="pa-results" style="max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:0;"></div>' +
     '<div id="pa-selected" style="display:none;">' +
-    '<div style="background:#f5f5f5;border-radius:10px;padding:10px 12px;margin-bottom:8px;"><input id="pa-sel-input" type="text" readonly style="width:100%;box-sizing:border-box;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;margin-bottom:6px;" /><div id="pa-sel-name" style="font-size:12px;font-weight:600;color:#111;background:#eee;display:inline-block;padding:3px 10px;border-radius:12px;"></div></div>' +
-    '<div style="background:#f5f5f5;border-radius:10px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:11px;color:#666;margin-bottom:4px;">'+t('port_cantidad_label')+'</div><input id="pa-qty" type="number" min="0" step="any" placeholder="'+t('port_cantidad_placeholder')+'" style="width:100%;box-sizing:border-box;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;" /></div>' +
-    '<div style="background:#f5f5f5;border-radius:10px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:11px;color:#666;margin-bottom:4px;">'+t('port_precio_compra_label')+'</div><input id="pa-price" type="number" min="0" step="any" placeholder="'+t('port_precio_placeholder')+'" style="width:100%;box-sizing:border-box;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;" /></div>' +
-    '<div id="pa-preview" style="background:#FEF3C7;border-radius:10px;padding:12px;margin-bottom:8px;"><div style="font-size:11px;font-weight:700;color:#111;margin-bottom:6px;">'+t('port_preview_title')+'</div><div style="display:flex;justify-content:space-between;font-size:12px;color:#333;margin-bottom:3px;"><span>'+t('port_preview_precio_mercado')+'</span><span id="pa-preview-price" style="font-weight:700;">--</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#333;margin-bottom:3px;"><span>'+t('port_preview_valor_sumara')+'</span><span id="pa-preview-value" style="font-weight:700;">$0,00</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#333;"><span>'+t('port_preview_pnl_inicial')+'</span><span id="pa-preview-pnl" style="font-weight:700;">$0,00</span></div></div>' +
-    '<div id="pa-err" style="color:#dc2626;font-size:11px;margin-top:4px;display:none;"></div>' +
+    '<div style="background:var(--card);border-radius:10px;padding:10px 12px;margin-bottom:8px;"><input id="pa-sel-input" type="text" readonly style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;margin-bottom:6px;" /><div id="pa-sel-name" style="font-size:12px;font-weight:600;color:#111;background:#eee;display:inline-block;padding:3px 10px;border-radius:12px;"></div></div>' +
+    '<div style="background:var(--card);border-radius:10px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:11px;color:var(--textSec);margin-bottom:4px;">'+t('port_cantidad_label')+'</div><input id="pa-qty" type="number" min="0" step="any" placeholder="'+t('port_cantidad_placeholder')+'" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;" /></div>' +
+    '<div style="background:var(--card);border-radius:10px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:11px;color:var(--textSec);margin-bottom:4px;">'+t('port_precio_compra_label')+'</div><input id="pa-price" type="number" min="0" step="any" placeholder="'+t('port_precio_placeholder')+'" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 10px;color:#111;font-size:14px;outline:none;" /></div>' +
+    '<div id="pa-preview" style="background:#FEF3C7;border-radius:10px;padding:12px;margin-bottom:8px;"><div style="font-size:11px;font-weight:700;color:#111;margin-bottom:6px;">'+t('port_preview_title')+'</div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text);margin-bottom:3px;"><span>'+t('port_preview_precio_mercado')+'</span><span id="pa-preview-price" style="font-weight:700;">--</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text);margin-bottom:3px;"><span>'+t('port_preview_valor_sumara')+'</span><span id="pa-preview-value" style="font-weight:700;">$0,00</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text);"><span>'+t('port_preview_pnl_inicial')+'</span><span id="pa-preview-pnl" style="font-weight:700;">$0,00</span></div></div>' +
+    '<div id="pa-err" style="color:var(--red);font-size:11px;margin-top:4px;display:none;"></div>' +
     '<div onclick="savePortActivo()" style="margin-top:4px;background:var(--gold);color:#111;border-radius:12px;padding:14px;text-align:center;font-size:15px;font-weight:700;cursor:pointer;">'+t('guardar')+'</div>' +
     '</div>' +
     '<input id="pa-sym" type="hidden" value="" />' +
@@ -1713,9 +1713,9 @@ window._renderSearchResult = function(a, idx, onclickFnName) {
   var yahooTag = a._fromYahoo ? ' <span style="font-size:8px;background:#58A6FF20;color:#58A6FF;border-radius:3px;padding:1px 4px;">YAHOO</span>' : '';
   var cachedP = (window._pcPrices||{})[a.s];
   var priceHtml = cachedP ? '<span style="font-size:12px;font-weight:700;color:#111;flex-shrink:0;">$'+Number(cachedP).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="port-sr-p-'+idx+'" style="font-size:11px;color:#999;flex-shrink:0;">...</span>';
-  return '<div onclick="' + onclickFnName + '(' + idx + ')" style="display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:8px;cursor:pointer;background:#f5f5f5;margin-bottom:4px;-webkit-tap-highlight-color:rgba(0,0,0,0);">' +
+  return '<div onclick="' + onclickFnName + '(' + idx + ')" style="display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:8px;cursor:pointer;background:var(--card);margin-bottom:4px;-webkit-tap-highlight-color:rgba(0,0,0,0);">' +
     logoHtml +
-    '<div style="flex:1;min-width:0;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;font-weight:700;color:#111;">' + a.s + '</span><span style="font-size:13px;color:#666;">' + a.n + '</span>' + yahooTag + '</div>' +
+    '<div style="flex:1;min-width:0;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;font-weight:700;color:#111;">' + a.s + '</span><span style="font-size:13px;color:var(--textSec);">' + a.n + '</span>' + yahooTag + '</div>' +
     priceHtml +
     '</div>';
 };
@@ -1847,25 +1847,25 @@ window._showDupeModal = function(sym, existing, newQty, newPrice, sumQty, avgPri
   ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;';
   ov.onclick = function(e){ if(e.target===ov){ ov.remove(); } };
   ov.innerHTML =
-    '<div style="background:#fff;border:3px solid var(--gold);border-radius:20px;padding:20px;width:100%;max-width:380px;">' +
+    '<div style="background:var(--card);border:3px solid var(--gold);border-radius:20px;padding:20px;width:100%;max-width:380px;">' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">' +
         '<span style="font-size:28px;">⚠️</span>' +
-        '<div style="flex:1;"><div style="font-size:15px;font-weight:800;color:#111;">'+sym+' '+t('port_dupe_title_suffix')+'</div><div style="font-size:11px;color:#888;margin-top:2px;">'+t('port_dupe_question')+'</div></div>' +
+        '<div style="flex:1;"><div style="font-size:15px;font-weight:800;color:#111;">'+sym+' '+t('port_dupe_title_suffix')+'</div><div style="font-size:11px;color:var(--textSec);margin-top:2px;">'+t('port_dupe_question')+'</div></div>' +
         '<span onclick="document.getElementById(\'dupe-modal-overlay\').remove()" style="font-size:20px;color:#999;cursor:pointer;padding:4px 8px;">✕</span>' +
       '</div>' +
       '<div style="display:flex;gap:8px;margin:14px 0;">' +
-        '<div style="flex:1;padding:10px;border-radius:10px;background:#f5f5f5;border:1px solid #ddd;">' +
-          '<div style="font-size:9px;font-weight:700;color:#888;letter-spacing:0.5px;margin-bottom:6px;">'+t('port_dupe_actual')+'</div>' +
-          '<div style="font-size:11px;color:#888;">'+t('port_cantidad_label')+'</div>' +
+        '<div style="flex:1;padding:10px;border-radius:10px;background:var(--card);border:1px solid #ddd;">' +
+          '<div style="font-size:9px;font-weight:700;color:var(--textSec);letter-spacing:0.5px;margin-bottom:6px;">'+t('port_dupe_actual')+'</div>' +
+          '<div style="font-size:11px;color:var(--textSec);">'+t('port_cantidad_label')+'</div>' +
           '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:4px;">'+existing.cantidad+'</div>' +
-          '<div style="font-size:11px;color:#888;">'+t('port_precio_compra_short')+'</div>' +
+          '<div style="font-size:11px;color:var(--textSec);">'+t('port_precio_compra_short')+'</div>' +
           '<div style="font-size:13px;font-weight:700;color:#111;">$'+fmt(existing.precio_compra)+'</div>' +
         '</div>' +
-        '<div style="flex:1;padding:10px;border-radius:10px;background:#f5f5f5;border:1px solid var(--gold);">' +
+        '<div style="flex:1;padding:10px;border-radius:10px;background:var(--card);border:1px solid var(--gold);">' +
           '<div style="font-size:9px;font-weight:700;color:var(--gold);letter-spacing:0.5px;margin-bottom:6px;">'+t('port_dupe_nuevo')+'</div>' +
-          '<div style="font-size:11px;color:#888;">'+t('port_cantidad_label')+'</div>' +
+          '<div style="font-size:11px;color:var(--textSec);">'+t('port_cantidad_label')+'</div>' +
           '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:4px;">'+newQty+'</div>' +
-          '<div style="font-size:11px;color:#888;">'+t('port_precio_compra_short')+'</div>' +
+          '<div style="font-size:11px;color:var(--textSec);">'+t('port_precio_compra_short')+'</div>' +
           '<div style="font-size:13px;font-weight:700;color:#111;">$'+fmt(newPrice)+'</div>' +
         '</div>' +
       '</div>' +
@@ -1878,7 +1878,7 @@ window._showDupeModal = function(sym, existing, newQty, newPrice, sumQty, avgPri
         '<div style="font-size:10px;color:#fff;margin-top:3px;opacity:0.9;">'+t('port_dupe_descarta')+' '+newQty+' '+sym+' @ $'+fmt(newPrice)+'</div>' +
       '</div>' +
       '<div id="dupe-btn-cancelar" style="background:transparent;border:1px solid #ddd;border-radius:10px;padding:13px;cursor:pointer;text-align:center;">' +
-        '<div style="font-size:13px;font-weight:600;color:#888;">'+t('cancelar')+'</div>' +
+        '<div style="font-size:13px;font-weight:600;color:var(--textSec);">'+t('cancelar')+'</div>' +
       '</div>' +
     '</div>';
   document.body.appendChild(ov);
@@ -4898,7 +4898,7 @@ window.showFearGreedInfo = function() {
       if (valStr.indexOf('+') === 0) valColor = '#16a34a';
       else if (valStr.indexOf('-') === 0) valColor = '#dc2626';
     }
-    return '<tr style="border-bottom:1px solid #eee;"><td style="padding:6px 4px;color:'+r[5]+';font-weight:600;font-size:11px;">'+r[0]+' '+r[1]+'</td><td style="color:#888;font-size:10px;padding:6px 4px;">'+r[2]+'</td><td style="color:#555;font-size:11px;padding:6px 4px;">'+r[3]+'</td><td style="color:'+valColor+';font-weight:700;font-size:11px;padding:6px 4px;">'+valStr+'</td></tr>';
+    return '<tr style="border-bottom:1px solid #eee;"><td style="padding:6px 4px;color:'+r[5]+';font-weight:600;font-size:11px;">'+r[0]+' '+r[1]+'</td><td style="color:var(--textSec);font-size:10px;padding:6px 4px;">'+r[2]+'</td><td style="color:#555;font-size:11px;padding:6px 4px;">'+r[3]+'</td><td style="color:'+valColor+';font-weight:700;font-size:11px;padding:6px 4px;">'+valStr+'</td></tr>';
   }).join('');
   // #13 auditoría: caja ELITE — Análisis profundo (paridad nativa MercadosScreen L1211-1227, solo ELITE)
   var _pulsePlan = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
@@ -4907,15 +4907,15 @@ window.showFearGreedInfo = function() {
       '<div style="font-size:11px;font-weight:800;color:#8A6D0F;margin-bottom:6px;letter-spacing:0.3px;">'+t('pulse_elite_titulo')+'</div>' +
       '<div style="font-size:10px;color:#222;line-height:1.5;margin-bottom:8px;">'+t('pulse_elite_p1')+'</div>' +
       '<div style="font-size:10px;color:#222;line-height:1.5;margin-bottom:8px;">'+t('pulse_elite_p2')+'</div>' +
-      '<div style="margin-top:6px;padding:8px;background:#f5f5f5;border-radius:6px;">' +
-        '<div style="font-size:9px;color:#666;font-weight:600;">&#128202; '+t('grafico_hist_pulse')+'</div>' +
+      '<div style="margin-top:6px;padding:8px;background:var(--card);border-radius:6px;">' +
+        '<div style="font-size:9px;color:var(--textSec);font-weight:600;">&#128202; '+t('grafico_hist_pulse')+'</div>' +
         '<div style="font-size:9px;color:#999;margin-top:2px;">'+t('disp_prox_bloque')+'</div>' +
       '</div>' +
     '</div>' : '';
   ov.innerHTML =
-    '<div style="background:#fff;border:3px solid var(--gold);border-radius:18px;padding:22px;width:calc(100% - 32px);max-width:420px;margin:auto;">' +
+    '<div style="background:var(--card);border:3px solid var(--gold);border-radius:18px;padding:22px;width:calc(100% - 32px);max-width:420px;margin:auto;">' +
       '<div style="font-size:15px;font-weight:700;color:#111;margin-bottom:4px;">'+t('mkt_pulse_info_title')+'</div>' +
-      '<div style="font-size:11px;color:#666;margin-bottom:12px;">'+t('mkt_pulse_info_subtitle')+'</div>' +
+      '<div style="font-size:11px;color:var(--textSec);margin-bottom:12px;">'+t('mkt_pulse_info_subtitle')+'</div>' +
       '<div style="font-size:11px;color:#555;line-height:1.7;margin-bottom:10px;">' +
         '<b style="color:#111;">'+t('mkt_pulse_zonas_title')+'</b><br>' +
         t('mkt_pulse_zona_miedo_ext')+' &nbsp; '+t('mkt_pulse_zona_miedo')+' &nbsp; '+t('mkt_pulse_zona_neutral')+'<br>' +
@@ -5059,7 +5059,7 @@ window.editFuturesBanner = function(){
   popup.id = 'aurex-fut-edit-popup';
   popup.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;';
   popup.innerHTML =
-    '<div style="background:#fff;border:3px solid var(--gold);border-radius:16px;padding:20px;width:calc(100% - 40px);max-width:340px;max-height:85vh;overflow-y:auto;">' +
+    '<div style="background:var(--card);border:3px solid var(--gold);border-radius:16px;padding:20px;width:calc(100% - 40px);max-width:340px;max-height:85vh;overflow-y:auto;">' +
       '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
         '<span style="font-size:16px;font-weight:700;color:#111;">'+t('mkt_fut_edit_title')+'</span>' +
         '<span onclick="document.getElementById(&apos;aurex-fut-edit-popup&apos;).remove()" style="font-size:20px;cursor:pointer;color:#999;padding:4px 8px;">&#x2715;</span>' +
@@ -5739,7 +5739,7 @@ window._refreshHoyPct = function() {
     /* Modal central */
     '#sort-overlay{position:fixed;inset:0;z-index:2050;background:rgba(0,0,0,0.55);' +
     'display:flex;align-items:center;justify-content:center;padding:24px;}' +
-    '#sort-modal{background:#fff;border:3px solid var(--gold);border-radius:20px;width:100%;max-width:340px;' +
+    '#sort-modal{background:var(--card);border:3px solid var(--gold);border-radius:20px;width:100%;max-width:340px;' +
     'max-height:80vh;overflow-y:auto;padding:16px;animation:lp-fadein 0.18s ease-out;' +
     'display:flex;flex-direction:column;gap:4px;-webkit-user-select:none;user-select:none;' +
     '-webkit-touch-callout:none;border:1px solid var(--gold);' +
@@ -5747,16 +5747,16 @@ window._refreshHoyPct = function() {
     '.sort-header{display:flex;align-items:center;justify-content:center;gap:8px;' +
     'padding:8px 0 12px;border-bottom:1px solid rgba(247,208,96,0.25);margin-bottom:10px;}' +
     '.sort-header-icon{font-size:18px;color:var(--gold);}' +
-    '.sort-header-title{font-size:15px;font-weight:800;color:#111;letter-spacing:0.3px;}' +
+    '.sort-header-title{font-size:15px;font-weight:800;color:var(--text);letter-spacing:0.3px;}' +
     '.sort-item{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;' +
     'border-radius:10px;background:transparent;margin-bottom:4px;border-left:3px solid transparent;' +
     '-webkit-tap-highlight-color:rgba(0,0,0,0);}' +
     '.sort-item.active{background:rgba(247,208,96,0.12);border-left:3px solid var(--gold);}' +
     '.sort-item-icon{font-size:16px;flex-shrink:0;}' +
     '.sort-item-text{flex:1;min-width:0;}' +
-    '.sort-item-label{font-size:13px;font-weight:600;color:#111;}' +
+    '.sort-item-label{font-size:13px;font-weight:600;color:var(--text);}' +
     '.sort-item.active .sort-item-label{font-weight:800;}' +
-    '.sort-item-desc{font-size:10px;color:#888;margin-top:1px;}' +
+    '.sort-item-desc{font-size:10px;color:var(--textSec);margin-top:1px;}' +
     '.sort-item-check{color:var(--gold);font-size:16px;font-weight:800;}' +
     '.sort-cancel{margin-top:10px;background:transparent;border:1px solid var(--gold);' +
     'border-radius:10px;padding:10px;text-align:center;font-size:13px;font-weight:700;' +
@@ -6080,18 +6080,18 @@ window._applyIASort = function(key) {
     'box-shadow:0 8px 32px rgba(0,0,0,0.25);}' +
     '.lp-header{text-align:center;padding:4px 0 12px;}' +
     '.lp-header .lp-ticker{font-size:18px;font-weight:700;color:#111;display:block;}' +
-    '.lp-header .lp-name{font-size:12px;color:#666;display:block;margin-top:2px;}' +
+    '.lp-header .lp-name{font-size:12px;color:var(--textSec);display:block;margin-top:2px;}' +
     '.lp-option{display:flex;align-items:center;gap:12px;padding:13px 14px;cursor:pointer;' +
-    'font-size:14px;font-weight:600;color:#333;border-radius:11px;background:#f0f0f0;' +
+    'font-size:14px;font-weight:600;color:var(--text);border-radius:11px;background:var(--card);' +
     '-webkit-tap-highlight-color:rgba(0,0,0,0);user-select:none;}' +
     '.lp-option .lp-icon{font-size:18px;flex-shrink:0;width:22px;text-align:center;}' +
     '.lp-option:active{opacity:0.7;}' +
-    '.lp-option.lp-primary{background:transparent;border:1.5px solid #333;color:#333;}' +
-    '.lp-option.lp-destructive{background:#fef2f2;color:#dc2626;border:1px solid #dc2626;}' +
+    '.lp-option.lp-primary{background:transparent;border:1.5px solid #333;color:var(--text);}' +
+    '.lp-option.lp-destructive{background:var(--redBg);color:var(--red);border:1px solid #dc2626;}' +
     '.lp-cancel{margin-top:8px;background:transparent;' +
     'border-radius:11px;padding:13px;text-align:center;font-size:14px;font-weight:600;' +
-    'color:#666;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);}' +
-    '.lp-cancel:active{background:#f0f0f0;}' +
+    'color:var(--textSec);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);}' +
+    '.lp-cancel:active{background:var(--card);}' +
     /* Header enriquecido Mercados */
     '.lp-header-rich{display:flex;align-items:center;gap:10px;padding:6px 0 10px;position:relative;}' +
     '.lp-header-rich .lp-logo{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;}' +
@@ -6099,10 +6099,10 @@ window._applyIASort = function(key) {
     '.lp-header-rich .lp-close{position:absolute;top:2px;right:0;font-size:20px;cursor:pointer;' +
     'color:#999;line-height:1;padding:4px;-webkit-tap-highlight-color:rgba(0,0,0,0);}' +
     '.lp-chips{display:flex;gap:6px;margin-bottom:8px;}' +
-    '.lp-chip{flex:1;background:#f0f0f0;border:1px solid #e0e0e0;border-radius:10px;padding:8px 4px;text-align:center;}' +
-    '.lp-chip-label{font-size:9px;color:#888;margin-bottom:3px;}' +
+    '.lp-chip{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 4px;text-align:center;}' +
+    '.lp-chip-label{font-size:9px;color:var(--textSec);margin-bottom:3px;}' +
     '.lp-chip-val{font-size:14px;font-weight:700;color:#222;}' +
-    '.lp-signal{text-align:center;padding:8px 12px;font-size:12px;color:#888;background:#f0f0f0;border-radius:10px;margin-bottom:4px;}' +
+    '.lp-signal{text-align:center;padding:8px 12px;font-size:12px;color:var(--textSec);background:var(--card);border-radius:10px;margin-bottom:4px;}' +
     '.lp-signal strong{display:block;font-size:15px;margin-top:3px;}' +
     '.lp-signal strong{font-weight:700;}' +
     '.lp-fav-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 14px;cursor:pointer;' +
@@ -6556,10 +6556,10 @@ window._openIdiomaModal = function() {
   ov.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;';
   ov.onclick = function(e) { if (e.target === ov) ov.remove(); };
   ov.innerHTML =
-    '<div style="background:#fff;border:3px solid var(--gold);border-radius:16px;padding:20px;width:100%;max-width:300px;">' +
+    '<div style="background:var(--card);border:3px solid var(--gold);border-radius:16px;padding:20px;width:100%;max-width:300px;">' +
       '<div style="text-align:center;font-size:16px;font-weight:700;color:#111;margin-bottom:14px;">'+t('idioma_label')+'</div>' +
       rows +
-      '<div onclick="document.getElementById(\'idioma-modal-overlay\').remove()" style="margin-top:14px;text-align:center;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:#333;cursor:pointer;">'+t('cancelar')+'</div>' +
+      '<div onclick="document.getElementById(\'idioma-modal-overlay\').remove()" style="margin-top:14px;text-align:center;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;">'+t('cancelar')+'</div>' +
     '</div>';
   document.body.appendChild(ov);
 };
