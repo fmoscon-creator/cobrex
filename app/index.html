@@ -686,16 +686,16 @@ function showAlertVars(tipo){
   var sub = isIA ? t('al_vars_ia_subtitle') : t('al_vars_pulse_subtitle');
   var color = isIA ? '#A78BFA' : '#EC4899';
   var vars = isIA ? [
-    {n:t('mkt_var1_label'),d:t('mkt_var1_desc'),p:t('al_peso_alto'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
-    {n:t('mkt_var2_label'),d:t('mkt_var2_desc'),p:t('al_peso_alto'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
-    {n:t('mkt_var3_label'),d:t('mkt_var3_desc'),p:t('al_peso_alto'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
-    {n:t('mkt_var4_label'),d:t('mkt_var4_desc'),p:t('al_peso_medio'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
-    {n:t('mkt_var5_label'),d:t('mkt_var5_desc'),p:t('al_peso_medio'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
-    {n:t('mkt_var6_label'),d:t('mkt_var6_desc'),p:t('al_peso_medio'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
-    {n:t('mkt_var7_label'),d:t('mkt_var7_desc'),p:t('al_peso_medio'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
-    {n:t('mkt_var8_label'),d:t('mkt_var8_desc'),p:t('al_peso_medio'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
-    {n:t('mkt_var9_label'),d:t('mkt_var9_desc'),p:t('al_peso_alto'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
-    {n:t('mkt_var10_label'),d:t('mkt_var10_desc'),p:t('al_peso_alto'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
+    {n:t('mkt_var1_label'),d:t('mkt_var1_desc'),p:t('al_peso_alto_short'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
+    {n:t('mkt_var2_label'),d:t('mkt_var2_desc'),p:t('al_peso_alto_short'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
+    {n:t('mkt_var3_label'),d:t('mkt_var3_desc'),p:t('al_peso_alto_short'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
+    {n:t('mkt_var4_label'),d:t('mkt_var4_desc'),p:t('al_peso_medio_short'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
+    {n:t('mkt_var5_label'),d:t('mkt_var5_desc'),p:t('al_peso_medio_short'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
+    {n:t('mkt_var6_label'),d:t('mkt_var6_desc'),p:t('al_peso_medio_short'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
+    {n:t('mkt_var7_label'),d:t('mkt_var7_desc'),p:t('al_peso_medio_short'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
+    {n:t('mkt_var8_label'),d:t('mkt_var8_desc'),p:t('al_peso_medio_short'),c:'#D4A017',bg:'rgba(212,160,23,0.18)'},
+    {n:t('mkt_var9_label'),d:t('mkt_var9_desc'),p:t('al_peso_alto_short'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
+    {n:t('mkt_var10_label'),d:t('mkt_var10_desc'),p:t('al_peso_alto_short'),c:'#3FB950',bg:'rgba(63,185,80,0.18)'},
   ] : [
     {n:'BTC momentum',d:'Binance',p:'12%',c:'#F7931A',bg:'rgba(247,147,26,0.12)'},
     {n:'ETH momentum',d:'Binance',p:'8%',c:'#627EEA',bg:'rgba(98,126,234,0.12)'},
@@ -713,7 +713,8 @@ function showAlertVars(tipo){
     {n:t('mkt_pulse_var_geopolitica'),d:'GDELT',p:'4%',c:'#F85149',bg:'rgba(248,81,73,0.12)'},
   ];
   var html = '<div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="display:flex;align-items:center;gap:8px"><div style="font-size:22px">'+(isIA?'🤖':'💓')+'</div><div><div style="font-size:15px;font-weight:700;color:'+color+'">'+title+'</div><div style="font-size:10px;color:var(--textSec)">'+sub+'</div></div></div><a href="javascript:void(0)" onclick="document.getElementById(\'alert-vars-modal\').remove()" style="width:32px;height:32px;border-radius:16px;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text);text-decoration:none">✕</a></div>';
-  if(isIA) html += '<div style="display:flex;gap:12px;justify-content:center;margin-bottom:12px"><div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:9px;color:var(--green);font-weight:600">'+t('al_peso_alto')+'</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:3px;background:var(--gold);border-radius:2px"></div><span style="font-size:9px;color:var(--gold);font-weight:600">'+t('al_peso_medio')+'</span></div></div>';
+  if(isIA){ html += '<div style="display:flex;gap:12px;justify-content:center;margin-bottom:12px"><div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:3px;background:var(--green);border-radius:2px"></div><span style="font-size:9px;color:var(--green);font-weight:600">'+t('al_peso_alta')+'</span></div><div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:3px;background:var(--gold);border-radius:2px"></div><span style="font-size:9px;color:var(--gold);font-weight:600">'+t('al_peso_media')+'</span></div></div>'; }
+  else { var _legP=[['#F7931A','al_leg_cripto'],['#4A9EFF','al_leg_indices'],['var(--gold)','al_leg_commodities'],['var(--green)','al_leg_macro'],['var(--red)','al_leg_riesgo']]; html += '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px">'; _legP.forEach(function(L){ html += '<div style="display:flex;align-items:center;gap:3px"><div style="width:8px;height:3px;background:'+L[0]+';border-radius:2px"></div><span style="font-size:8px;color:var(--textSec)">'+t(L[1])+'</span></div>'; }); html += '</div>'; }
   vars.forEach(function(v,i){
     html += '<div style="display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:0.5px solid var(--border);border-left:2px solid '+v.c+';border-radius:4px;margin-bottom:2px"><span style="font-size:10px;font-weight:800;color:#D4A017;width:20px;text-align:center;flex-shrink:0">'+(i+1)+'</span><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--text)">'+v.n+'</div><div style="font-size:9px;color:var(--textSec);margin-top:1px">'+v.d+'</div></div><div style="background:'+v.bg+';padding:4px 10px;border-radius:6px;text-align:center;min-width:40px"><span style="font-size:11px;font-weight:700;color:'+v.c+'">'+v.p+'</span></div></div>';
   });
@@ -721,7 +722,7 @@ function showAlertVars(tipo){
   var overlay = document.createElement('div');
   overlay.id = 'alert-vars-modal';
   overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#000000CC;z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px';
-  overlay.innerHTML = '<div style="background:var(--card);border-radius:20px;width:100%;max-width:440px;max-height:80vh;overflow-y:auto;border:2px solid var(--gold);box-shadow:0 10px 20px rgba(0,0,0,0.35)">'+html+'</div>';
+  overlay.innerHTML = '<div style="background:var(--card);border-radius:16px;width:100%;max-width:440px;max-height:80vh;overflow-y:auto;border:1px solid var(--border2);box-shadow:0 10px 20px rgba(0,0,0,0.35)">'+html+'</div>';
   overlay.onclick = function(e){ if(e.target === overlay) overlay.remove(); };
   document.body.appendChild(overlay);
 }
@@ -785,8 +786,8 @@ function calculateAlerts(){
   var toggleIds = ['ia_cambio','ia_alta','ia_umbral','ia_portfolio','pulse_zona','pulse_cat','pulse_thermo','precio_variacion','precio_maxmin','precio_rsi','ev_fomc','ev_cpi','ev_apertura','ev_earnings','ev_gdelt'];
   var toggles = {};
   checks.forEach(function(c,i){if(toggleIds[i])toggles[toggleIds[i]]=c.checked;});
-  var pctThreshold = 5;
-  var probThreshold = 75;
+  var pctThreshold = parseFloat(window._alPctThreshold) || 5;
+  var probThreshold = parseFloat(window._alProbThreshold) || 75;
   var alerts = [];
 
   filtered.forEach(function(sig){
@@ -1929,7 +1930,7 @@ window._mktOpenDetail = function(idx){
 <div style="display:flex;gap:8px;margin:10px 11px">
   <!-- WhatsApp (SOON, sin toggle) -->
   <div style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">💬</span><span style="font-size:8px;font-weight:800;color:var(--textSec);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px;letter-spacing:0.5px">SOON</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:20px">💬</span><span style="font-size:8px;font-weight:800;color:var(--textSec);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px;letter-spacing:0.5px" data-i18n="al_pronto">PRONTO</span></div>
     <div style="font-size:12px;font-weight:800;color:#25D366;text-align:center;margin-top:8px">WhatsApp</div>
   </div>
   <!-- Telegram (toggle conecta el bot) -->
@@ -1959,7 +1960,7 @@ window._mktOpenDetail = function(idx){
   <div style="font-size:10px;color:var(--gold);font-weight:800;margin-bottom:10px;text-align:center;letter-spacing:1px" data-i18n="al_alertas_sobre">ALERTAS SOBRE</div>
   <div style="display:flex;gap:8px" id="alert-scope-btns">
     <div onclick="setAlertScope('portfolio')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="portfolio"><div style="font-size:20px;margin-bottom:4px">💼</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_portfolio">Mi Portfolio</div></div>
-    <div onclick="setAlertScope('watchlist')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="watchlist"><div style="font-size:20px;margin-bottom:4px">👀</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mi_watchlist">Mi Watchlist</div></div>
+    <div onclick="setAlertScope('watchlist')" style="flex:1;background:var(--bg);border:1.5px solid var(--border2);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="watchlist"><div style="font-size:20px;margin-bottom:4px">👀</div><div style="font-size:11px;font-weight:800;color:var(--text)" data-i18n="al_mis_watchlists">Mis Watchlists</div></div>
     <div onclick="setAlertScope('todos')" style="flex:1;background:var(--gold);border:1.5px solid var(--gold);border-radius:10px;padding:10px;text-align:center;cursor:pointer" data-scope="todos"><div style="font-size:20px;margin-bottom:4px">🌍</div><div style="font-size:11px;font-weight:800;color:#000" data-i18n="al_todos">Todos (503)</div></div>
   </div>
 </div>
@@ -1985,7 +1986,7 @@ window._mktOpenDetail = function(idx){
   <div id="ia-alert-body" style="display:none;border-top:0.5px solid var(--border)">
     <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_ia_cambio">Cambio de senal</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_ia_cambio_desc">Cuando un activo cambia de ALCISTA a BAJISTA o viceversa</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
     <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_ia_alta">Alta Conviccion</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_ia_alta_desc">Cuando la IA detecta senal de maxima conviccion (85-88%)</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
-    <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_ia_umbral">Umbral probabilidad</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_ia_umbral_desc">Alerta cuando la probabilidad supera el umbral configurado</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
+    <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_ia_umbral">Umbral probabilidad</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_ia_umbral_desc">Alerta cuando la probabilidad supera el umbral configurado</div><div id="cfg-umbral" style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:11px;color:var(--textSec)"><span data-i18n="al_umbral_label">Umbral</span>:</span><input type="number" value="75" min="0" max="99" oninput="window._alProbThreshold=parseFloat(this.value)||75;if(window.calculateAlerts)calculateAlerts()" style="background:var(--bg);border:1px solid var(--gold);border-radius:6px;padding:4px 8px;color:var(--gold);font-size:14px;font-weight:700;width:44px;text-align:center;box-sizing:border-box"><span style="font-size:11px;color:var(--textSec)">%</span></div></div><label class="toggle-sw"><input type="checkbox" checked onchange="var c=document.getElementById('cfg-umbral');if(c)c.style.display=this.checked?'flex':'none';updateAlertCount()"><span class="toggle-slider"></span></label></div>
     <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_ia_portfolio">Senal en Portfolio</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_ia_portfolio_desc">Nueva senal IA en activos de tu cartera personal</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
   </div>
 </div>
@@ -2013,7 +2014,7 @@ window._mktOpenDetail = function(idx){
   </div>
   <div id="precio-alert-body" style="display:none;border-top:0.5px solid var(--border)">
     <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_precio_obj">Precio objetivo</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_precio_obj_desc">Cuando un activo alcanza el precio target que definiste</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
-    <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_precio_var">Variacion brusca</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_precio_var_desc">Sube o baja mas del % configurado en 24hs</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
+    <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_precio_var">Variacion brusca</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_precio_var_desc">Sube o baja mas del % configurado en 24hs</div><div id="cfg-variacion" style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="font-size:11px;color:var(--textSec)"><span data-i18n="al_variacion_label">Variación</span>:</span><input type="number" value="5.00" step="0.1" min="0" oninput="window._alPctThreshold=parseFloat(this.value)||5;if(window.calculateAlerts)calculateAlerts()" style="background:var(--bg);border:1px solid var(--gold);border-radius:6px;padding:4px 8px;color:var(--gold);font-size:14px;font-weight:700;width:58px;text-align:center;box-sizing:border-box"><span style="font-size:11px;color:var(--textSec)">%</span></div></div><label class="toggle-sw"><input type="checkbox" checked onchange="var c=document.getElementById('cfg-variacion');if(c)c.style.display=this.checked?'flex':'none';updateAlertCount()"><span class="toggle-slider"></span></label></div>
     <div class="alert-item" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px"><div style="flex:1"><span style="font-size:13px;font-weight:500;color:var(--text)" data-i18n="al_precio_maxmin">Nuevo maximo/minimo</span><div style="font-size:10px;color:var(--textSec);margin-top:2px;line-height:14px" data-i18n="al_precio_maxmin_desc">Nuevo maximo o minimo de 52 semanas</div></div><label class="toggle-sw"><input type="checkbox" checked onchange="updateAlertCount()"><span class="toggle-slider"></span></label></div>
   </div>
 </div>
