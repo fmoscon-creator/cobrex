@@ -221,6 +221,8 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .pais-row.show{display:flex}
 .pais{flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:700;color:var(--text);background:var(--chipBg);border:1px solid var(--border2);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
 .pais.on{background:var(--gold);color:#111;font-weight:700;border-color:var(--gold)}
+/* Watchlist header: +Lista pegado a la campana a la derecha (la campana trae margin-left:auto inline; lo anulamos para que solo +Lista empuje al grupo) */
+#screen-watchlist > div > .cobrex-bell{margin-left:6px !important}
 
 /* TIMEFRAME + EDITAR */
 .tfrow{display:flex;gap:5px;padding:6px 11px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0}
@@ -1876,12 +1878,12 @@ window._mktOpenDetail = function(idx){
 
 <div class="screen" id="screen-watchlist" style="flex-direction:column;flex:1;min-height:0">
 <!-- Header -->
-<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0">
+<div style="display:flex;align-items:center;gap:8px;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0">
   <div style="display:flex;align-items:center;gap:8px">
     <span style="font-size:16px;font-weight:500;color:var(--gold);letter-spacing:1px">Cobrex</span>
     <span style="font-size:13px;color:var(--textSec)" data-i18n="wl_header_title">Watchlist</span>
   </div>
-  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Nueva lista</a>
+  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Nueva lista</a>
 </div>
 <!-- Contenido dinámico -->
 <div id="watch-cnt" style="overflow-y:auto;flex:1;min-height:200px;padding:0;-webkit-overflow-scrolling:touch;pointer-events:auto">
