@@ -220,7 +220,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .pais-row::-webkit-scrollbar{display:none}
 .pais-row.show{display:flex}
 .pais{flex-shrink:0;padding:3px 9px;border-radius:12px;font-size:10px;font-weight:500;color:var(--textSec);border:0.5px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation}
-.pais.on{background:var(--gold);color:#111;font-weight:700;border-color:var(--gold)}
+.pais.on{background:var(--gold);color:var(--text);font-weight:700;border-color:var(--gold)}
 
 /* TIMEFRAME + EDITAR */
 .tfrow{display:flex;gap:5px;padding:6px 11px;border-bottom:1px solid var(--border);align-items:center;flex-shrink:0}
@@ -1387,8 +1387,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="port-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;padding:0 8px;box-sizing:border-box;" onclick="if(event.target===this)closePortModal()">
   <div style="background:var(--card);border:3px solid var(--gold);border-radius:16px;width:100%;max-width:380px;padding:20px 16px 24px;max-height:88vh;overflow-y:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <span id="port-modal-title" style="font-size:16px;font-weight:700;color:#111" data-i18n="port_agregar_activo">Agregar activo</span>
-      <span onclick="closePortModal()" style="font-size:20px;color:#999;cursor:pointer">✕</span>
+      <span id="port-modal-title" style="font-size:16px;font-weight:700;color:var(--text)" data-i18n="port_agregar_activo">Agregar activo</span>
+      <span onclick="closePortModal()" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</span>
     </div>
     <div id="port-modal-body"></div>
   </div>
@@ -1728,10 +1728,10 @@ function filterMktSearch(){
   res.style.flexDirection='column';
   res.style.gap='4px';
   res.style.padding='6px';
-  res.innerHTML='<div style="font-size:11px;color:#999;padding:12px;text-align:center;">'+t('mkt_buscando')+'</div>';
+  res.innerHTML='<div style="font-size:11px;color:var(--textSec);padding:12px;text-align:center;">'+t('mkt_buscando')+'</div>';
   if(window._buscarActivos){
     window._buscarActivos(q, function(results){
-      if(!results.length){ res.innerHTML='<div style="font-size:11px;color:#999;padding:12px;text-align:center;">'+t('mkt_sin_resultados')+q+'"</div>'; return; }
+      if(!results.length){ res.innerHTML='<div style="font-size:11px;color:var(--textSec);padding:12px;text-align:center;">'+t('mkt_sin_resultados')+q+'"</div>'; return; }
       window._mktSearchActs = results;
       res.innerHTML = results.map(function(a,i){
         var logoHtml = a.logo ? '<img src="'+a.logo+'" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.style.display=\'none\';" />' : '<div style="width:24px;height:24px;border-radius:50%;background:'+(a.color||'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--text);flex-shrink:0;">'+(a.abbr||a.s.substring(0,3).toUpperCase())+'</div>';
@@ -1739,8 +1739,8 @@ function filterMktSearch(){
         var tipoLabel = a.tipo==='cripto'?t('mkt_tipo_cripto'):a.tipo==='accion'?t('mkt_tipo_accion'):a.tipo==='etf'?t('mkt_tipo_etf'):(a.tipo||t('mkt_tipo_activo'));
         var tag = a._fromYahoo ? ' <span style="font-size:8px;background:#58A6FF20;color:#58A6FF;border-radius:3px;padding:1px 3px;">YAHOO</span>' : '';
         var cachedP = (window._pcPrices||{})[a.s];
-        var priceHtml = cachedP ? '<span style="font-size:13px;font-weight:700;color:#111;">$'+Number(cachedP).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="mkt-sr-p-'+i+'" style="font-size:11px;color:#999;">...</span>';
-        return '<div onclick="window._mktOpenDetail('+i+')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;background:#f5f5f5;-webkit-tap-highlight-color:rgba(0,0,0,0);">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:#111;">'+a.s+tag+'</div><div style="font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+a.n+' <span style="color:'+tipoColor+'">&#9830; '+tipoLabel+'</span></div></div>'+priceHtml+'</div>';
+        var priceHtml = cachedP ? '<span style="font-size:13px;font-weight:700;color:var(--text);">$'+Number(cachedP).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>' : '<span id="mkt-sr-p-'+i+'" style="font-size:11px;color:var(--textSec);">...</span>';
+        return '<div onclick="window._mktOpenDetail('+i+')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;background:#f5f5f5;-webkit-tap-highlight-color:rgba(0,0,0,0);">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:700;color:var(--text);">'+a.s+tag+'</div><div style="font-size:11px;color:var(--textSec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+a.n+' <span style="color:'+tipoColor+'">&#9830; '+tipoLabel+'</span></div></div>'+priceHtml+'</div>';
       }).join('');
       // Fetch precios para resultados sin cache
       var toFetch = results.filter(function(a,i){ return !(window._pcPrices||{})[a.s]; });
@@ -1906,7 +1906,7 @@ window._mktOpenDetail = function(idx){
 </div>
 <!-- Modal Agregar Activo -->
 <div id="wl-add-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100dvh;background:#000000CC;z-index:100;align-items:flex-end;justify-content:center">
-  <div style="background:var(--card);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(36px + env(safe-area-inset-bottom));border-top:1px solid var(--border2);max-height:85dvh;overflow-y:auto">
+  <div style="background:var(--card);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(36px + env(safe-area-inset-bottom));border-top:1px solid var(--border2);max-height:85svh;overflow-y:auto">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span style="font-size:15px;font-weight:500;color:var(--text)" data-i18n="wl_agregar_activo">Agregar activo</span><span onclick="wlCloseAddModal()" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</span></div>
     <input id="wl-add-search" type="text" placeholder="Buscar: BTC, AAPL, SPY..." data-i18n="wl_buscar_placeholder" data-i18n-attr="placeholder" autocomplete="off" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border2);border-radius:9px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px" oninput="wlSearchAssets()" />
     <div id="wl-add-results" style="max-height:350px;overflow-y:auto"></div>
@@ -2286,7 +2286,7 @@ display:flex;align-items:center;justify-content:space-between}
           letter-spacing:.5px" data-i18n="email_label">Email</div>
         <div id="cuenta-email-txt"
           style="background:var(--card);border:1px solid #222;border-radius:8px;
-          padding:10px 12px;color:#666;font-size:14px">
+          padding:10px 12px;color:var(--textSec);font-size:14px">
         </div>
         <div style="font-size:11px;color:var(--textDim);margin-top:4px">
           <span data-i18n-html="email_no_editar">&#128274; El email no se puede modificar</span>
@@ -4010,18 +4010,18 @@ document.addEventListener("DOMContentLoaded", function(){
 <div id="modal-aviso-legal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
   <div style="background:var(--card);border-radius:20px;padding:24px 20px;max-height:80vh;overflow-y:auto;width:calc(100% - 32px);max-width:380px;border:2px solid var(--gold);box-shadow:0 15px 28px rgba(0,0,0,0.55);">
     <div style="text-align:center;margin-bottom:16px;">
-      <span style="font-weight:700;font-size:16px;color:#111;" data-i18n="aviso_legal_titulo">⚖️ AVISO LEGAL</span>
+      <span style="font-weight:700;font-size:16px;color:var(--text);" data-i18n="aviso_legal_titulo">⚖️ AVISO LEGAL</span>
     </div>
-    <p style="font-size:13px;color:#333;line-height:1.7;margin:0 0 12px;" data-i18n="aviso_legal_p1">
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin:0 0 12px;" data-i18n="aviso_legal_p1">
       La información proporcionada por Cobrex tiene carácter exclusivamente informativo y educativo. No constituye asesoramiento financiero, recomendación de inversión, ni oferta de compra o venta de ningún activo financiero.
     </p>
-    <p style="font-size:13px;color:#333;line-height:1.7;margin:0 0 12px;" data-i18n="aviso_legal_p2">
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin:0 0 12px;" data-i18n="aviso_legal_p2">
       Las señales, análisis e indicadores mostrados son generados por algoritmos automatizados y no deben interpretarse como garantía de resultados futuros. Invertir conlleva riesgos, incluida la posible pérdida del capital invertido.
     </p>
-    <p style="font-size:13px;color:#333;line-height:1.7;margin:0 0 16px;" data-i18n="aviso_legal_p3">
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin:0 0 16px;" data-i18n="aviso_legal_p3">
       Consulte siempre a un asesor financiero certificado antes de tomar decisiones de inversión.
     </p>
-    <div style="text-align:center;font-size:11px;color:#999;margin-bottom:16px;">
+    <div style="text-align:center;font-size:11px;color:var(--textSec);margin-bottom:16px;">
       © 2026 Cobrex — Fernando Moscon
     </div>
     <div onclick="document.getElementById('modal-aviso-legal').style.display='none'" style="text-align:center;cursor:pointer;font-size:14px;font-weight:600;color:#dc2626;">
@@ -4283,7 +4283,9 @@ document.addEventListener("DOMContentLoaded", function(){
     }).join('');
   };
   window.abrirMisAlertas = async function(){
-    var ov = document.getElementById('mis-alertas-modal'); if (!ov) return;
+    var ov = document.getElementById('mis-alertas-modal');
+    if (!ov) { try { initMA(); } catch(e){} ov = document.getElementById('mis-alertas-modal'); }
+    if (!ov) return;
     ov.style.display = 'flex';
     document.getElementById('mis-alertas-body').innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">Cargando…</div>';
     await window.cargarMisAlertas(); window.renderMisAlertas();
@@ -4309,7 +4311,7 @@ document.addEventListener("DOMContentLoaded", function(){
         ov.id = 'mis-alertas-modal';
         ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:flex-end;justify-content:center';
         ov.onclick = function(e){ if (e.target === ov) window.cerrarMisAlertas(); };
-        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85dvh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
+        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85svh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
           + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 '+(window.t?window.t('mis_al_titulo'):'Mis Alertas')+'</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
           + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ '+(window.t?window.t('mis_al_marcar'):'Marcar leídas')+'</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ '+(window.t?window.t('mis_al_borrar'):'Borrar')+'</button></div>'
           + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1;padding-bottom:env(safe-area-inset-bottom)"></div></div>';
