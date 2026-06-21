@@ -2993,9 +2993,9 @@ window.openPortItemDetail = function(itemId){
       '<div style="font-size:20px;font-weight:700;color:'+dirColor+';">'+probPrincipal.toFixed(0)+'<span style="font-size:11px;">%</span></div>' +
       '</div>' +
       '<div style="display:flex;gap:8px;margin-bottom:8px;">' +
-      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_detail_objetivo')+'</div><div style="font-size:12px;color:var(--green);font-weight:600;">$'+fmtP(sig.objetivo)+'</div></div>' +
-      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_detail_stop_loss')+'</div><div style="font-size:12px;color:var(--red);font-weight:600;">$'+fmtP(sig.stop)+'</div></div>' +
-      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+(sig.direccion==='ALCISTA'?t('port_detail_upside'):t('port_detail_downside'))+'</div><div style="font-size:12px;color:'+dirColor+';font-weight:600;">'+(sig.direccion==='ALCISTA'?'+':'-')+Math.abs(sig.upside||0).toFixed(1)+'%</div></div>' +
+      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_detail_objetivo')+'</div><div style="font-size:12px;color:var(--green);font-weight:600;">$'+fmtP(sig.objetivo)+'</div></div>' +
+      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_detail_stop_loss')+'</div><div style="font-size:12px;color:var(--red);font-weight:600;">$'+fmtP(sig.stop)+'</div></div>' +
+      '<div style="flex:1;background:var(--bg);border-radius:7px;padding:7px;text-align:center;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+(sig.direccion==='ALCISTA'?t('port_detail_upside'):t('port_detail_downside'))+'</div><div style="font-size:12px;color:'+dirColor+';font-weight:600;">'+(sig.direccion==='ALCISTA'?'+':'-')+Math.abs(sig.upside||0).toFixed(1)+'%</div></div>' +
       '</div>' +
       motivosHtml +
       '</div>';
@@ -3011,12 +3011,12 @@ window.openPortItemDetail = function(itemId){
     '<div style="font-size:11px;color:'+pnlColor+';">'+pnlSign+pnlPct.toFixed(2)+'% P&L</div>' +
     '</div></div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_precio_compra_short')+'</div><div style="font-size:13px;color:var(--text);font-weight:600;">$'+fmtP(item.precio_compra)+'</div></div>' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_cantidad_label')+'</div><div style="font-size:13px;color:var(--text);font-weight:600;">'+item.cantidad+'</div></div>' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_pnl_usd')+'</div><div style="font-size:13px;color:'+pnlColor+';font-weight:600;">'+pnlSign+'$'+fmtP(Math.abs(pnlUsd))+'</div></div>' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_entrada')+'</div><div style="font-size:11px;color:var(--textSec);">'+fechaStr+'</div></div>' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_min_52sem')+'</div><div style="font-size:12px;color:var(--red);font-weight:600;">'+(low52 ? '$'+fmtP(low52) : '--')+'</div></div>' +
-    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_max_52sem')+'</div><div style="font-size:12px;color:var(--green);font-weight:600;">'+(high52 ? '$'+fmtP(high52) : '--')+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_precio_compra_short')+'</div><div style="font-size:13px;color:var(--text);font-weight:600;">$'+fmtP(item.precio_compra)+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_cantidad_label')+'</div><div style="font-size:13px;color:var(--text);font-weight:600;">'+item.cantidad+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_pnl_usd')+'</div><div style="font-size:13px;color:'+pnlColor+';font-weight:600;">'+pnlSign+'$'+fmtP(Math.abs(pnlUsd))+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_entrada')+'</div><div style="font-size:11px;color:var(--textSec);">'+fechaStr+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_min_52sem')+'</div><div style="font-size:12px;color:var(--red);font-weight:600;">'+(low52 ? '$'+fmtP(low52) : '--')+'</div></div>' +
+    '<div style="background:var(--card);border-radius:7px;padding:8px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_max_52sem')+'</div><div style="font-size:12px;color:var(--green);font-weight:600;">'+(high52 ? '$'+fmtP(high52) : '--')+'</div></div>' +
     '</div>' +
     rangeBar +
     '<div id="port-det-pct" style="margin:6px 0;"><span id="pd-24h-val" style="font-size:13px;font-weight:600;color:var(--textSec);">--</span><span style="display:flex;gap:4px;margin-top:4px;">' +
@@ -3024,16 +3024,23 @@ window.openPortItemDetail = function(itemId){
     '</span></div>' +
     sigHtml +
     '<div style="margin-top:10px;background:var(--card);border-radius:9px;padding:12px;border:1px solid var(--border);">' +
-    '<div style="font-size:10px;color:var(--textDim);font-weight:600;letter-spacing:.3px;margin-bottom:8px;">'+t('port_sim_title')+'</div>' +
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' +
-    '<span style="font-size:11px;color:var(--textSec);">'+t('port_sim_label')+'</span>' +
-    '<input id="pd-sim-pct" type="range" min="-50" max="50" value="0" step="1" style="flex:1;accent-color:var(--gold);" oninput="portSimUpdate(\'' + item.id + '\',\'' + item.simbolo + '\',this.value)" />' +
-    '<span id="pd-sim-label" style="font-size:12px;font-weight:700;color:var(--gold);min-width:38px;text-align:right;">0%</span>' +
+    '<div style="font-size:10px;color:var(--textSec);font-weight:700;letter-spacing:.3px;margin-bottom:8px;">'+t('port_sim_title')+'</div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">' +
+    '<div onclick="window.portSimStep(\''+item.id+'\',\''+item.simbolo+'\',-5)" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--red);background:rgba(248,81,73,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;"><span style="color:var(--red);font-size:22px;font-weight:800;">−</span></div>' +
+    '<div style="text-align:center;"><div style="font-size:10px;color:var(--textSec);font-weight:600;">'+t('port_sim_label')+'</div><div id="pd-sim-label" style="font-size:22px;font-weight:800;color:var(--gold);min-width:80px;">0%</div></div>' +
+    '<div onclick="window.portSimStep(\''+item.id+'\',\''+item.simbolo+'\',5)" style="width:40px;height:40px;border-radius:10px;border:1px solid var(--green);background:rgba(63,185,80,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;"><span style="color:var(--green);font-size:22px;font-weight:800;">+</span></div>' +
     '</div>' +
+    '<div style="height:10px;border-radius:5px;overflow:hidden;position:relative;margin-bottom:2px;">' +
+    '<div style="position:absolute;left:0;top:0;bottom:0;width:33.3%;background:var(--red);opacity:.85;"></div>' +
+    '<div style="position:absolute;left:33.3%;top:0;bottom:0;width:33.3%;background:var(--gold);opacity:.85;"></div>' +
+    '<div style="position:absolute;left:66.6%;top:0;bottom:0;width:33.4%;background:var(--green);opacity:.85;"></div>' +
+    '<div id="pd-sim-indicator" style="position:absolute;left:50%;top:-3px;margin-left:-8px;width:16px;height:16px;border-radius:8px;background:var(--text);border:2px solid var(--card);"></div>' +
+    '</div>' +
+    '<div style="display:flex;justify-content:space-between;margin-bottom:12px;"><span style="font-size:9px;color:var(--textDim);">-50%</span><span style="font-size:9px;color:var(--textDim);">0%</span><span style="font-size:9px;color:var(--textDim);">+50%</span></div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
-    '<div style="background:var(--bg);border-radius:7px;padding:7px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_sim_nuevo_precio')+'</div><div id="pd-sim-newprice" style="font-size:12px;color:var(--text);font-weight:600;">$' + fmtP(precio) + '</div></div>' +
-    '<div style="background:var(--bg);border-radius:7px;padding:7px;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_sim_pnl_activo')+'</div><div id="pd-sim-pnl" style="font-size:12px;color:var(--text);font-weight:600;">' + pnlSign + '$' + fmtP(Math.abs(pnlUsd)) + '</div></div>' +
-    '<div style="background:var(--bg);border-radius:7px;padding:7px;grid-column:span 2;"><div style="font-size:9px;color:var(--textDim);margin-bottom:2px;">'+t('port_sim_impacto_total')+'</div><div id="pd-sim-portimpact" style="font-size:12px;color:var(--text);font-weight:600;">--</div></div>' +
+    '<div style="background:var(--bg);border-radius:7px;padding:7px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_sim_nuevo_precio')+'</div><div id="pd-sim-newprice" style="font-size:12px;color:var(--text);font-weight:600;">$' + fmtP(precio) + '</div></div>' +
+    '<div style="background:var(--bg);border-radius:7px;padding:7px;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_sim_pnl_activo')+'</div><div id="pd-sim-pnl" style="font-size:12px;color:var(--text);font-weight:600;">' + pnlSign + '$' + fmtP(Math.abs(pnlUsd)) + '</div></div>' +
+    '<div style="background:var(--bg);border-radius:7px;padding:7px;grid-column:span 2;"><div style="font-size:9px;color:var(--textSec);margin-bottom:2px;">'+t('port_sim_impacto_total')+'</div><div id="pd-sim-portimpact" style="font-size:12px;color:var(--text);font-weight:600;">--</div></div>' +
     '' +
     '<div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;">' +
     '<div style="font-size:10px;color:var(--textSec);margin-bottom:8px;text-align:center;">'+t('port_compartir')+'</div>' +
@@ -3053,6 +3060,7 @@ window.openPortItemDetail = function(itemId){
 })()
     + '</div></div>';
   window._portSimBase = {precio: precio, cantidad: item.cantidad, precioCompra: item.precio_compra};
+  window._portSimPct = 0;
   modal.style.display = 'flex';
   try { window.portSimUpdate('', item.simbolo, '0'); } catch(e){}
   portDetPeriod(item.simbolo, item.tipo, '24h');
@@ -3119,10 +3127,16 @@ window.portSimUpdate = function(itemId, simbolo, pctStr){
   var piColor = portImpact >= 0 ? 'var(--green)' : 'var(--red)';
   var fmt = function(n){ var loc=(navigator.language||'en-US'); return n.toLocaleString(loc,{minimumFractionDigits:2,maximumFractionDigits:2}); };
   if(lbl) { lbl.textContent = (pct>=0?'+':'')+pct+'%'; lbl.style.color = pct===0?'var(--gold)':(pct>0?'var(--green)':'var(--red)'); }
+  window._portSimPct = pct;
+  var _ind = document.getElementById('pd-sim-indicator'); if(_ind) _ind.style.left = (pct+50)+'%';
   if(npEl) npEl.textContent = '$'+fmt(newPrice);
   if(pnlEl){ pnlEl.textContent = (newPnlUsd>=0?'+':'-')+'$'+fmt(Math.abs(newPnlUsd))+' ('+( newPnlPct>=0?'+':'')+newPnlPct.toFixed(1)+'%)'; pnlEl.style.color = pnlColor; }
   if(piEl){ piEl.textContent = (portImpact>=0?'+':'-')+'$'+fmt(Math.abs(portImpact)); piEl.style.color = piColor; }
 };;
+window.portSimStep = function(itemId, simbolo, delta){
+  var cur = window._portSimPct || 0; var nx = Math.max(-50, Math.min(50, cur + delta));
+  window.portSimUpdate(itemId, simbolo, String(nx));
+};
 
 
 // ââ AGREGAR activo al portfolio en Supabase ââ

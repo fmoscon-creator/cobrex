@@ -4261,6 +4261,7 @@ document.addEventListener("DOMContentLoaded", function(){
     } catch(e){}
   };
   window._misAlertasSel = function(){ return Array.from(document.querySelectorAll('#mis-alertas-body .ma-chk:checked')).map(function(c){ return c.getAttribute('data-id'); }); };
+  window.selTodasMisAlertas = function(){ var chk=Array.from(document.querySelectorAll('#mis-alertas-body .ma-chk')); var allSel=chk.length>0&&chk.every(function(c){return c.checked;}); chk.forEach(function(c){ c.checked=!allSel; }); };
   window.renderMisAlertas = function(){
     var body = document.getElementById('mis-alertas-body'); if (!body) return;
     var data = window._misAlertasData || [];
@@ -4270,16 +4271,25 @@ document.addEventListener("DOMContentLoaded", function(){
     if (!data.length){ body.innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">No tenés alertas en el historial todavía.</div>'; return; }
     body.innerHTML = data.map(function(a){
       var al = a.alertas || {};
-      var fecha = a.created_at ? new Date(a.created_at).toLocaleString() : '';
-      // C1 (web-1.4): dirección con los strings reales del backend ('arriba'/'abajo') + color verde/rojo en el borde izquierdo (como nativa MisAlertasScreen.js).
+      var fp = function(n){ return (n==null?'--':Number(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})); };
+      // Igual a nativa MisAlertasScreen.js: borde-izq + círculo verde/rojo, "SÍMBOLO — ALCISTA/BAJISTA", "Disparado", config line.
       var _isUp = al.direccion==='arriba'||al.direccion==='subio'||al.direccion==='up';
       var _isDown = al.direccion==='abajo'||al.direccion==='bajo'||al.direccion==='down';
-      var _dirColor = _isUp ? 'var(--green)' : (_isDown ? 'var(--red)' : 'var(--textSec)');
-      var dir = _isUp ? '▲' : (_isDown ? '▼' : '•');
-      return '<div style="display:flex;gap:10px;padding:12px 14px;border-bottom:0.5px solid var(--border);border-left:4px solid '+_dirColor+';background:'+(a.leida?'transparent':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.7':'1')+'">'
+      var dirColor = _isUp ? 'var(--green)' : (_isDown ? 'var(--red)' : 'var(--textSec)');
+      var bgC = _isUp ? 'rgba(63,185,80,.15)' : (_isDown ? 'rgba(248,81,73,.15)' : 'var(--border)');
+      var dirEmoji = _isUp ? '📈' : (_isDown ? '📉' : '🔔');
+      var dirWord = _isUp ? 'ALCISTA' : (_isDown ? 'BAJISTA' : '');
+      var cfg = (al.tipo==='precio_objetivo' && al.precio_base!=null)
+        ? ((_isUp?'⬆️ SUBA':'⬇️ BAJA')+' $'+Math.abs(al.valor_objetivo)+' desde $'+fp(al.precio_base))
+        : ('🎯 Objetivo: $'+fp(al.valor_objetivo));
+      var fecha = (al.disparada_at||a.created_at) ? new Date(al.disparada_at||a.created_at).toLocaleString('es-AR') : '';
+      return '<div style="display:flex;gap:10px;padding:12px;margin-bottom:8px;border-radius:10px;border:1px solid var(--border);border-left:4px solid '+dirColor+';background:'+(a.leida?'var(--card)':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.65':'1')+';align-items:flex-start">'
         + '<input type="checkbox" class="ma-chk" data-id="'+a.id+'" style="margin-top:3px">'
-        + '<div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">'+dir+' '+(a.simbolo||'')+(a.precio_disparado!=null?' — '+a.precio_disparado:'')+'</div>'
-        + '<div style="font-size:10px;color:var(--textSec);margin-top:2px">'+(function(tp){var _t=window.t||function(k){return k;};var m={precio_objetivo:'al_precio_obj',variacion_brusca:'al_precio_var',max_min:'al_precio_maxmin',precio:'al_precio_obj',porcentaje:'al_precio_var',umbral:'al_ia_umbral',apertura:'al_ev_apertura'};return m[tp]?_t(m[tp]):(tp||'');})(al.tipo)+' · '+fecha+'</div></div></div>';
+        + '<div style="width:36px;height:36px;border-radius:18px;background:'+bgC+';border:1px solid '+dirColor+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">'+dirEmoji+'</div>'
+        + '<div style="flex:1"><div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px">'+(a.simbolo||'')+' — <span style="color:'+dirColor+'">'+dirWord+'</span></div>'
+        + '<div style="font-size:12px;color:var(--text);margin-bottom:3px">💰 Disparado: <b>$'+fp(a.precio_disparado)+'</b></div>'
+        + '<div style="font-size:11px;color:var(--textSec);margin-bottom:4px">'+cfg+'</div>'
+        + '<div style="font-size:10px;color:var(--textDim)">'+fecha+'</div></div></div>';
     }).join('');
   };
   window.abrirMisAlertas = async function(){
@@ -4309,11 +4319,11 @@ document.addEventListener("DOMContentLoaded", function(){
       if (!document.getElementById('mis-alertas-modal')){
         var ov = document.createElement('div');
         ov.id = 'mis-alertas-modal';
-        ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:flex-end;justify-content:center';
+        ov.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:stretch;justify-content:center';
         ov.onclick = function(e){ if (e.target === ov) window.cerrarMisAlertas(); };
-        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;max-height:85svh;border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden">'
+        ov.innerHTML = '<div style="background:var(--bg);width:100%;max-width:480px;height:100dvh;border-radius:0;display:flex;flex-direction:column;overflow:hidden">'
           + '<div style="display:flex;align-items:center;padding:14px;border-bottom:0.5px solid var(--border)"><div style="flex:1"><div style="font-size:15px;font-weight:800;color:var(--text)">🔔 '+(window.t?window.t('mis_al_titulo'):'Mis Alertas')+'</div><div id="mis-alertas-hdr" style="font-size:10px;color:var(--textSec);margin-top:2px"></div></div><span onclick="window.cerrarMisAlertas()" style="font-size:20px;color:var(--textSec);cursor:pointer;padding:4px">✕</span></div>'
-          + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ '+(window.t?window.t('mis_al_marcar'):'Marcar leídas')+'</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ '+(window.t?window.t('mis_al_borrar'):'Borrar')+'</button></div>'
+          + '<div style="display:flex;gap:8px;padding:10px 14px;border-bottom:0.5px solid var(--border)"><button onclick="window.marcarLeidasMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">✓ '+(window.t?window.t('mis_al_marcar'):'Marcar leídas')+'</button><button onclick="window.borrarMisAlertas()" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">🗑️ '+(window.t?window.t('mis_al_borrar'):'Borrar')+'</button><button onclick="window.selTodasMisAlertas()" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:11px;font-weight:700;color:var(--text);cursor:pointer">☑ '+(function(){var x=window.t?window.t('mis_al_sel_todas'):'';return (x&&x!=='mis_al_sel_todas')?x:'Sel. todas';})()+'</button></div>'
           + '<div id="mis-alertas-body" style="overflow-y:auto;flex:1;padding-bottom:env(safe-area-inset-bottom)"></div></div>';
         document.body.appendChild(ov);
       }
