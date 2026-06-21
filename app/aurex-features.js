@@ -1,4 +1,31 @@
 /* v=1774807550559 */
+// PURGA de caché vieja: este archivo SIEMPRE carga fresco (?t=Date.now() en index.html),
+// así que es el lugar seguro para matar un service worker viejo + CacheStorage que sirvan index.html viejo.
+(function _cbxPurgeStaleCache(){
+  try {
+    if(typeof window==='undefined') return;
+    var purgedFlag = '_cbxPurged_20260621';
+    if(sessionStorage.getItem(purgedFlag)) return; // ya purgado en esta pestaña, evitar loop
+    var jobs = [];
+    if(window.caches && caches.keys){
+      jobs.push(caches.keys().then(function(keys){
+        return Promise.all(keys.map(function(k){ return caches.delete(k); })).then(function(){ return keys.length; });
+      }).catch(function(){ return 0; }));
+    } else { jobs.push(Promise.resolve(0)); }
+    if('serviceWorker' in navigator && navigator.serviceWorker.getRegistrations){
+      jobs.push(navigator.serviceWorker.getRegistrations().then(function(regs){
+        return Promise.all(regs.map(function(r){ return r.unregister(); })).then(function(){ return regs.length; });
+      }).catch(function(){ return 0; }));
+    } else { jobs.push(Promise.resolve(0)); }
+    Promise.all(jobs).then(function(res){
+      var hadCaches = (res[0]||0) > 0, hadSW = (res[1]||0) > 0;
+      if(hadCaches || hadSW){
+        sessionStorage.setItem(purgedFlag,'1');
+        location.reload(); // recargar UNA vez ya sin caché/SW viejo → index.html fresco
+      }
+    });
+  } catch(e){}
+})();
 // Cache inmediato: renderizar portfolio del cache al iniciar (sin esperar auth/fetch)
 (function _loadPortCacheImmediate(){
   try {
