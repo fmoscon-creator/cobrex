@@ -1450,7 +1450,7 @@ function _renderMarketBanner(containerId){
   }
   var items = ALL_MKTS.map(mktItem).filter(Boolean).join('');
   var editBtn = '<div onclick="editMarketBanner()" style="font-size:12px;color:#3B9EF5;cursor:pointer;padding:4px 8px;border-radius:4px;border:1px solid #3B9EF5;margin-left:auto;flex-shrink:0;">&#9998;</div>';
-  el.innerHTML = '<div style="display:flex;align-items:center;gap:0;padding:8px 10px;background:var(--card);border:1px solid var(--border2);border-radius:10px;margin:4px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;">'+items+editBtn+'</div>';
+  el.innerHTML = '<div style="display:flex;align-items:center;gap:0;padding:4px 8px;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;">'+items+editBtn+'</div>';
 }
 
 window.editMarketBanner = function(){
@@ -5583,8 +5583,8 @@ function _renderComboBanner(containerId){
   document.body.removeChild(tmpMarket);
   document.body.removeChild(tmpFutures);
 
-  var sOn  = 'display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;background:var(--gold);color:var(--text);';
-  var sOff = 'display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;background:#2a2a2a;color:var(--textDim);';
+  var sOn  = 'display:inline-block;padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:var(--gold);color:#111;border:1px solid var(--gold);';
+  var sOff = 'display:inline-block;padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:var(--chipBg);color:var(--text);border:1px solid var(--border2);';
 
   var html = '<div style="display:flex;gap:5px;padding:2px 10px 2px;justify-content:flex-end;">'
     + '<div id="combo-tab-a" style="' + sOn  + '" onclick="if(window._comboActive!==0&&window._comboBannerFlip)window._comboBannerFlip()">'+t('tab_mercados')+'</div>'
@@ -5596,8 +5596,8 @@ function _renderComboBanner(containerId){
   el.innerHTML = html;
 
   window._comboActive = 0;
-  window._comboSOn  = 'display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;background:var(--gold);color:var(--text);';
-  window._comboSOff = 'display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;background:#2a2a2a;color:var(--textDim);';
+  window._comboSOn  = 'display:inline-block;padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:var(--gold);color:#111;border:1px solid var(--gold);';
+  window._comboSOff = 'display:inline-block;padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;background:var(--chipBg);color:var(--text);border:1px solid var(--border2);';
 
   function _comboFlip(){
     window._comboActive = 1 - window._comboActive;
@@ -6303,11 +6303,11 @@ window._mktShowDetailCard = function(act) {
   var logoHtml = _logoSrc
     ? '<img src="'+_logoSrc+'" style="width:40px;height:40px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="this.outerHTML=\'<div style=&quot;width:40px;height:40px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff&quot;>'+_ini+'</div>\'"/>'
     : '<div style="width:40px;height:40px;border-radius:50%;background:'+(act.color||'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">'+_ini+'</div>';
-  var boxCss='flex:1;background:var(--bg);border-radius:10px;padding:10px;text-align:center;', lblCss='font-size:9px;color:var(--textSec);margin-bottom:4px;', valCss='font-size:16px;font-weight:700;';
+  var boxCss='flex:1;min-width:0;box-sizing:border-box;background:var(--bg);border-radius:10px;padding:10px;text-align:center;', lblCss='font-size:10px;color:var(--textSec);margin-bottom:4px;', valCss='font-size:14px;font-weight:700;';
   var ov = document.createElement('div');
   ov.id = 'mkt-detail-overlay';
   ov.style.cssText = 'position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:20px;-webkit-tap-highlight-color:rgba(0,0,0,0);';
-  var h = '<div style="background:var(--card);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:320px;padding:16px;box-sizing:border-box;">';
+  var h = '<div style="background:var(--card);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:360px;padding:20px;box-sizing:border-box;">';
   h += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">'+logoHtml+'<div style="flex:1;min-width:0;"><div style="font-size:18px;font-weight:700;color:var(--text);">'+ticker+'</div><div style="font-size:12px;color:var(--textSec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(name?name:ticker)+(tipo?' · '+tipo:'')+'</div></div><div id="mkt-det-x" style="font-size:22px;color:var(--textSec);cursor:pointer;padding:0 4px;">✕</div></div>';
   h += '<div style="display:flex;gap:10px;margin-bottom:14px;">';
   h += '<div style="'+boxCss+'"><div style="'+lblCss+'">'+t('precio_row')+'</div><div style="'+valCss+'color:var(--text);">'+(precio?_fmt(precio,'precio'):'--')+'</div></div>';
