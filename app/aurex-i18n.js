@@ -559,6 +559,7 @@
     mis_al_suba: { es: 'SUBA', en: 'UP', pt: 'SUBA', zh: '上涨', fr: 'HAUSSE', it: 'RIALZO', hi: 'ऊपर', ar: 'صعود' },
     mis_al_baja: { es: 'BAJA', en: 'DOWN', pt: 'QUEDA', zh: '下跌', fr: 'BAISSE', it: 'RIBASSO', hi: 'नीचे', ar: 'هبوط' },
     mis_al_desde: { es: 'desde', en: 'from', pt: 'desde', zh: '从', fr: 'depuis', it: 'da', hi: 'से', ar: 'من' },
+    mis_al_sel_todas: { es: 'Sel. todas', en: 'Select all', pt: 'Sel. todas', zh: '全选', fr: 'Tout sél.', it: 'Sel. tutti', hi: 'सभी चुनें', ar: 'تحديد الكل' },
     mis_al_titulo: { es: 'Mis Alertas', en: 'My Alerts', pt: 'Minhas Alertas', zh: '我的提醒', fr: 'Mes Alertes', it: 'I miei Avvisi', hi: 'मेरे अलर्ट', ar: 'تنبيهاتي' },
     mis_al_historial: { es: 'Historial de alertas disparadas', en: 'History of triggered alerts', pt: 'Histórico de alertas disparados', zh: '已触发提醒历史', fr: 'Historique des alertes déclenchées', it: 'Cronologia degli avvisi attivati', hi: 'ट्रिगर किए गए अलर्ट का इतिहास', ar: 'سجل التنبيهات المُفعّلة' },
     mis_al_marcar: { es: 'Marcar leídas', en: 'Mark read', pt: 'Marcar lidas', zh: '标记已读', fr: 'Marquer lu', it: 'Segna come letti', hi: 'पढ़ा हुआ चिह्नित करें', ar: 'تحديد كمقروء' },
