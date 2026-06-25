@@ -596,7 +596,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   }
 })();
 </script>
-<script src="aurex-i18n.js?v=35"></script>
+<script src="aurex-i18n.js?v=36"></script>
 <script src="aurex-v3.js?v=151"></script>
 <script>document.write('<scr'+'ipt src="aurex-features.js?t='+Date.now()+'"><\/scr'+'ipt>');</script>
 <script>
@@ -4160,27 +4160,27 @@ document.addEventListener("DOMContentLoaded", function(){
     var data = window._misAlertasData || [];
     var hdr = document.getElementById('mis-alertas-hdr');
     var unread = data.filter(function(a){ return !a.leida; }).length;
-    if (hdr) hdr.textContent = unread + ' sin leer · ' + data.length + ' en historial';
-    if (!data.length){ body.innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">No tenés alertas en el historial todavía.</div>'; return; }
+    if (hdr) hdr.textContent = unread + ' ' + (window.t?window.t('mis_al_sin_leer'):'sin leer') + ' · ' + data.length + ' ' + (window.t?window.t('mis_al_en_historial'):'en historial');
+    if (!data.length){ body.innerHTML = '<div style="text-align:center;color:var(--textSec);padding:30px;font-size:12px">'+(window.t?window.t('mis_al_vacio'):'No tenés alertas en el historial todavía.')+'</div>'; return; }
     body.innerHTML = data.map(function(a){
       var al = a.alertas || {};
-      var fp = function(n){ return (n==null?'--':Number(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})); };
+      var fp = function(n){ return (n==null?'--':Number(n).toLocaleString((window._numLocale?window._numLocale():'es-AR'),{minimumFractionDigits:2,maximumFractionDigits:2})); };
       // Igual a nativa MisAlertasScreen.js: borde-izq + círculo verde/rojo, "SÍMBOLO — ALCISTA/BAJISTA", "Disparado", config line.
       var _isUp = al.direccion==='arriba'||al.direccion==='subio'||al.direccion==='up';
       var _isDown = al.direccion==='abajo'||al.direccion==='bajo'||al.direccion==='down';
       var dirColor = _isUp ? 'var(--green)' : (_isDown ? 'var(--red)' : 'var(--textSec)');
       var bgC = _isUp ? 'rgba(63,185,80,.15)' : (_isDown ? 'rgba(248,81,73,.15)' : 'var(--border)');
       var dirEmoji = _isUp ? '📈' : (_isDown ? '📉' : '🔔');
-      var dirWord = _isUp ? 'ALCISTA' : (_isDown ? 'BAJISTA' : '');
+      var dirWord = _isUp ? (window.t?window.t('ia_w_alcista'):'ALCISTA') : (_isDown ? (window.t?window.t('ia_w_bajista'):'BAJISTA') : '');
       var cfg = (al.tipo==='precio_objetivo' && al.precio_base!=null)
-        ? ((_isUp?'⬆️ SUBA':'⬇️ BAJA')+' $'+Math.abs(al.valor_objetivo)+' desde $'+fp(al.precio_base))
-        : ('🎯 Objetivo: $'+fp(al.valor_objetivo));
-      var fecha = (al.disparada_at||a.created_at) ? new Date(al.disparada_at||a.created_at).toLocaleString('es-AR') : '';
+        ? ((_isUp?('⬆️ '+(window.t?window.t('mis_al_suba'):'SUBA')):('⬇️ '+(window.t?window.t('mis_al_baja'):'BAJA')))+' $'+Math.abs(al.valor_objetivo)+' '+(window.t?window.t('mis_al_desde'):'desde')+' $'+fp(al.precio_base))
+        : ('🎯 '+(window.t?window.t('mis_al_objetivo'):'Objetivo')+': $'+fp(al.valor_objetivo));
+      var fecha = (al.disparada_at||a.created_at) ? new Date(al.disparada_at||a.created_at).toLocaleString((window._numLocale?window._numLocale():'es-AR')) : '';
       return '<div style="display:flex;gap:10px;padding:12px;margin-bottom:8px;border-radius:10px;border:1px solid var(--border);border-left:4px solid '+dirColor+';background:'+(a.leida?'var(--card)':'rgba(212,160,23,0.08)')+';opacity:'+(a.leida?'0.65':'1')+';align-items:flex-start">'
         + '<input type="checkbox" class="ma-chk" data-id="'+a.id+'" style="margin-top:3px">'
         + '<div style="width:36px;height:36px;border-radius:18px;background:'+bgC+';border:1px solid '+dirColor+';display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">'+dirEmoji+'</div>'
         + '<div style="flex:1"><div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px">'+(a.simbolo||'')+' — <span style="color:'+dirColor+'">'+dirWord+'</span></div>'
-        + '<div style="font-size:12px;color:var(--text);margin-bottom:3px">💰 Disparado: <b>$'+fp(a.precio_disparado)+'</b></div>'
+        + '<div style="font-size:12px;color:var(--text);margin-bottom:3px">💰 '+(window.t?window.t('mis_al_disparado'):'Disparado')+': <b>$'+fp(a.precio_disparado)+'</b></div>'
         + '<div style="font-size:11px;color:var(--textSec);margin-bottom:4px">'+cfg+'</div>'
         + '<div style="font-size:10px;color:var(--textDim)">'+fecha+'</div></div></div>';
     }).join('');
