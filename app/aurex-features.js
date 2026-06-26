@@ -4873,7 +4873,7 @@ function _renderFearGreed(containerId) {
   if(raw.vix)              bits.push('VIX: <b style="color:var(--text)">'+_fmt(raw.vix.price,'precio')+'</b>');
   if(raw.btcPct!==undefined)bits.push('BTC: <b style="color:'+(raw.btcPct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.btcPct,'pct')+'</b>');
   if(raw.sp500)            bits.push('S&P: <b style="color:'+(raw.sp500.pct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.sp500.pct,'pct')+'</b>');
-  if(raw.gcf)              bits.push('Oro: <b style="color:'+(raw.gcf.pct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.gcf.pct,'pct')+'</b>');
+  if(raw.gcf)              bits.push(((window._i18n&&window._i18n.getLang&&window._i18n.getLang()!=='es')?'Gold':'Oro')+': <b style="color:'+(raw.gcf.pct>=0?'var(--green)':'var(--red)')+'">'+_fmt(raw.gcf.pct,'pct')+'</b>');
   var dataLine = '<div style="display:flex;flex-wrap:wrap;gap:5px;font-size:9px;color:var(--textSec);margin-top:3px;">'+bits.join('')+'</div>';
   var cats = ['GLOBAL','CRIPTO','ACCIONES','COMOD','FUTUROS'];
   var catLabels = {GLOBAL:'🟩 '+t('mkt_pulse_cat_global'),CRIPTO:'🪙 '+t('mkt_pulse_cat_cripto'),ACCIONES:'📈 '+t('mkt_pulse_cat_acciones'),COMOD:'🟤 '+t('mkt_pulse_cat_comod'),FUTUROS:'⚡ '+t('mkt_pulse_cat_futuros')};
@@ -4939,9 +4939,9 @@ window.showFearGreedInfo = function() {
     ['&#x1FA99;','ETH momentum','Binance','8%',  fmtPct(raw.ethPct),'#58A6FF'],
     ['&#x1F4C9;',t('mkt_pulse_var_vix'),'Yahoo','14%',fmtPrice(raw.vix),'#FF6B6B'],
     ['&#x1F4C8;','S&P500 momentum','Yahoo','8%', fmtPct(raw.sp500&&raw.sp500.pct),'var(--green)'],
-    ['&#x26A1;','ES=F S&P Futuro','Yahoo','8%',  fmtPct(raw.esf&&raw.esf.pct),'var(--green)'],
+    ['&#x26A1;','ES=F S&P Fut','Yahoo','8%',  fmtPct(raw.esf&&raw.esf.pct),'var(--green)'],
     ['&#x26A1;','NQ=F Nasdaq Fut','Yahoo','6%',  fmtPct(raw.nqf&&raw.nqf.pct),'var(--green)'],
-    ['&#x26A1;','YM=F Dow Futuro','Yahoo','4%',  fmtPct(raw.ymf&&raw.ymf.pct),'var(--green)'],
+    ['&#x26A1;','YM=F Dow Fut','Yahoo','4%',  fmtPct(raw.ymf&&raw.ymf.pct),'var(--green)'],
     ['&#x26A1;','RTY=F Russell Fut','Yahoo','3%',fmtPct(raw.rtyf&&raw.rtyf.pct),'var(--green)'],
     ['&#x1F947;',t('mkt_pulse_var_oro'),'Yahoo','8%',         fmtPct(raw.gcf&&raw.gcf.pct),'var(--gold)'],
     ['&#x26AA;',t('mkt_pulse_var_plata'),'Yahoo','4%',         fmtPct(raw.sif&&raw.sif.pct),'var(--gold)'],
