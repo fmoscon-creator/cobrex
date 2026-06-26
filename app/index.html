@@ -4228,17 +4228,43 @@ document.addEventListener("DOMContentLoaded", function(){
   // === Filtro "Solo favoritos" en Mercados (paridad onlyFavs nativa) ===
   window._onlyFavs = false;
   function _esFav(ticker){ try { return (JSON.parse(localStorage.getItem('aurex_pins')||'[]')).indexOf(ticker) >= 0; } catch(e){ return false; } }
+  // legacy (compat): ocultar no-favoritos en la lista actual. display:flex (NO '') para no romper el row.
   window._applyOnlyFavs = function(){
     document.querySelectorAll('#cnt .item-row').forEach(function(el){
       var ticker = el.id.replace('row-','');
-      el.style.display = (window._onlyFavs && !_esFav(ticker)) ? 'none' : '';
+      el.style.display = (window._onlyFavs && !_esFav(ticker)) ? 'none' : 'flex';
     });
+  };
+  // Junta TODOS los favoritos de TODOS los tipos, ordenados por tipo: Acciones -> Cripto -> resto.
+  window._favItemsAll = function(){
+    var pins=[]; try{ pins=JSON.parse(localStorage.getItem('aurex_pins')||'[]'); }catch(e){}
+    if(!pins.length || typeof DATA==='undefined') return [];
+    var order=['acciones','cripto','stable','etf','metales','comm','futuros','divisas','bonos'];
+    var found={};
+    if(DATA.acciones){ Object.keys(DATA.acciones).forEach(function(p){ (DATA.acciones[p]||[]).forEach(function(it){ if(pins.indexOf(it.s)>=0 && !found[it.s]) found[it.s]={item:it,tab:'acciones'}; }); }); }
+    ['cripto','stable','etf','metales','comm','futuros','divisas','bonos'].forEach(function(tab){ (DATA[tab]||[]).forEach(function(it){ if(pins.indexOf(it.s)>=0 && !found[it.s]) found[it.s]={item:it,tab:tab}; }); });
+    var list=pins.map(function(t){return found[t];}).filter(Boolean);
+    list.sort(function(a,b){ var ia=order.indexOf(a.tab); var ib=order.indexOf(b.tab); if(ia<0)ia=99; if(ib<0)ib=99; return ia-ib; });
+    return list;
+  };
+  window._renderFavoritosAll = function(){
+    var cnt=document.getElementById('cnt'); if(!cnt) return;
+    var favs=window._favItemsAll();
+    cnt.innerHTML=''; window._mktRenderedSyms={};
+    if(!favs.length){ cnt.innerHTML='<div style="padding:26px 18px;text-align:center;color:var(--textSec);font-size:13px;line-height:1.5;">'+((window.t&&window.t('mkt_sin_favoritos'))||'Todavía no marcaste favoritos.<br>Mantené presionado un activo y elegí ⭐ Agregar a Favoritos.')+'</div>'; return; }
+    favs.forEach(function(f){ try{ _appendMktRow(cnt, f.item, f.tab); }catch(e){} });
+    var cryptos=favs.filter(function(f){return f.tab==='cripto'||f.tab==='stable';});
+    var otros=favs.filter(function(f){return !(f.tab==='cripto'||f.tab==='stable');});
+    if(cryptos.length){ var syms=cryptos.map(function(f){return '"'+f.item.s+'USDT"';}).join(','); fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=['+syms+']').then(function(r){return r.json();}).then(function(list){ list.forEach(function(t){ var sym=t.symbol.replace('USDT',''),pel=document.getElementById('p-'+sym),cel=document.getElementById('c-'+sym),pr=parseFloat(t.lastPrice),pc=parseFloat(t.priceChangePercent)||0; if(pel)pel.textContent=_fmt(pr,'precio'); if(cel){cel.textContent=_fmt(pc,'pct');cel.style.color=pc>=0?'var(--green)':'var(--red)';} }); }).catch(function(){}); }
+    otros.forEach(function(f){ var sym=f.item.s; fetch('https://aurex-app-production.up.railway.app/api/yahoo?symbol='+encodeURIComponent(sym)+'&interval=1d&range=2d').then(function(r){return r.json();}).then(function(d){ var meta=d.chart&&d.chart.result&&d.chart.result[0]?d.chart.result[0].meta:null; if(!meta)return; var price=meta.regularMarketPrice; if(!price)return; var prev=meta.chartPreviousClose||meta.previousClose||price; var pct=prev>0?((price-prev)/prev*100):0; var pel=document.getElementById('p-'+sym),cel=document.getElementById('c-'+sym); if(pel)pel.textContent=_fmt(price,'precio'); if(cel){cel.textContent=_fmt(pct,'pct');cel.style.color=pct>=0?'var(--green)':'var(--red)';} try{ var q=d.chart.result[0].indicators.quote[0].close; var vc=q?q.filter(function(c){return c!=null;}):[]; if(vc.length>=2){var sp=document.getElementById('spark-'+sym); if(sp&&window._buildSparklineSVG)sp.innerHTML=_buildSparklineSVG(vc, vc[vc.length-1]>=vc[0]);} }catch(e){} }).catch(function(){}); });
+    if(window._attachAllMercadosLP) setTimeout(window._attachAllMercadosLP,120);
   };
   window.toggleOnlyFavs = function(){
     window._onlyFavs = !window._onlyFavs;
     var b = document.getElementById('only-favs-chip');
     if (b){ b.style.background = window._onlyFavs ? 'var(--gold)' : 'var(--card)'; b.style.color = window._onlyFavs ? '#000' : 'var(--text)'; }
-    window._applyOnlyFavs();
+    if (window._onlyFavs){ window._renderFavoritosAll(); }
+    else if (window.renderTab){ renderTab(window._activeTab||'cripto', window._activePais||'usa'); }
   };
   // Chip "⭐ Solo favoritos" REMOVIDO: la nativa NO lo muestra (tiene la variable onlyFavs pero
   // nunca llama setOnlyFavs en el render → no hay botón). Era un invento de la web. (Reportado por Fernando.)
