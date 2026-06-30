@@ -962,7 +962,7 @@ function showAlertInfoModal(tipo){
     allChecks.forEach(function(c,i){if(c.checked && toggleLabels[i]) items.push({icon:'✅',label:toggleLabels[i]});});
   } else {
     var scope = window._alertScope||'todos';
-    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:350;
+    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:503;
     title = count + ' ' + t('al_info_activos_monitoreados');
     subtitle = scope==='portfolio'?t('al_mi_portfolio'):scope==='watchlist'?t('al_mi_watchlist'):t('al_info_todos_activos');
     sections.forEach(function(s){items.push({icon:s.icon,label:s.title+': '+s.count+' tipos'});});
@@ -1308,6 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span style="font-size:13px;color:var(--textSec)" data-i18n="port_header_title"> Portfolio</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+      <div class="lang-chip" onclick="cbxLangMenu(this)" style="position:relative;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span id="lang-chip-flag">🇦🇷</span></div>
       <div class="live"><div class="ldot"></div><span>LIVE</span><span id="liveTimePort" style="color:var(--textSec);font-weight:400;margin-left:2px;font-size:9px;"></span></div>
     </div>
   </div>
@@ -1884,7 +1885,7 @@ window._mktOpenDetail = function(idx){
     <span style="font-size:16px;font-weight:500;color:var(--gold);letter-spacing:1px">Cobrex</span>
     <span style="font-size:13px;color:var(--textSec)" data-i18n="wl_header_title">Watchlist</span>
   </div>
-  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Nueva lista</a>
+  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Lista</a>
 </div>
 <!-- Contenido dinámico -->
 <div id="watch-cnt" style="overflow-y:auto;flex:1;min-height:200px;padding:0;-webkit-overflow-scrolling:touch;pointer-events:auto">
@@ -4716,6 +4717,28 @@ window.connectTelegram=function(){
   if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded', run);
   setTimeout(run,1700); setTimeout(run,3700);
   var _n=window.navTo; if(typeof _n==='function'){ window.navTo=function(){ var r=_n.apply(this,arguments); setTimeout(run,400); return r; }; }
+})();
+</script>
+
+<script>
+/* Desplegable de IDIOMA (8 banderas) en el header de Portafolio — paridad nativa LanguageButton. Cambia el idioma global y traduce todo. */
+(function(){
+  var FLAGS={es:'🇦🇷',en:'🇺🇸',pt:'🇧🇷',fr:'🇫🇷',it:'🇮🇹',zh:'🇨🇳',hi:'🇮🇳',ar:'🇸🇦'};
+  var ORDER=['es','en','pt','fr','it','zh','hi','ar'];
+  function curLang(){ try{ return (window._i18n&&window._i18n.getLang)?window._i18n.getLang():(localStorage.getItem('aurex_lang')||'es'); }catch(e){ return 'es'; } }
+  window.cbxUpdateLangChip=function(){ var f=document.getElementById('lang-chip-flag'); if(f) f.textContent=FLAGS[curLang()]||'🌐'; };
+  window.cbxSetLang=function(code){ try{ if(window.pacSaveLang) window.pacSaveLang({value:code}); else if(window._i18n&&window._i18n.setLang) window._i18n.setLang(code); localStorage.setItem('aurex_lang',code); }catch(e){} window.cbxUpdateLangChip(); var ex=document.getElementById('cbx-lang-menu'); if(ex) ex.remove(); };
+  window.cbxLangMenu=function(el){
+    var ex=document.getElementById('cbx-lang-menu'); if(ex){ ex.remove(); return; }
+    var m=document.createElement('div'); m.id='cbx-lang-menu';
+    m.style.cssText='position:absolute;top:130%;right:0;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.35)';
+    ORDER.forEach(function(c){ var b=document.createElement('div'); b.textContent=FLAGS[c]; b.title=c; b.style.cssText='font-size:22px;cursor:pointer;padding:6px 7px;border-radius:8px;text-align:center;-webkit-tap-highlight-color:rgba(0,0,0,0)'; b.onmouseover=function(){b.style.background='var(--border)';}; b.onmouseout=function(){b.style.background='transparent';}; b.onclick=function(ev){ ev.stopPropagation(); window.cbxSetLang(c); }; m.appendChild(b); });
+    el.appendChild(m);
+    setTimeout(function(){ document.addEventListener('click', function _h(ev){ if(!m.contains(ev.target) && ev.target!==el){ try{m.remove();}catch(e){} document.removeEventListener('click',_h); } }); }, 20);
+  };
+  function init(){ try{ window.cbxUpdateLangChip(); }catch(e){} }
+  if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
+  setTimeout(init,1800);
 })();
 </script>
 
