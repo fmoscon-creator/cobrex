@@ -1308,7 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span style="font-size:13px;color:var(--textSec)" data-i18n="port_header_title"> Portfolio</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
-      <div class="lang-chip" onclick="cbxLangMenu(this)" style="position:relative;cursor:pointer;font-size:18px;line-height:1;padding:2px 4px;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span id="lang-chip-flag">🇦🇷</span></div>
+      <div class="lang-chip" onclick="cbxLangMenu(this)" style="display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:3px 8px;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span id="lang-chip-flag" style="font-size:18px;line-height:1">🇪🇸</span><span style="font-size:9px;color:var(--gold);font-weight:800">▼</span></div>
       <div class="live"><div class="ldot"></div><span>LIVE</span><span id="liveTimePort" style="color:var(--textSec);font-weight:400;margin-left:2px;font-size:9px;"></span></div>
     </div>
   </div>
@@ -3526,7 +3526,7 @@ window.authDoLogin=function(){
   showAuthMsg((window._i18n?window._i18n.t('pw_ingresando'):'Ingresando...'));
   c.auth.signInWithPassword({email:email,password:pass}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg('');}});
 };
-window.togglePwVis=function(inpId,iconEl){var i=document.getElementById(inpId);if(!i)return;var show=(i.type==='password');i.type=show?'text':'password';if(iconEl)iconEl.style.opacity=show?'0.95':'0.55';};
+window.togglePwVis=function(inpId,iconEl){var i=document.getElementById(inpId);if(!i)return;var show=(i.type==='password');i.type=show?'text':'password';if(iconEl)iconEl.textContent=show?'🙈':'👁';};
 window.authDoRegister=function(){
   var c=getSB(); if(!c){showAuthMsg((window._i18n?window._i18n.t('pw_servicio_no_disp'):'Servicio no disponible'));return;}
   var email=document.getElementById('reg-email').value.trim();
@@ -4723,18 +4723,24 @@ window.connectTelegram=function(){
 <script>
 /* Desplegable de IDIOMA (8 banderas) en el header de Portafolio — paridad nativa LanguageButton. Cambia el idioma global y traduce todo. */
 (function(){
-  var FLAGS={es:'🇦🇷',en:'🇺🇸',pt:'🇧🇷',fr:'🇫🇷',it:'🇮🇹',zh:'🇨🇳',hi:'🇮🇳',ar:'🇸🇦'};
-  var ORDER=['es','en','pt','fr','it','zh','hi','ar'];
+  // Copia EXACTA del LanguageButton nativo (src/components/LanguageButton.js): orden + banderas + menu centrado.
+  var LANGS=[['es','🇪🇸','Español'],['en','🇺🇸','English'],['pt','🇧🇷','Português'],['zh','🇨🇳','中文'],['fr','🇫🇷','Français'],['it','🇮🇹','Italiano'],['hi','🇮🇳','हिन्दी'],['ar','🇦🇪','العربية']];
+  var FLAGS={}; LANGS.forEach(function(L){ FLAGS[L[0]]=L[1]; });
   function curLang(){ try{ return (window._i18n&&window._i18n.getLang)?window._i18n.getLang():(localStorage.getItem('aurex_lang')||'es'); }catch(e){ return 'es'; } }
+  function _T(k,f){ try{ var v=(window._i18n&&window._i18n.t)?window._i18n.t(k):null; return (v&&v!==k)?v:f; }catch(e){ return f; } }
   window.cbxUpdateLangChip=function(){ var f=document.getElementById('lang-chip-flag'); if(f) f.textContent=FLAGS[curLang()]||'🌐'; };
-  window.cbxSetLang=function(code){ try{ if(window.pacSaveLang) window.pacSaveLang({value:code}); else if(window._i18n&&window._i18n.setLang) window._i18n.setLang(code); localStorage.setItem('aurex_lang',code); }catch(e){} window.cbxUpdateLangChip(); var ex=document.getElementById('cbx-lang-menu'); if(ex) ex.remove(); };
+  window.cbxSetLang=function(code){ try{ if(window.pacSaveLang) window.pacSaveLang({value:code}); else if(window._i18n&&window._i18n.setLang) window._i18n.setLang(code); localStorage.setItem('aurex_lang',code); }catch(e){} window.cbxUpdateLangChip(); var ex=document.getElementById('cbx-lang-modal'); if(ex) ex.remove(); };
   window.cbxLangMenu=function(el){
-    var ex=document.getElementById('cbx-lang-menu'); if(ex){ ex.remove(); return; }
-    var m=document.createElement('div'); m.id='cbx-lang-menu';
-    m.style.cssText='position:absolute;top:130%;right:0;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:6px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;z-index:99999;box-shadow:0 8px 24px rgba(0,0,0,0.35)';
-    ORDER.forEach(function(c){ var b=document.createElement('div'); b.textContent=FLAGS[c]; b.title=c; b.style.cssText='font-size:22px;cursor:pointer;padding:6px 7px;border-radius:8px;text-align:center;-webkit-tap-highlight-color:rgba(0,0,0,0)'; b.onmouseover=function(){b.style.background='var(--border)';}; b.onmouseout=function(){b.style.background='transparent';}; b.onclick=function(ev){ ev.stopPropagation(); window.cbxSetLang(c); }; m.appendChild(b); });
-    el.appendChild(m);
-    setTimeout(function(){ document.addEventListener('click', function _h(ev){ if(!m.contains(ev.target) && ev.target!==el){ try{m.remove();}catch(e){} document.removeEventListener('click',_h); } }); }, 20);
+    var ex=document.getElementById('cbx-lang-modal'); if(ex){ ex.remove(); return; }
+    var cur=curLang();
+    var rows=LANGS.map(function(L){ var a=(L[0]===cur);
+      return '<div onclick="cbxSetLang(\''+L[0]+'\')" style="padding:11px 12px;display:flex;align-items:center;gap:10px;margin-bottom:4px;border-radius:10px;background:'+(a?'var(--goldBg,rgba(212,160,23,0.13))':'transparent')+';border-left:3px solid '+(a?'var(--gold)':'transparent')+';cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span style="font-size:18px">'+L[1]+'</span><span style="flex:1;font-size:14px;color:var(--text);font-weight:'+(a?'800':'600')+'">'+L[2]+'</span>'+(a?'<span style="font-size:16px;color:var(--gold);font-weight:800">✓</span>':'')+'</div>';
+    }).join('');
+    var ov=document.createElement('div'); ov.id='cbx-lang-modal';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100000;display:flex;align-items:center;justify-content:center;padding:24px';
+    ov.onclick=function(e){ if(e.target===ov) ov.remove(); };
+    ov.innerHTML='<div style="width:100%;max-width:320px;background:var(--card);border-radius:20px;padding:16px;border:1px solid var(--gold);box-shadow:0 10px 20px rgba(0,0,0,0.35)"><div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 0 12px;border-bottom:1px solid var(--gold40,rgba(212,160,23,0.25));margin-bottom:10px"><span style="font-size:18px;color:var(--gold)">🌐</span><span style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:0.3px">'+_T('idioma','Idioma')+'</span></div>'+rows+'<div onclick="document.getElementById(\'cbx-lang-modal\').remove()" style="margin-top:10px;padding:10px;border-radius:10px;border:1px solid var(--gold);background:var(--bg);text-align:center;cursor:pointer;font-size:13px;font-weight:700;color:var(--text)">'+_T('cancelar','Cancelar')+'</div></div>';
+    document.body.appendChild(ov);
   };
   function init(){ try{ window.cbxUpdateLangChip(); }catch(e){} }
   if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
@@ -4807,7 +4813,7 @@ window.connectTelegram=function(){
 /* A2: versión "Cobrex Web v1.3.45" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957. Bumpear manual al sincronizar a nuevo build nativo. */
 (function(){
   // ⛳ ÚNICA FUENTE de la versión web (espejo de la nativa). Bumpear SOLO acá al sincronizar la PWA a un build nativo nuevo.
-  window.COBREX_WEB_VERSION = '1.3.45';
+  window.COBREX_WEB_VERSION = '1.4';
   function _verLabel(){ return 'Cobrex Web v' + window.COBREX_WEB_VERSION; }
   window._injectPerfilVersion=function(){
     // 1) header de Perfil
