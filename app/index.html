@@ -491,7 +491,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     ph.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;';
     if(_done){
       onb.style.display='none';
-      setTimeout(function(){ if(window.navTo) window.navTo(dest||'mercados'); },100);
+      setTimeout(function(){ if(window.navTo) window.navTo(dest); },100);
     }
   }
 
@@ -962,7 +962,7 @@ function showAlertInfoModal(tipo){
     allChecks.forEach(function(c,i){if(c.checked && toggleLabels[i]) items.push({icon:'✅',label:toggleLabels[i]});});
   } else {
     var scope = window._alertScope||'todos';
-    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:350;
+    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:503;
     title = count + ' ' + t('al_info_activos_monitoreados');
     subtitle = scope==='portfolio'?t('al_mi_portfolio'):scope==='watchlist'?t('al_mi_watchlist'):t('al_info_todos_activos');
     sections.forEach(function(s){items.push({icon:s.icon,label:s.title+': '+s.count+' tipos'});});
@@ -1308,6 +1308,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span style="font-size:13px;color:var(--textSec)" data-i18n="port_header_title"> Portfolio</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-left:auto">
+      <div class="lang-chip" onclick="cbxLangMenu(this)" style="display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:3px 8px;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span id="lang-chip-flag" style="font-size:18px;line-height:1">🇪🇸</span><span style="font-size:9px;color:var(--gold);font-weight:800">▼</span></div>
       <div class="live"><div class="ldot"></div><span>LIVE</span><span id="liveTimePort" style="color:var(--textSec);font-weight:400;margin-left:2px;font-size:9px;"></span></div>
     </div>
   </div>
@@ -1884,7 +1885,7 @@ window._mktOpenDetail = function(idx){
     <span style="font-size:16px;font-weight:500;color:var(--gold);letter-spacing:1px">Cobrex</span>
     <span style="font-size:13px;color:var(--textSec)" data-i18n="wl_header_title">Watchlist</span>
   </div>
-  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Nueva lista</a>
+  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Lista</a>
 </div>
 <!-- Contenido dinámico -->
 <div id="watch-cnt" style="overflow-y:auto;flex:1;min-height:200px;padding:0;-webkit-overflow-scrolling:touch;pointer-events:auto">
@@ -1898,13 +1899,13 @@ window._mktOpenDetail = function(idx){
 <!-- Modal Crear Lista -->
 <div id="wl-create-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:100;align-items:center;justify-content:center">
   <div style="background:var(--card);border-radius:16px;width:90%;max-width:340px;padding:20px;border:1px solid var(--border2)">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span style="font-size:15px;font-weight:600;color:var(--text)" data-i18n="wl_nueva_lista_title">Nueva lista</span><span onclick="wlCloseCreateModal()" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span id="wl-create-title" style="font-size:15px;font-weight:600;color:var(--text)" data-i18n="wl_nueva_lista_title">Nueva lista</span><span onclick="wlCloseCreateModal()" style="font-size:20px;color:var(--textSec);cursor:pointer">✕</span></div>
     <div style="font-size:10px;color:var(--textSec);font-weight:500;margin-bottom:4px" data-i18n="wl_nombre_label">Nombre</div>
     <input id="wl-new-name" type="text" placeholder="Ej: Criptos favoritas" data-i18n="wl_nombre_placeholder" data-i18n-attr="placeholder" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:12px" />
     <div style="font-size:10px;color:var(--textSec);font-weight:500;margin-bottom:6px" data-i18n="wl_color_label">Color</div>
     <div id="wl-colors" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap"></div>
     <div id="wl-primary-toggle" onclick="wlTogglePrimary()" style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg);border-radius:8px;margin-bottom:14px;cursor:pointer"><span id="wl-primary-star" style="font-size:16px">☆</span><span style="font-size:12px;color:var(--textSec)" data-i18n="wl_marcar_principal">Marcar como Lista Principal</span></div>
-    <div onclick="wlCreateList()" style="background:var(--gold);border-radius:8px;padding:12px;text-align:center;color:var(--chipTextActive);font-size:13px;font-weight:600;cursor:pointer" data-i18n="wl_crear_lista">Crear lista</div>
+    <div id="wl-create-btn" onclick="wlCreateList()" style="background:var(--gold);border-radius:8px;padding:12px;text-align:center;color:var(--chipTextActive);font-size:13px;font-weight:600;cursor:pointer" data-i18n="wl_crear_lista">Crear lista</div>
   </div>
 </div>
 <!-- Modal Agregar Activo -->
@@ -2151,21 +2152,16 @@ window._mktOpenDetail = function(idx){
 <div id="form-register" style="width:100%;display:none;flex-direction:column;gap:16px">
 <input id="reg-email" type="email" placeholder="Email" autocomplete="email"
   style="background:var(--card);color:var(--text);border-radius:12px;padding:16px;font-size:16px;border:1px solid var(--border2);outline:none;width:100%;box-sizing:border-box"/>
-<input id="reg-pass" type="password" placeholder="Contraseña (mín 6 car.)" autocomplete="new-password" data-i18n="contrasena_min6" data-i18n-attr="placeholder"
-  style="background:var(--card);color:var(--text);border-radius:12px;padding:16px;font-size:16px;border:1px solid var(--border2);outline:none;width:100%;box-sizing:border-box"/>
-<div style="display:flex;gap:8px;align-items:center">
-  <select id="reg-pais-sel" onchange="var v=this.value;document.getElementById('reg-celular').value=v"
-    style="background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:12px;padding:14px 10px;font-size:14px;cursor:pointer;outline:none;min-width:100px">
-    <option value="+54">🇦🇷 +54</option><option value="+1">🇺🇸 +1</option><option value="+55">🇧🇷 +55</option>
-    <option value="+52">🇲🇽 +52</option><option value="+56">🇨🇱 +56</option><option value="+57">🇨🇴 +57</option>
-    <option value="+51">🇵🇪 +51</option><option value="+598">🇺🇾 +598</option><option value="+34">🇪🇸 +34</option>
-    <option value="+44">🇬🇧 +44</option><option value="+49">🇩🇪 +49</option>
-  </select>
-  <input id="reg-celular-num" type="tel" placeholder="9 11 1234-5678" autocomplete="tel" oninput="syncPhoneField()"
-    style="flex:1;background:var(--card);color:var(--text);border-radius:12px;padding:16px;font-size:16px;border:1px solid var(--border2);outline:none;box-sizing:border-box"/>
-  <input id="reg-celular" type="hidden" value="+54"/>
+<div style="position:relative;width:100%">
+  <input id="reg-pass" type="password" placeholder="Contraseña (mín 6 car.)" autocomplete="new-password" data-i18n="contrasena_min6" data-i18n-attr="placeholder"
+    style="background:var(--card);color:var(--text);border-radius:12px;padding:16px;padding-right:48px;font-size:16px;border:1px solid var(--border2);outline:none;width:100%;box-sizing:border-box"/>
+  <span onclick="togglePwVis('reg-pass',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;opacity:0.55;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0)">👁</span>
 </div>
-<div style="font-size:11px;color:var(--gold);margin-top:-8px" data-i18n="registro_hint_celular">* Para recibir alertas automáticas de señales IA</div>
+<div style="position:relative;width:100%">
+  <input id="reg-pass2" type="password" placeholder="Repetir contraseña" autocomplete="new-password" data-i18n="repetir_contrasena" data-i18n-attr="placeholder"
+    style="background:var(--card);color:var(--text);border-radius:12px;padding:16px;padding-right:48px;font-size:16px;border:1px solid var(--border2);outline:none;width:100%;box-sizing:border-box"/>
+  <span onclick="togglePwVis('reg-pass2',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;opacity:0.55;user-select:none;-webkit-tap-highlight-color:rgba(0,0,0,0)">👁</span>
+</div>
 <button onclick="authDoRegister()"
   style="background:var(--gold);border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:bold;color:#000;cursor:pointer;width:100%;margin-top:8px">
   <span data-i18n="crear_cuenta_btn">Crear cuenta</span>
@@ -3513,9 +3509,12 @@ window.authSwitchTab=function(tab){
   var tl=document.getElementById('auth-toggle-link');
   if(fl) fl.style.display=tab==='login'?'flex':'none';
   if(fr) fr.style.display=tab==='register'?'flex':'none';
-  if(tl) tl.innerHTML=tab==='login'
-    ? '<span style="font-size:13px;color:var(--textSec)">¿No tenés cuenta? </span><span onclick="authSwitchTab(\'register\')" style="font-size:13px;color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline">Registrate</span>'
-    : '<span style="font-size:13px;color:var(--textSec)">¿Ya tenés cuenta? </span><span onclick="authSwitchTab(\'login\')" style="font-size:13px;color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline">Ingresá</span>';
+  if(tl){
+    var _tt=function(k){return (window._i18n&&window._i18n.t)?window._i18n.t(k):k;};
+    tl.innerHTML=tab==='login'
+    ? '<span style="font-size:13px;color:var(--textSec)">'+_tt('no_tenes_cuenta')+' </span><span onclick="authSwitchTab(\'register\')" style="font-size:13px;color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline">'+_tt('registrate')+'</span>'
+    : '<span style="font-size:13px;color:var(--textSec)">'+_tt('ya_tenes_cuenta')+' </span><span onclick="authSwitchTab(\'login\')" style="font-size:13px;color:var(--gold);font-weight:600;cursor:pointer;text-decoration:underline">'+_tt('ingresa')+'</span>';
+  }
   var msg=document.getElementById('auth-msg');
   if(msg) msg.textContent='';
 };
@@ -3527,15 +3526,17 @@ window.authDoLogin=function(){
   showAuthMsg((window._i18n?window._i18n.t('pw_ingresando'):'Ingresando...'));
   c.auth.signInWithPassword({email:email,password:pass}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg('');}});
 };
+window.togglePwVis=function(inpId,iconEl){var i=document.getElementById(inpId);if(!i)return;var show=(i.type==='password');i.type=show?'text':'password';if(iconEl)iconEl.textContent=show?'🙈':'👁';};
 window.authDoRegister=function(){
   var c=getSB(); if(!c){showAuthMsg((window._i18n?window._i18n.t('pw_servicio_no_disp'):'Servicio no disponible'));return;}
   var email=document.getElementById('reg-email').value.trim();
   var pass=document.getElementById('reg-pass').value;
-  var cel=document.getElementById('reg-celular').value.trim();
+  var pass2El=document.getElementById('reg-pass2'); var pass2=pass2El?pass2El.value:pass;
   if(!email||!pass){showAuthMsg((window._i18n?window._i18n.t('pw_completa_email_pass'):'Completá email y contraseña'));return;}
   if(pass.length<6){showAuthMsg((window._i18n?window._i18n.t('pw_pass_min6'):'La contraseña debe tener al menos 6 caracteres'));return;}
+  if(pass!==pass2){showAuthMsg((window._i18n?window._i18n.t('pw_pass_no_coincide'):'Las contraseñas no coinciden'));return;}
   showAuthMsg((window._i18n?window._i18n.t('pw_creando_cuenta'):'Creando cuenta...'));
-  c.auth.signUp({email:email,password:pass,options:{data:{celular:cel||''}}}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg((window._i18n?window._i18n.t('pw_cuenta_creada'):'\u00a1Cuenta creada!'));setTimeout(function(){document.getElementById('auth-msg').textContent='';},3000);}});
+  c.auth.signUp({email:email,password:pass}).then(function(r){if(r.error){showAuthMsg(r.error.message);}else{showAuthMsg((window._i18n?window._i18n.t('pw_cuenta_creada'):'\u00a1Cuenta creada!'));setTimeout(function(){document.getElementById('auth-msg').textContent='';},3000);}});
 };
 window.authSaveCelular=function(){
   var c=getSB();
@@ -3833,6 +3834,9 @@ setTimeout(function(){
 })();
 
 window.navTo = function(screen) {
+  if(typeof screen !== 'string'){ try{ screen = localStorage.getItem('aurex_tab') || window._activeScreen || 'mercados'; }catch(e){ screen = window._activeScreen || 'mercados'; } } // guard: si llega un evento/objeto (ej. listener DOMContentLoaded), restaurar la tab guardada — no blanquear
+  window._activeScreen = screen;
+  try{ localStorage.setItem('aurex_tab', screen); }catch(e){} // recordar la tab para restaurarla en el refresh (sin flash entre tabs)
   var screens = document.querySelectorAll('.screen');
   screens.forEach(function(s){ s.style.display = 'none'; });
   var target = document.getElementById('screen-' + screen);
@@ -3849,8 +3853,8 @@ window.navTo = function(screen) {
 
 //  Selector de pas para telfono 
 
-// Init: mostrar mercados por defecto (paridad 1.3.45)
-navTo('mercados');
+// Init: restaurar la tab donde estaba el usuario (default mercados, paridad 1.3.45) — sin flash
+navTo((function(){try{return localStorage.getItem('aurex_tab')||'mercados';}catch(e){return 'mercados';}})());
 
 window.updatePhonePrefix = function(){
   var sel = document.getElementById('reg-pais');
@@ -3882,8 +3886,8 @@ document.addEventListener("DOMContentLoaded", function(){
     // Ya hizo onboarding - mostrar app
     if(ob) ob.style.display = "none";
     if(ph) ph.style.display = "flex";
-    // navTo portfolio si existe
-    if(typeof window.navTo === "function") window.navTo("portfolio");
+    // restaurar la tab guardada (default mercados) — evita el flash de cambiar de tab en el refresh
+    if(typeof window.navTo === "function") window.navTo((function(){try{return localStorage.getItem('aurex_tab')||'mercados';}catch(e){return 'mercados';}})());
     else {
       // Fallback: mostrar screen-portfolio directamente
       var screens = document.querySelectorAll(".screen");
@@ -4719,6 +4723,34 @@ window.connectTelegram=function(){
 })();
 </script>
 
+<script>
+/* Desplegable de IDIOMA (8 banderas) en el header de Portafolio — paridad nativa LanguageButton. Cambia el idioma global y traduce todo. */
+(function(){
+  // Copia EXACTA del LanguageButton nativo (src/components/LanguageButton.js): orden + banderas + menu centrado.
+  var LANGS=[['es','🇪🇸','Español'],['en','🇺🇸','English'],['pt','🇧🇷','Português'],['zh','🇨🇳','中文'],['fr','🇫🇷','Français'],['it','🇮🇹','Italiano'],['hi','🇮🇳','हिन्दी'],['ar','🇦🇪','العربية']];
+  var FLAGS={}; LANGS.forEach(function(L){ FLAGS[L[0]]=L[1]; });
+  function curLang(){ try{ return (window._i18n&&window._i18n.getLang)?window._i18n.getLang():(localStorage.getItem('aurex_lang')||'es'); }catch(e){ return 'es'; } }
+  function _T(k,f){ try{ var v=(window._i18n&&window._i18n.t)?window._i18n.t(k):null; return (v&&v!==k)?v:f; }catch(e){ return f; } }
+  window.cbxUpdateLangChip=function(){ var f=document.getElementById('lang-chip-flag'); if(f) f.textContent=FLAGS[curLang()]||'🌐'; };
+  window.cbxSetLang=function(code){ try{ if(window.pacSaveLang) window.pacSaveLang({value:code}); else if(window._i18n&&window._i18n.setLang) window._i18n.setLang(code); localStorage.setItem('aurex_lang',code); }catch(e){} window.cbxUpdateLangChip(); var ex=document.getElementById('cbx-lang-modal'); if(ex) ex.remove(); };
+  window.cbxLangMenu=function(el){
+    var ex=document.getElementById('cbx-lang-modal'); if(ex){ ex.remove(); return; }
+    var cur=curLang();
+    var rows=LANGS.map(function(L){ var a=(L[0]===cur);
+      return '<div onclick="cbxSetLang(\''+L[0]+'\')" style="padding:11px 12px;display:flex;align-items:center;gap:10px;margin-bottom:4px;border-radius:10px;background:'+(a?'var(--goldBg,rgba(212,160,23,0.13))':'transparent')+';border-left:3px solid '+(a?'var(--gold)':'transparent')+';cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0)"><span style="font-size:18px">'+L[1]+'</span><span style="flex:1;font-size:14px;color:var(--text);font-weight:'+(a?'800':'600')+'">'+L[2]+'</span>'+(a?'<span style="font-size:16px;color:var(--gold);font-weight:800">✓</span>':'')+'</div>';
+    }).join('');
+    var ov=document.createElement('div'); ov.id='cbx-lang-modal';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:100000;display:flex;align-items:center;justify-content:center;padding:24px';
+    ov.onclick=function(e){ if(e.target===ov) ov.remove(); };
+    ov.innerHTML='<div style="width:100%;max-width:320px;background:var(--card);border-radius:20px;padding:16px;border:1px solid var(--gold);box-shadow:0 10px 20px rgba(0,0,0,0.35)"><div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 0 12px;border-bottom:1px solid var(--gold40,rgba(212,160,23,0.25));margin-bottom:10px"><span style="font-size:18px;color:var(--gold)">🌐</span><span style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:0.3px">'+_T('idioma','Idioma')+'</span></div>'+rows+'<div onclick="document.getElementById(\'cbx-lang-modal\').remove()" style="margin-top:10px;padding:10px;border-radius:10px;border:1px solid var(--gold);background:var(--bg);text-align:center;cursor:pointer;font-size:13px;font-weight:700;color:var(--text)">'+_T('cancelar','Cancelar')+'</div></div>';
+    document.body.appendChild(ov);
+  };
+  function init(){ try{ window.cbxUpdateLangChip(); }catch(e){} }
+  if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded', init);
+  setTimeout(init,1800);
+})();
+</script>
+
 
 <script>
 /* #12b: chooser inline FREE/PRO/ELITE en Perfil > Plan actual (paridad nativa). Clona los tabs+paneles del modal de planes (mismos features/precios/botones cbxBuy). */
@@ -4784,7 +4816,7 @@ window.connectTelegram=function(){
 /* A2: versión "Cobrex Web v1.3.45" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957. Bumpear manual al sincronizar a nuevo build nativo. */
 (function(){
   // ⛳ ÚNICA FUENTE de la versión web (espejo de la nativa). Bumpear SOLO acá al sincronizar la PWA a un build nativo nuevo.
-  window.COBREX_WEB_VERSION = '1.3.45';
+  window.COBREX_WEB_VERSION = '1.4';
   function _verLabel(){ return 'Cobrex Web v' + window.COBREX_WEB_VERSION; }
   window._injectPerfilVersion=function(){
     // 1) header de Perfil
