@@ -168,6 +168,7 @@
     eliminar_cuenta_btn: { es: '🗑️ Eliminar mi cuenta', en: '🗑️ Delete my account', pt: '🗑️ Excluir minha conta', zh: '🗑️ 删除我的账户', fr: '🗑️ Supprimer mon compte', it: '🗑️ Elimina il mio account', hi: '🗑️ मेरा खाता हटाएँ', ar: '🗑️ حذف حسابي' },
     confirmar_email_elim: { es: 'Escribí tu email para confirmar:', en: 'Enter your email to confirm:', pt: 'Digite seu email para confirmar:', zh: '输入您的邮箱确认：', fr: 'Saisissez votre email pour confirmer :', it: 'Inserisci la tua email per confermare:', hi: 'पुष्टि के लिए अपना ईमेल लिखें:', ar: 'اكتب بريدك الإلكتروني للتأكيد:' },
     cancelar: { es: 'Cancelar', en: 'Cancel', pt: 'Cancelar', zh: '取消', fr: 'Annuler', it: 'Annulla', hi: 'रद्द करें', ar: 'إلغاء' },
+    idioma: { es: 'Idioma', en: 'Language', pt: 'Idioma', zh: '语言', fr: 'Langue', it: 'Lingua', hi: 'भाषा', ar: 'اللغة' },
     confirmar_eliminacion: { es: 'Confirmar eliminación', en: 'Confirm deletion', pt: 'Confirmar exclusão', zh: '确认删除', fr: 'Confirmer la suppression', it: "Conferma l'eliminazione", hi: 'हटाने की पुष्टि करें', ar: 'تأكيد الحذف' },
 
     // === MODAL RATING ===
