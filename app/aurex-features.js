@@ -2031,23 +2031,41 @@ function _wlDeleteItemDB(listId, ticker, cb){
 }
 
 // ─── CREAR LISTA ───
-window.wlCreateListModal = function(){
+window.wlCreateListModal = function(editList){
   var m = document.getElementById('wl-create-modal');
   if(!m) return;
+  var _T=function(k){return (window._i18n&&window._i18n.t)?window._i18n.t(k):k;};
+  window._wlEditId = (editList && editList.id) ? editList.id : null;
+  _wlNewColor = (editList && editList.color) ? editList.color : WL_COLORS[0];
   var colorsDiv = document.getElementById('wl-colors');
   if(colorsDiv){
-    _wlNewColor = WL_COLORS[0];
     colorsDiv.innerHTML = WL_COLORS.map(function(c){
       return '<div onclick="wlPickColor(\''+c+'\')" id="wlc-'+c.replace('#','')+'" style="width:28px;height:28px;border-radius:50%;background:'+c+';cursor:pointer;border:2px solid '+(c===_wlNewColor?'#fff':'transparent')+'"></div>';
     }).join('');
   }
-  _wlNewPrimary = false;
+  _wlNewPrimary = editList ? !!editList.is_primary : false;
   var star = document.getElementById('wl-primary-star');
-  if(star) star.textContent = '☆';
+  if(star) star.textContent = _wlNewPrimary ? '⭐' : '☆';
   var nameEl = document.getElementById('wl-new-name');
-  if(nameEl) nameEl.value = '';
+  if(nameEl) nameEl.value = editList ? (editList.name||'') : '';
+  var titleEl = document.getElementById('wl-create-title');
+  if(titleEl){ var tk=editList?'wl_editar_lista_title':'wl_nueva_lista_title'; titleEl.setAttribute('data-i18n',tk); titleEl.textContent=_T(tk); }
+  var btnEl = document.getElementById('wl-create-btn');
+  if(btnEl){ var bk=editList?'wl_guardar':'wl_crear_lista'; btnEl.setAttribute('data-i18n',bk); btnEl.textContent=_T(bk); }
   m.style.cssText = 'display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:100;align-items:center;justify-content:center';
 };
+window.wlEditListModal = function(listId){
+  var l=(_wlGetLists()||[]).filter(function(x){ return x.id===listId; })[0];
+  if(l) window.wlCreateListModal(l);
+};
+function _wlUpdateList(listId, fields, cb){
+  var sb = window._supabase;
+  if(!sb){ if(cb) cb(); return; }
+  sb.from('watchlists').update(fields).eq('id', listId).then(function(){
+    _wlListsCache = (_wlListsCache||[]).map(function(l){ return l.id===listId ? Object.assign({}, l, fields) : l; });
+    if(cb) cb();
+  });
+}
 window.wlCloseCreateModal = function(){ var m=document.getElementById('wl-create-modal'); if(m) m.style.display='none'; };
 window.wlPickColor = function(c){
   _wlNewColor = c;
@@ -2065,6 +2083,12 @@ window.wlCreateList = function(){
   var nameEl = document.getElementById('wl-new-name');
   var name = nameEl ? nameEl.value.trim() : '';
   if(!name){ alert((window._i18n?window._i18n.t('pw_ingresa_nombre'):'Ingresa un nombre')); return; }
+  if(window._wlEditId){
+    var _eid = window._wlEditId; window._wlEditId = null;
+    wlCloseCreateModal();
+    _wlUpdateList(_eid, { name: name, color: _wlNewColor, is_primary: _wlNewPrimary }, function(){ if(typeof renderWatchCnt==='function') renderWatchCnt(); });
+    return;
+  }
   var lists = _wlGetLists();
   // Gating por plan: FREE topa en watchlistMax (10).
   if(window.checkPlanLimit){
@@ -2246,6 +2270,7 @@ window.renderWatchCnt = function(){
     html += '<a href="javascript:void(0)" data-wl="compareMode" style="'+_cmpStyle+'">'+_cmpLabel+'</a>';
     html += '<a href="javascript:void(0)" data-wl="shareList" style="font-size:16px;cursor:pointer;padding:4px;text-decoration:none">📤</a>';
     html += '<a href="javascript:void(0)" ontouchstart="wlOpenAddModal()" data-wl="addAsset" style="padding:8px 14px;border-radius:8px;background:var(--gold);color:#000;font-size:12px;font-weight:800;cursor:pointer;text-decoration:none">'+t('wl_agregar')+'</a>';
+    html += '<div onclick="wlEditListModal(\''+currentList.id+'\')" style="font-size:14px;cursor:pointer;padding:4px">✏️</div>';
     html += '<div onclick="wlDeleteList(\''+currentList.id+'\')" style="font-size:14px;cursor:pointer;padding:4px">🗑️</div>';
     html += '</div>';
     html += '</div>';
