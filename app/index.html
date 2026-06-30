@@ -491,7 +491,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     ph.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:1000;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;';
     if(_done){
       onb.style.display='none';
-      setTimeout(function(){ if(window.navTo) window.navTo(dest||'mercados'); },100);
+      setTimeout(function(){ if(window.navTo) window.navTo(typeof dest==='string'?dest:'mercados'); },100);
     }
   }
 
@@ -3834,6 +3834,8 @@ setTimeout(function(){
 })();
 
 window.navTo = function(screen) {
+  if(typeof screen !== 'string'){ screen = (window._activeScreen && typeof window._activeScreen==='string') ? window._activeScreen : 'mercados'; } // guard: si llega un evento/objeto (ej. listener DOMContentLoaded), no blanquear la pantalla
+  window._activeScreen = screen;
   var screens = document.querySelectorAll('.screen');
   screens.forEach(function(s){ s.style.display = 'none'; });
   var target = document.getElementById('screen-' + screen);
