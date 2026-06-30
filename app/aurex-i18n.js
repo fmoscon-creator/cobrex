@@ -791,6 +791,8 @@
     wl_color_label: { es: 'Color', en: 'Color', pt: 'Cor', zh: '颜色', fr: 'Couleur', it: 'Colore', hi: 'रंग', ar: 'اللون' },
     wl_marcar_principal: { es: 'Marcar como Lista Principal', en: 'Mark as Primary List', pt: 'Marcar como Lista Principal', zh: '标记为主列表', fr: 'Marquer comme Liste Principale', it: 'Segna come Lista Principale', hi: 'प्राथमिक सूची के रूप में चिह्नित करें', ar: 'تعيين كقائمة رئيسية' },
     wl_crear_lista: { es: 'Crear lista', en: 'Create list', pt: 'Criar lista', zh: '创建列表', fr: 'Créer la liste', it: 'Crea lista', hi: 'सूची बनाएँ', ar: 'إنشاء القائمة' },
+    wl_editar_lista_title: { es: 'Editar lista', en: 'Edit list', pt: 'Editar lista', zh: '编辑列表', fr: 'Modifier la liste', it: 'Modifica lista', hi: 'सूची संपादित करें', ar: 'تعديل القائمة' },
+    wl_guardar: { es: 'Guardar', en: 'Save', pt: 'Salvar', zh: '保存', fr: 'Enregistrer', it: 'Salva', hi: 'सहेजें', ar: 'حفظ' },
     wl_agregar_activo: { es: 'Agregar activo', en: 'Add asset', pt: 'Adicionar ativo', zh: '添加资产', fr: 'Ajouter un actif', it: 'Aggiungi asset', hi: 'एसेट जोड़ें', ar: 'إضافة أصل' },
     wl_buscar_placeholder: { es: 'Buscar: BTC, AAPL, SPY...', en: 'Search: BTC, AAPL, SPY...', pt: 'Buscar: BTC, AAPL, SPY...', zh: '搜索：BTC, AAPL, SPY...', fr: 'Rechercher : BTC, AAPL, SPY...', it: 'Cerca: BTC, AAPL, SPY...', hi: 'खोजें: BTC, AAPL, SPY...', ar: 'بحث: BTC, AAPL, SPY...' },
     wl_activos_count: { es: ' activos', en: ' assets', pt: ' ativos', zh: ' 个资产', fr: ' actifs', it: ' asset', hi: ' एसेट', ar: ' أصول' },
