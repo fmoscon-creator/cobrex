@@ -1113,9 +1113,9 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
               sessionStorage.setItem('cobrex_paywall_seen','1');
               setTimeout(function(){ abrirModalPlanes('login'); }, 250);
             } else {
-              try { if (window.navTo) window.navTo('mercados'); } catch(e){}
+              try { if (window.navTo) window.navTo((function(){try{return localStorage.getItem('aurex_tab')||'mercados';}catch(e){return 'mercados';}})()); } catch(e){}
             }
-          }).catch(function(){ try { if (window.navTo) window.navTo('mercados'); } catch(e){} });
+          }).catch(function(){ try { if (window.navTo) window.navTo((function(){try{return localStorage.getItem('aurex_tab')||'mercados';}catch(e){return 'mercados';}})()); } catch(e){} });
         }
       } else if (session && session.user && window.loadUserPlan) {
         // C4: restauración de sesión (no login) → solo cargar el plan + gating, sin paywall.
@@ -2996,7 +2996,7 @@ function cerrarModalPlanes(){
   var m=document.getElementById('modal-planes');
   if(m) m.style.display='none';
   // Nativa: al cerrar/saltar el paywall que se auto-abrió tras login → entra a la app (Mercados).
-  if(window._planMode==='login'){ try{ if(window.navTo) window.navTo('mercados'); }catch(e){} }
+  if(window._planMode==='login'){ try{ if(window.navTo) window.navTo((function(){try{return localStorage.getItem('aurex_tab')||'mercados';}catch(e){return 'mercados';}})()); }catch(e){} }
   window._planMode=null;
 }
 // "Saltar ✕" arriba si el paywall viene del login (nativa SubscriptionScreen.js:209-217); si no, × normal.
@@ -3836,9 +3836,8 @@ window.navTo = function(screen) {
   // FIX refresh: si llega un Event (el listener DOMContentLoaded de _movePhone pasa el evento)
   // o algo que no sea string, NO blanquear la app: usar la tab guardada (o mercados).
   if(typeof screen !== 'string'){ try{ screen = localStorage.getItem('aurex_tab') || 'mercados'; }catch(e){ screen = 'mercados'; } }
-  // Persistir la tab SOLO cuando ya es navegación real del usuario (no los navTo del arranque),
-  // para que el refresh restaure exactamente donde estabas.
-  try{ if(window._navReady && screen){ localStorage.setItem('aurex_tab', screen); } }catch(e){}
+  // La tab NO se persiste acá: ni el boot ni el auth deben pisar la tab guardada.
+  // Solo el click del usuario en el tab-bar la guarda (listener de abajo).
   window._activeScreen = screen;
   var screens = document.querySelectorAll('.screen');
   screens.forEach(function(s){ s.style.display = 'none'; });
@@ -3853,10 +3852,12 @@ window.navTo = function(screen) {
   if(screen==='perfil'){var pc=document.getElementById('perfil-canvas');if(pc&&pc.parentElement)pc.parentElement.scrollTop=0;}
   if(window._i18n) window._i18n.applyTranslations();
 };
-// FIX refresh: marcar "navegación lista" para empezar a persistir la tab. Los navTo del arranque
-// (abajo + auth) corren antes y NO pisan la tab guardada; el click del usuario en el tab-bar sí.
-document.addEventListener('click', function(e){ if(e.target && e.target.closest && e.target.closest('.tab-btn')){ window._navReady = true; } }, true);
-setTimeout(function(){ window._navReady = true; }, 1500);
+// FIX refresh: la tab se guarda SOLO cuando el usuario toca el tab-bar (jamás desde boot/auth).
+// Así ningún navTo('mercados') del arranque o del evento SIGNED_IN puede pisar la tab donde estabas.
+document.addEventListener('click', function(e){
+  var btn = e.target && e.target.closest && e.target.closest('.tab-btn');
+  if(btn && btn.id){ var t = btn.id.replace('btn-',''); if(t){ try{ localStorage.setItem('aurex_tab', t); }catch(_e){} } }
+}, true);
 
 //  Selector de pas para telfono
 
@@ -4795,7 +4796,7 @@ window.connectTelegram=function(){
 /* A2: versión "Cobrex Web v1.3.45" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957. Bumpear manual al sincronizar a nuevo build nativo. */
 (function(){
   // ⛳ ÚNICA FUENTE de la versión web (espejo de la nativa). Bumpear SOLO acá al sincronizar la PWA a un build nativo nuevo.
-  window.COBREX_WEB_VERSION = '1.3.46';
+  window.COBREX_WEB_VERSION = '1.3.47';
   function _verLabel(){ return 'Cobrex Web v' + window.COBREX_WEB_VERSION; }
   window._injectPerfilVersion=function(){
     // 1) header de Perfil
