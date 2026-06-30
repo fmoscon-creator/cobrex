@@ -4950,11 +4950,16 @@ function _renderFearGreed(containerId) {
     filterBtns += '<div data-pulse-cat="'+c+'" data-pulse-el="'+elId+'" style="font-size:9px;font-weight:'+fw+';color:'+col+';background:'+bg+';border-radius:10px;padding:4px 8px;cursor:pointer;white-space:nowrap;flex-shrink:0;border:'+bdr+';">'+catLabels[c]+'</div>';
   });
   var nvars = Object.keys(d.vars).length;
+  // FIX gating Pulse (paridad nativa MercadosScreen L1076-1086): FREE no abre las variables → ve candado y va al paywall.
+  var _pulsePln = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
+  var _pulseIsPro = (_pulsePln==='PRO' || _pulsePln==='ELITE');
+  var _verVarsTxt = _pulseIsPro ? t('mkt_pulse_ver_variables') : ('🔒 ' + t('mkt_pulse_ver_variables').replace(/^📊\s*/,''));
+  var _verVarsCol = _pulseIsPro ? '#58A6FF' : 'var(--gold)';
   el.innerHTML =
     '<div style="margin:8px 14px 6px;border-radius:14px;padding:'+(compact?'8px 10px':'12px 14px 10px')+';background:var(--card);border:1px solid var(--border);">' +
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
         '<span style="font-size:'+(compact?'10':'11')+'px;font-weight:700;color:var(--gold);letter-spacing:0.5px;">&#x26A1; Cobrex PULSE&#x2122;</span>' +
-        '<div id="pulse-info-btn-'+elId+'" style="font-size:9px;color:#58A6FF;cursor:pointer;padding:3px 10px;border-radius:10px;border:1px solid #58A6FF;white-space:nowrap;font-weight:600;">'+t('mkt_pulse_ver_variables')+'</div>' +
+        '<div id="pulse-info-btn-'+elId+'" style="font-size:9px;color:'+_verVarsCol+';cursor:pointer;padding:3px 10px;border-radius:10px;border:1px solid '+_verVarsCol+';white-space:nowrap;font-weight:600;">'+_verVarsTxt+'</div>' +
       '</div>' +
       '<div id="pulse-filters-'+elId+'" style="display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;margin-bottom:8px;-webkit-overflow-scrolling:touch;">'+filterBtns+'</div>' +
       '<div style="display:flex;align-items:center;gap:10px;">' +
@@ -4985,7 +4990,13 @@ function _renderFearGreed(containerId) {
   }
   var infoBtn = document.getElementById('pulse-info-btn-'+elId);
   if(infoBtn) {
-    infoBtn.addEventListener('click', function() { showFearGreedInfo(); });
+    infoBtn.addEventListener('click', function() {
+      // FIX gating Pulse: solo PRO/ELITE abren las variables; FREE va al paywall (igual que la nativa)
+      var _pp = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
+      if(_pp==='PRO' || _pp==='ELITE'){ showFearGreedInfo(); }
+      else if(window.abrirModalPlanes){ abrirModalPlanes('pulse'); }
+      else { showFearGreedInfo(); }
+    });
   }
 }
 
