@@ -71,7 +71,6 @@
     contrasena_label: { es: 'Contraseña', en: 'Password', pt: 'Senha', zh: '密码', fr: 'Mot de passe', it: 'Password', hi: 'पासवर्ड', ar: 'كلمة المرور' },
     nueva_contrasena: { es: 'Nueva contraseña', en: 'New password', pt: 'Nova senha', zh: '新密码', fr: 'Nouveau mot de passe', it: 'Nuova password', hi: 'नया पासवर्ड', ar: 'كلمة مرور جديدة' },
     repetir_contrasena: { es: 'Repetir contraseña', en: 'Repeat password', pt: 'Repetir senha', zh: '重复密码', fr: 'Répéter le mot de passe', it: 'Ripeti password', hi: 'पासवर्ड दोहराएँ', ar: 'تكرار كلمة المرور' },
-    pw_pass_no_coincide: { es: 'Las contraseñas no coinciden', en: "Passwords don't match", pt: 'As senhas não coincidem', zh: '两次密码不一致', fr: 'Les mots de passe ne correspondent pas', it: 'Le password non coincidono', hi: 'पासवर्ड मेल नहीं खाते', ar: 'كلمتا المرور غير متطابقتين' },
     cambiar_contrasena_btn: { es: 'Cambiar contraseña', en: 'Change password', pt: 'Alterar senha', zh: '修改密码', fr: 'Changer le mot de passe', it: 'Cambia password', hi: 'पासवर्ड बदलें', ar: 'تغيير كلمة المرور' },
     contrasena_actualizada: { es: 'Contraseña actualizada', en: 'Password updated', pt: 'Senha atualizada', zh: '密码已更新', fr: 'Mot de passe mis à jour', it: 'Password aggiornata', hi: 'पासवर्ड अपडेट किया गया', ar: 'تم تحديث كلمة المرور' },
     contrasenas_no_coinciden: { es: 'Las contraseñas no coinciden', en: 'Passwords do not match', pt: 'As senhas não coincidem', zh: '密码不匹配', fr: 'Les mots de passe ne correspondent pas', it: 'Le password non corrispondono', hi: 'पासवर्ड मेल नहीं खाते', ar: 'كلمتا المرور غير متطابقتين' },
@@ -168,7 +167,6 @@
     eliminar_cuenta_btn: { es: '🗑️ Eliminar mi cuenta', en: '🗑️ Delete my account', pt: '🗑️ Excluir minha conta', zh: '🗑️ 删除我的账户', fr: '🗑️ Supprimer mon compte', it: '🗑️ Elimina il mio account', hi: '🗑️ मेरा खाता हटाएँ', ar: '🗑️ حذف حسابي' },
     confirmar_email_elim: { es: 'Escribí tu email para confirmar:', en: 'Enter your email to confirm:', pt: 'Digite seu email para confirmar:', zh: '输入您的邮箱确认：', fr: 'Saisissez votre email pour confirmer :', it: 'Inserisci la tua email per confermare:', hi: 'पुष्टि के लिए अपना ईमेल लिखें:', ar: 'اكتب بريدك الإلكتروني للتأكيد:' },
     cancelar: { es: 'Cancelar', en: 'Cancel', pt: 'Cancelar', zh: '取消', fr: 'Annuler', it: 'Annulla', hi: 'रद्द करें', ar: 'إلغاء' },
-    idioma: { es: 'Idioma', en: 'Language', pt: 'Idioma', zh: '语言', fr: 'Langue', it: 'Lingua', hi: 'भाषा', ar: 'اللغة' },
     confirmar_eliminacion: { es: 'Confirmar eliminación', en: 'Confirm deletion', pt: 'Confirmar exclusão', zh: '确认删除', fr: 'Confirmer la suppression', it: "Conferma l'eliminazione", hi: 'हटाने की पुष्टि करें', ar: 'تأكيد الحذف' },
 
     // === MODAL RATING ===
@@ -792,8 +790,6 @@
     wl_color_label: { es: 'Color', en: 'Color', pt: 'Cor', zh: '颜色', fr: 'Couleur', it: 'Colore', hi: 'रंग', ar: 'اللون' },
     wl_marcar_principal: { es: 'Marcar como Lista Principal', en: 'Mark as Primary List', pt: 'Marcar como Lista Principal', zh: '标记为主列表', fr: 'Marquer comme Liste Principale', it: 'Segna come Lista Principale', hi: 'प्राथमिक सूची के रूप में चिह्नित करें', ar: 'تعيين كقائمة رئيسية' },
     wl_crear_lista: { es: 'Crear lista', en: 'Create list', pt: 'Criar lista', zh: '创建列表', fr: 'Créer la liste', it: 'Crea lista', hi: 'सूची बनाएँ', ar: 'إنشاء القائمة' },
-    wl_editar_lista_title: { es: 'Editar lista', en: 'Edit list', pt: 'Editar lista', zh: '编辑列表', fr: 'Modifier la liste', it: 'Modifica lista', hi: 'सूची संपादित करें', ar: 'تعديل القائمة' },
-    wl_guardar: { es: 'Guardar', en: 'Save', pt: 'Salvar', zh: '保存', fr: 'Enregistrer', it: 'Salva', hi: 'सहेजें', ar: 'حفظ' },
     wl_agregar_activo: { es: 'Agregar activo', en: 'Add asset', pt: 'Adicionar ativo', zh: '添加资产', fr: 'Ajouter un actif', it: 'Aggiungi asset', hi: 'एसेट जोड़ें', ar: 'إضافة أصل' },
     wl_buscar_placeholder: { es: 'Buscar: BTC, AAPL, SPY...', en: 'Search: BTC, AAPL, SPY...', pt: 'Buscar: BTC, AAPL, SPY...', zh: '搜索：BTC, AAPL, SPY...', fr: 'Rechercher : BTC, AAPL, SPY...', it: 'Cerca: BTC, AAPL, SPY...', hi: 'खोजें: BTC, AAPL, SPY...', ar: 'بحث: BTC, AAPL, SPY...' },
     wl_activos_count: { es: ' activos', en: ' assets', pt: ' ativos', zh: ' 个资产', fr: ' actifs', it: ' asset', hi: ' एसेट', ar: ' أصول' },
