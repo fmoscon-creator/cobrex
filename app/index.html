@@ -962,7 +962,7 @@ function showAlertInfoModal(tipo){
     allChecks.forEach(function(c,i){if(c.checked && toggleLabels[i]) items.push({icon:'✅',label:toggleLabels[i]});});
   } else {
     var scope = window._alertScope||'todos';
-    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:350;
+    var count = scope==='portfolio'?(window._alertPortSyms||[]).length:scope==='watchlist'?(window._alertWLSyms||[]).length:503;
     title = count + ' ' + t('al_info_activos_monitoreados');
     subtitle = scope==='portfolio'?t('al_mi_portfolio'):scope==='watchlist'?t('al_mi_watchlist'):t('al_info_todos_activos');
     sections.forEach(function(s){items.push({icon:s.icon,label:s.title+': '+s.count+' tipos'});});
@@ -1884,7 +1884,7 @@ window._mktOpenDetail = function(idx){
     <span style="font-size:16px;font-weight:500;color:var(--gold);letter-spacing:1px">Cobrex</span>
     <span style="font-size:13px;color:var(--textSec)" data-i18n="wl_header_title">Watchlist</span>
   </div>
-  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Nueva lista</a>
+  <a href="javascript:void(0)" ontouchend="event.preventDefault();window.wlCreateListModal();" onclick="window.wlCreateListModal()" style="margin-left:auto;padding:5px 10px;border-radius:8px;background:var(--gold);color:#000;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;-webkit-tap-highlight-color:rgba(0,0,0,0)" data-i18n="wl_nueva_lista">+ Lista</a>
 </div>
 <!-- Contenido dinámico -->
 <div id="watch-cnt" style="overflow-y:auto;flex:1;min-height:200px;padding:0;-webkit-overflow-scrolling:touch;pointer-events:auto">
@@ -4802,7 +4802,7 @@ window.connectTelegram=function(){
 /* A2: versión "Cobrex Web v1.3.45" en el header de Perfil (igual que Soporte) — paridad PerfilScreen.js:957. Bumpear manual al sincronizar a nuevo build nativo. */
 (function(){
   // ⛳ ÚNICA FUENTE de la versión web (espejo de la nativa). Bumpear SOLO acá al sincronizar la PWA a un build nativo nuevo.
-  window.COBREX_WEB_VERSION = '1.3.54';
+  window.COBREX_WEB_VERSION = '1.3.55';
   function _verLabel(){ return 'Cobrex Web v' + window.COBREX_WEB_VERSION; }
   window._injectPerfilVersion=function(){
     // 1) header de Perfil
