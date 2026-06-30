@@ -1202,7 +1202,7 @@ window.portTotalPeriod = function(btn, period) {
   var pnlPct = document.getElementById('port-pnl-pct');
   var pnlSpan = document.querySelector('#port-pnl-row span:last-child');
 
-  if(pnlUSD) pnlUSD.textContent = (diffUSD >= 0 ? '+' : '') + '$' + Math.abs(diffUSD).toLocaleString(navigator.language||'en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(pnlUSD) pnlUSD.textContent = (diffUSD >= 0 ? '+' : '') + '$' + Math.abs(diffUSD).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
   if(pnlPct) pnlPct.textContent = _fmt(diffPct,'pct');
   if(pnlSpan) pnlSpan.textContent = period === 'max' ? t('port_period_buy') : period;
 
@@ -1212,7 +1212,7 @@ window.portTotalPeriod = function(btn, period) {
   if (typeof window._refreshHoyPct === 'function') window._refreshHoyPct();
   var pColor = diffUSD >= 0 ? 'var(--green)' : 'var(--red)';
   var pctTxt = _fmt(diffPct,'pct');
-  var amtTxt = (diffUSD >= 0 ? '+' : '-') + '$' + Math.abs(diffUSD).toLocaleString(navigator.language||'en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  var amtTxt = (diffUSD >= 0 ? '+' : '-') + '$' + Math.abs(diffUSD).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});
   var pPct = document.getElementById('port-period-pct');
   var pAmt = document.getElementById('port-period-amt');
   if(pPct) { pPct.textContent = pctTxt; pPct.style.color = pColor; }
@@ -2031,23 +2031,41 @@ function _wlDeleteItemDB(listId, ticker, cb){
 }
 
 // ─── CREAR LISTA ───
-window.wlCreateListModal = function(){
+window.wlCreateListModal = function(editList){
   var m = document.getElementById('wl-create-modal');
   if(!m) return;
+  var _T=function(k){return (window._i18n&&window._i18n.t)?window._i18n.t(k):k;};
+  window._wlEditId = (editList && editList.id) ? editList.id : null;
+  _wlNewColor = (editList && editList.color) ? editList.color : WL_COLORS[0];
   var colorsDiv = document.getElementById('wl-colors');
   if(colorsDiv){
-    _wlNewColor = WL_COLORS[0];
     colorsDiv.innerHTML = WL_COLORS.map(function(c){
       return '<div onclick="wlPickColor(\''+c+'\')" id="wlc-'+c.replace('#','')+'" style="width:28px;height:28px;border-radius:50%;background:'+c+';cursor:pointer;border:2px solid '+(c===_wlNewColor?'#fff':'transparent')+'"></div>';
     }).join('');
   }
-  _wlNewPrimary = false;
+  _wlNewPrimary = editList ? !!editList.is_primary : false;
   var star = document.getElementById('wl-primary-star');
-  if(star) star.textContent = '☆';
+  if(star) star.textContent = _wlNewPrimary ? '⭐' : '☆';
   var nameEl = document.getElementById('wl-new-name');
-  if(nameEl) nameEl.value = '';
+  if(nameEl) nameEl.value = editList ? (editList.name||'') : '';
+  var titleEl = document.getElementById('wl-create-title');
+  if(titleEl){ var tk=editList?'wl_editar_lista_title':'wl_nueva_lista_title'; titleEl.setAttribute('data-i18n',tk); titleEl.textContent=_T(tk); }
+  var btnEl = document.getElementById('wl-create-btn');
+  if(btnEl){ var bk=editList?'wl_guardar':'wl_crear_lista'; btnEl.setAttribute('data-i18n',bk); btnEl.textContent=_T(bk); }
   m.style.cssText = 'display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000CC;z-index:100;align-items:center;justify-content:center';
 };
+window.wlEditListModal = function(listId){
+  var l=(_wlGetLists()||[]).filter(function(x){ return x.id===listId; })[0];
+  if(l) window.wlCreateListModal(l);
+};
+function _wlUpdateList(listId, fields, cb){
+  var sb = window._supabase;
+  if(!sb){ if(cb) cb(); return; }
+  sb.from('watchlists').update(fields).eq('id', listId).then(function(){
+    _wlListsCache = (_wlListsCache||[]).map(function(l){ return l.id===listId ? Object.assign({}, l, fields) : l; });
+    if(cb) cb();
+  });
+}
 window.wlCloseCreateModal = function(){ var m=document.getElementById('wl-create-modal'); if(m) m.style.display='none'; };
 window.wlPickColor = function(c){
   _wlNewColor = c;
@@ -2065,6 +2083,12 @@ window.wlCreateList = function(){
   var nameEl = document.getElementById('wl-new-name');
   var name = nameEl ? nameEl.value.trim() : '';
   if(!name){ alert((window._i18n?window._i18n.t('pw_ingresa_nombre'):'Ingresa un nombre')); return; }
+  if(window._wlEditId){
+    var _eid = window._wlEditId; window._wlEditId = null;
+    wlCloseCreateModal();
+    _wlUpdateList(_eid, { name: name, color: _wlNewColor, is_primary: _wlNewPrimary }, function(){ if(typeof renderWatchCnt==='function') renderWatchCnt(); });
+    return;
+  }
   var lists = _wlGetLists();
   // Gating por plan: FREE topa en watchlistMax (10).
   if(window.checkPlanLimit){
@@ -2246,6 +2270,7 @@ window.renderWatchCnt = function(){
     html += '<a href="javascript:void(0)" data-wl="compareMode" style="'+_cmpStyle+'">'+_cmpLabel+'</a>';
     html += '<a href="javascript:void(0)" data-wl="shareList" style="font-size:16px;cursor:pointer;padding:4px;text-decoration:none">📤</a>';
     html += '<a href="javascript:void(0)" ontouchstart="wlOpenAddModal()" data-wl="addAsset" style="padding:8px 14px;border-radius:8px;background:var(--gold);color:#000;font-size:12px;font-weight:800;cursor:pointer;text-decoration:none">'+t('wl_agregar')+'</a>';
+    html += '<div onclick="wlEditListModal(\''+currentList.id+'\')" style="font-size:14px;cursor:pointer;padding:4px">✏️</div>';
     html += '<div onclick="wlDeleteList(\''+currentList.id+'\')" style="font-size:14px;cursor:pointer;padding:4px">🗑️</div>';
     html += '</div>';
     html += '</div>';
@@ -2984,7 +3009,7 @@ window.openPortItemDetail = function(itemId){
   for(var i=0;i<acts.length;i++){ if(acts[i].s===item.simbolo){ act=acts[i]; break; } }
   var logoHtml = (act && act.logo) ? '<img src="'+act.logo+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;margin-right:10px;" onerror="this.style.display=\'none\'"/>' : '<div style="width:32px;height:32px;border-radius:50%;background:'+(act&&act.color||'var(--border)')+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--text);margin-right:10px;">'+(item.simbolo[0]||'?')+'</div>';
   var fechaStr = item.created_at ? new Date(item.created_at).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '--';
-  var fmtP = function(n,d){ var loc=(navigator.language||'en-US'); return n ? n.toLocaleString(loc,{minimumFractionDigits:d||2,maximumFractionDigits:d||2}) : '--'; };
+  var fmtP = function(n,d){ var loc=(window._numLocale()); return n ? n.toLocaleString(loc,{minimumFractionDigits:d||2,maximumFractionDigits:d||2}) : '--'; };
   // 52-week range
   var low52 = window._pc52Low && window._pc52Low[item.simbolo];
   var high52 = window._pc52High && window._pc52High[item.simbolo];
@@ -3162,7 +3187,7 @@ window.portSimUpdate = function(itemId, simbolo, pctStr){
   var portImpact = base.precio > 0 ? (base.cantidad * (newPrice - base.precio)) : 0;
   var pnlColor = newPnlUsd >= 0 ? 'var(--green)' : 'var(--red)';
   var piColor = portImpact >= 0 ? 'var(--green)' : 'var(--red)';
-  var fmt = function(n){ var loc=(navigator.language||'en-US'); return n.toLocaleString(loc,{minimumFractionDigits:2,maximumFractionDigits:2}); };
+  var fmt = function(n){ var loc=(window._numLocale()); return n.toLocaleString(loc,{minimumFractionDigits:2,maximumFractionDigits:2}); };
   if(lbl) { lbl.textContent = (pct>=0?'+':'')+pct+'%'; lbl.style.color = pct===0?'var(--gold)':(pct>0?'var(--green)':'var(--red)'); }
   window._portSimPct = pct;
   var _ind = document.getElementById('pd-sim-indicator'); if(_ind) _ind.style.left = (pct+50)+'%';
@@ -5594,7 +5619,7 @@ window._calcPortPeriod = function(period) {
   var bg = isPos?'#1A3A2A':'#3A1A1A';
   var el1 = document.getElementById('port-pnl-usd');
   var el2 = document.getElementById('port-pnl-pct');
-  if(el1){el1.textContent=(isPos?'+':'-')+'$'+Math.abs(diff).toLocaleString(navigator.language||'en-US',{minimumFractionDigits:2,maximumFractionDigits:2});el1.style.color=color;}
+  if(el1){el1.textContent=(isPos?'+':'-')+'$'+Math.abs(diff).toLocaleString(window._numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2});el1.style.color=color;}
   if(el2){el2.textContent=_fmt(pct,'pct');el2.style.color=color;el2.style.background='transparent';}
   // F2: sincronizar indicador Hoy
   if (typeof window._refreshHoyPct === 'function') window._refreshHoyPct();
