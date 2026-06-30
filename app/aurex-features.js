@@ -37,6 +37,10 @@
     if (cachedPrices) window._pcPrices = cachedPrices;
     if (cachedChange24) window._pcChange24 = cachedChange24;
     if (cachedIAPrecios) window._IA_PRECIOS = cachedIAPrecios;
+    // FIX refresh: cache de precios de MERCADOS (paridad con prices.js nativo, que cachea en memoria 5min).
+    // Evita el flash de "..." (precio en placeholder) al recargar: se siembra la última cotización conocida.
+    var cachedMktPx = JSON.parse(localStorage.getItem('aurex_mkt_px_cache') || 'null');
+    if (cachedMktPx) window._mktPxCache = cachedMktPx;
     var cachedMktState = JSON.parse(localStorage.getItem('aurex_pc_mktstate_cache') || 'null');
     if (cachedMktState) window._pcMarketState = cachedMktState;
     if (cached && cached.length > 0) {
@@ -364,7 +368,30 @@ function renderTab(tab, pais){
   else fetchYahoo(tab, pais, window._activeTf);
   // Background load
   setTimeout(function(){ _loadMktBackground(tab, pais); }, 1200);
+  // FIX refresh: capturar precios ya cargados a cache, para sembrar el próximo refresh sin flash de "..."
+  setTimeout(_snapshotMktPx, 2200);
+  setTimeout(_snapshotMktPx, 5000);
 }
+
+// FIX refresh: lee los precios actualmente pintados en #cnt y los persiste, así el próximo
+// arranque siembra la última cotización conocida (paridad con el cache en memoria de prices.js nativo).
+function _snapshotMktPx(){
+  try{
+    var cnt=document.getElementById('cnt'); if(!cnt) return;
+    var cache=window._mktPxCache||{};
+    cnt.querySelectorAll('.item-row').forEach(function(rw){
+      var ps=rw.querySelector('[id^="p-"]'); if(!ps) return;
+      var s=ps.id.slice(2); var p=(ps.textContent||'').trim();
+      if(!p || p==='...') return;
+      var cs=rw.querySelector('[id^="c-"]');
+      cache[s]={ p:p, c:cs?(cs.textContent||'').trim():'', col:cs?cs.style.color:'' };
+    });
+    window._mktPxCache=cache;
+    localStorage.setItem('aurex_mkt_px_cache', JSON.stringify(cache));
+  }catch(e){}
+}
+window._snapshotMktPx=_snapshotMktPx;
+try{ window.addEventListener('beforeunload', _snapshotMktPx); document.addEventListener('visibilitychange', function(){ if(document.hidden) _snapshotMktPx(); }); }catch(e){}
 
 function _getMktLogo(item,tab){
   var t=tab||item.tab||'';
@@ -379,6 +406,7 @@ function _appendMktRow(cnt, item, tab) {
   var dotsHtml = _buildDotsHTML(scores);
   var row=document.createElement('div');
   row.className='item-row'; row.id='row-'+item.s;
+  var _cx=(window._mktPxCache||{})[item.s]||{};
   row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;gap:10px;';
   row.innerHTML=
     '<img src="'+_getMktLogo(item,tab)+'" data-s="'+item.s+'" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" onerror="var _s=this.dataset.s.replace(/[^A-Z0-9]/g,\x27\x27).substring(0,4);var _f=_s.length>3?\x279\x27:\x2711\x27;this.src=\x27data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22><circle cx=%2214%22 cy=%2214%22 r=%2214%22 fill=%22%23334%22/><text x=%2214%22 y=%2218%22 text-anchor=%22middle%22 font-size=%22\x27+_f+\x27%22 font-family=%22Arial,sans-serif%22 font-weight=%22bold%22 fill=%22%23ccc%22>\x27+_s+\x27</text></svg>\x27;this.onerror=null;">'+
@@ -390,10 +418,10 @@ function _appendMktRow(cnt, item, tab) {
       '<div style="display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:2px;">'+_buildDotsHTML(_getActivoScores(item.simbolo))+'</div>'+
     '</div>'+
     '<div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;">'+
-      '<span id="p-'+item.s+'" style="color:var(--text);font-size:13px;font-weight:600;">...</span>'+
+      '<span id="p-'+item.s+'" style="color:var(--text);font-size:13px;font-weight:600;">'+(_cx.p||'...')+'</span>'+
       '<div style="display:flex;align-items:center;gap:3px;justify-content:flex-end;">'+
         '<span id="lbl-'+item.s+'" style="font-size:9px;color:var(--gold);font-weight:700;display:none;"></span>'+
-        '<span id="c-'+item.s+'" style="font-size:11px;color:var(--textSec);">...</span>'+
+        '<span id="c-'+item.s+'" style="font-size:11px;color:'+(_cx.col||'var(--textSec)')+';">'+(_cx.c||'...')+'</span>'+
       '</div>'+
       dotsHtml+
     '<div style="display:flex;gap:2px;margin-top:2px;">'+['24h','7d','1m','3m','1a'].map(function(p){return '<span class="mkt-tf-btn" data-tf="'+p+'" ontouchstart="stf(null,\''+p+'\')" onclick="stf(null,\''+p+'\')" style="font-size:9px;padding:1px 3px;border-radius:3px;background:'+(p==='24h'?'var(--gold)':'var(--border)')+';color:'+(p==='24h'?'#111':'var(--textSec)')+';cursor:pointer;touch-action:manipulation;">'+p+'</span>';}).join('')+'</div>'+
