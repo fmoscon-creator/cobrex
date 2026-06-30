@@ -1974,6 +1974,9 @@ var _wlNewPrimary = false;
 // Cache local para no hacer fetch en cada render
 var _wlListsCache = null;
 var _wlItemsCache = {};
+// FIX flash refresh: sembrar las listas desde el cache para NO mostrar el estado "vacío / crear primera lista"
+// mientras Supabase responde. _wlSyncFromSupabase luego actualiza con lo real.
+try{ var _wlC0=JSON.parse(localStorage.getItem('aurex_wl_pwa_cache')||'null'); if(_wlC0&&_wlC0.lists&&_wlC0.lists.length){ _wlListsCache=_wlC0.lists; _wlItemsCache=_wlC0.items||{}; } }catch(_e){}
 
 function _wlGetLists(){ return _wlListsCache || []; }
 function _wlSaveLists(lists){ _wlListsCache = lists; }
@@ -3951,6 +3954,9 @@ function _calcIAScore(activo, datos) {
 function generarSenalesIA() {
   // FUENTE UNICA: backend Railway — mismos datos que la app nativa iOS
   console.log('[Cobrex IA] Cargando senales del backend centralizado...');
+  // FIX flash refresh: si no hay señales en memoria, sembrar las últimas conocidas desde cache
+  // ANTES del fetch → no se ven todas las señales en 0% un instante. El backend luego actualiza.
+  try{ if(!window._iaSignals || !window._iaSignals.length) _iaLoadFromCache(); }catch(e){}
   fetch('https://aurex-app-production.up.railway.app/api/ia-signals', { cache: 'no-store' })
     .then(function(r){
       console.log('[Cobrex IA] Backend respondio status:', r.status);
@@ -5395,6 +5401,8 @@ window._addLegalChip = function(headerEl, insertBeforeEl, useMarginAuto) {
 };
 
 document.addEventListener('DOMContentLoaded', function(){
+  // FIX flash refresh: dibujar las señales IA cacheadas YA (sin esperar el setTimeout) → no se ven en 0% un instante
+  try{ if(!window._iaSignals || !window._iaSignals.length) _iaLoadFromCache(); }catch(e){}
   setTimeout(function(){
     _initHeaderLogos();
     if (typeof window._initHoyIndicator === 'function') window._initHoyIndicator();
