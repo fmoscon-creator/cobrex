@@ -4446,7 +4446,7 @@ function _buildIADetail(s) {
   var _plan = (window.aurexPlan && window.aurexPlan.plan) || (typeof localStorage!=='undefined' && localStorage.getItem('aurex_plan')) || 'FREE';
   var _isPro = _plan==='PRO' || _plan==='ELITE';
   var _isElite = _plan==='ELITE';
-  var _iaLock = function(titKey){ return '<div onclick="event.stopPropagation();if(window.abrirModalPlanes)abrirModalPlanes(\'ia\')" style="margin-bottom:10px;padding:10px;border-radius:8px;background:var(--goldBg);border:1px solid var(--gold40);display:flex;align-items:center;gap:8px;cursor:pointer"><span style="font-size:14px">&#128274;</span><div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--gold)">'+t(titKey)+'</div><div style="font-size:10px;color:var(--textSec);margin-top:2px">'+t('disponible_elite')+'</div></div></div>'; };
+  var _iaLock = function(titKey,planKey){ return '<div onclick="event.stopPropagation();if(window.abrirModalPlanes)abrirModalPlanes(\'ia\')" style="margin-bottom:10px;padding:10px;border-radius:8px;background:var(--goldBg);border:1px solid var(--gold40);display:flex;align-items:center;gap:8px;cursor:pointer"><span style="font-size:14px">&#128274;</span><div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--gold)">'+t(titKey)+'</div><div style="font-size:10px;color:var(--textSec);margin-top:2px">'+t(planKey||'disponible_elite')+'</div></div></div>'; };
   var html = '<div style="padding-top:12px">';
   html += '<div style="background:'+dirColor+'15;border:1px solid '+dirColor+'40;border-radius:10px;padding:10px 12px;margin-bottom:10px">';
   html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">';
@@ -4459,7 +4459,7 @@ function _buildIADetail(s) {
       html += '<div style="display:flex;gap:6px;margin-bottom:5px"><span style="color:'+dirColor+';flex-shrink:0;font-weight:700">-></span><span style="font-size:11px;color:var(--textSec);line-height:1.4">'+m+'</span></div>';
     });
   } else {
-    html += _iaLock('ia_razonamiento_lock');
+    html += _iaLock('ia_justificacion','disponible_pro');
   }
   html += '</div>';
   html += '<div style="display:flex;gap:8px;margin-bottom:10px">';
