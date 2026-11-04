@@ -3041,26 +3041,89 @@ async function _cbxToken(){
     return (s&&s.data&&s.data.session)?s.data.session.access_token:null;
   }catch(e){ return null; }
 }
+// Correccion de Escritorio 03-11: NO existe camino de respaldo al enlace alojado. Ese enlace no
+// acepta custom_id, asi que un pago por ahi reproduce EXACTO el caso de Cristina: sin custom_id,
+// sin fila 'pendiente', y la reconciliacion no lo puede encontrar porque Transaction Search
+// devuelve 403. Antes que cobrar un pago que no vamos a poder atar a la cuenta, no se cobra.
+function _cbxAviso(titulo, texto, botones){
+  var vi=document.getElementById('cbx-aviso'); if(vi) vi.remove();
+  var ov=document.createElement('div'); ov.id='cbx-aviso';
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:24px';
+  var html='<div dir="auto" style="max-width:360px;width:100%;background:#15161c;border:1px solid #2a2c37;border-radius:16px;padding:22px;text-align:center;color:#fff;font-family:inherit">'
+    +'<div style="font-size:17px;font-weight:800;margin-bottom:8px">'+titulo+'</div>'
+    +'<div style="font-size:14px;color:#aab;line-height:1.45;margin-bottom:18px">'+texto+'</div>';
+  botones.forEach(function(b,i){
+    html+='<button id="cbx-aviso-b'+i+'" style="width:100%;margin-top:8px;padding:12px;border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;'
+      +(b.primario?'background:linear-gradient(135deg,#8B6208,#c9a84c);color:#fff':'background:transparent;color:#9aa;text-decoration:underline')+'">'+b.texto+'</button>';
+  });
+  ov.innerHTML=html+'</div>';
+  document.body.appendChild(ov);
+  botones.forEach(function(b,i){
+    var el=document.getElementById('cbx-aviso-b'+i);
+    if(el) el.onclick=function(){ ov.remove(); if(b.accion) b.accion(); };
+  });
+  ov.onclick=function(e){ if(e.target===ov) ov.remove(); };
+}
+// Lleva al login y deja marcado que hay que volver a la pantalla de planes.
+function _cbxIrALogin(){
+  try{ sessionStorage.setItem('cbx_volver_a_planes','1'); }catch(e){}
+  var mp=document.getElementById('modal-planes'); if(mp) mp.style.display='none';
+  // se usa el punto de entrada de la app si existe; si no, se revela #auth-guest a mano.
+  try{ if(typeof authSwitchTab==='function') authSwitchTab('login'); }catch(e){}
+  var g=document.getElementById('auth-guest');
+  if(g){
+    g.style.display='flex';
+    for(var n=g.parentElement; n && n!==document.body; n=n.parentElement){
+      if(getComputedStyle(n).display==='none') n.style.display='block';
+    }
+    g.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+}
+// Al volver del login, si veniamos de intentar suscribirnos, se reabre la pantalla de planes.
+try{
+  if(sessionStorage.getItem('cbx_volver_a_planes')==='1'){
+    sessionStorage.removeItem('cbx_volver_a_planes');
+    setTimeout(function(){
+      if(window._currentUser && typeof abrirModalPlanes==='function') abrirModalPlanes();
+    }, 1800);
+  }
+}catch(e){}
+
 async function cbxBuy(planId){
   if(window._planMode==='perfil'){ window._planMode='stacked'; _showAllPlans(); _applyPaywallHeader(); var mm=document.getElementById('modal-planes'); if(mm) mm.scrollTop=0; return; }
   var token=await _cbxToken();
   if(!token){
-    // Sin sesion no hay custom_id posible. NO se bloquea la venta: se usa el camino viejo y el pago
-    // lo levanta la reconciliacion por email. Pero queda el aviso en consola.
-    console.warn('[cbxBuy] sin sesion: voy por el enlace alojado, sin custom_id');
-    window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/app/?paypal=success'),'_blank');
+    // Sin sesion NO se abre PayPal: sin custom_id el pago no se puede atar a ninguna cuenta.
+    _cbxAviso('Iniciá sesión para suscribirte',
+      'Necesitamos tu cuenta para activarte el plan apenas se acredite el pago.',
+      [{texto:'Iniciar sesión',primario:true,accion:_cbxIrALogin},{texto:'Ahora no'}]);
     return;
   }
   try{
-    var r=await fetch(CBX_API+'/api/paypal/crear',{method:'POST',
+    var ctl=new AbortController(); var to=setTimeout(function(){ctl.abort();},20000);
+    var r=await fetch(CBX_API+'/api/paypal/crear',{method:'POST',signal:ctl.signal,
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
       body:JSON.stringify({plan_id:planId})});
-    var d=await r.json();
+    clearTimeout(to);
+    var d=await r.json().catch(function(){return null;});
     if(r.ok && d && d.approve){ window.location.href=d.approve; return; }
-    console.error('[cbxBuy] el backend no pudo crear la suscripcion:', r.status, d);
-  }catch(e){ console.error('[cbxBuy] error llamando al backend:', e && e.message); }
-  // Respaldo: si el backend falla, el usuario igual puede pagar.
-  window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/app/?paypal=success'),'_blank');
+    _cbxFalloPago(planId, token, 'HTTP '+r.status+' '+JSON.stringify(d||{}).slice(0,160));
+  }catch(e){
+    _cbxFalloPago(planId, token, (e && e.name==='AbortError') ? 'timeout de 20s' : ('excepcion: '+(e&&e.message||'')).slice(0,160));
+  }
+}
+// Fallo del backend: NO se abre PayPal. Se avisa al usuario con reintento, y al admin por Telegram
+// (el backend limita a 1 aviso por usuario cada 10 min).
+function _cbxFalloPago(planId, token, detalle){
+  console.error('[cbxBuy] no pude iniciar el pago:', detalle);
+  try{
+    fetch(CBX_API+'/api/paypal/log-error',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({plan_id:planId, error:detalle})}).catch(function(){});
+  }catch(e){}
+  _cbxAviso('No pudimos iniciar el pago',
+    'Probá de nuevo en un minuto. Si sigue, escribinos y lo resolvemos.',
+    [{texto:'Reintentar',primario:true,accion:function(){ cbxBuy(planId); }},{texto:'Cerrar'}]);
 }
 function pacInitCuenta(){
   var u=window._currentUser;
