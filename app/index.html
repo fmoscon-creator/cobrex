@@ -3028,9 +3028,39 @@ function planTab(p){
 }
 // Compra: en modo Perfil (pestañas) abre el paywall apilado primero (= nativa navigate('Subscription'));
 // en el paywall apilado va a PayPal apuntando a Cobrex (el plan_id lo reescribe el sistema dinámico por región).
-function cbxBuy(planId){
+// 03-11-2026: la suscripcion ya NO se crea con el enlace suelto a webapps/billing/plans/subscribe.
+// Ese enlace NO acepta custom_id, y sin custom_id la unica forma de atar el pago a la cuenta es el
+// email de PayPal, que puede ser otro. Paso de verdad: nexum1999@gmail.com pago DOS veces 95,99 USD
+// y el plan nunca se activo (PayPal tampoco genera los webhooks: 0 eventos en 30 dias).
+// Ahora el BACKEND crea la suscripcion con custom_id = id del usuario, deja la fila en 'pendiente'
+// (que no da acceso) y devuelve el link de aprobacion. Al volver, detectarRetornoPayPal() confirma.
+var CBX_API='https://aurex-app-production.up.railway.app';
+async function _cbxToken(){
+  try{ var sb=window._supabase; if(!sb) return null;
+    var s=await sb.auth.getSession();
+    return (s&&s.data&&s.data.session)?s.data.session.access_token:null;
+  }catch(e){ return null; }
+}
+async function cbxBuy(planId){
   if(window._planMode==='perfil'){ window._planMode='stacked'; _showAllPlans(); _applyPaywallHeader(); var mm=document.getElementById('modal-planes'); if(mm) mm.scrollTop=0; return; }
-  window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/?paypal=success'),'_blank');
+  var token=await _cbxToken();
+  if(!token){
+    // Sin sesion no hay custom_id posible. NO se bloquea la venta: se usa el camino viejo y el pago
+    // lo levanta la reconciliacion por email. Pero queda el aviso en consola.
+    console.warn('[cbxBuy] sin sesion: voy por el enlace alojado, sin custom_id');
+    window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/app/?paypal=success'),'_blank');
+    return;
+  }
+  try{
+    var r=await fetch(CBX_API+'/api/paypal/crear',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({plan_id:planId})});
+    var d=await r.json();
+    if(r.ok && d && d.approve){ window.location.href=d.approve; return; }
+    console.error('[cbxBuy] el backend no pudo crear la suscripcion:', r.status, d);
+  }catch(e){ console.error('[cbxBuy] error llamando al backend:', e && e.message); }
+  // Respaldo: si el backend falla, el usuario igual puede pagar.
+  window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id='+planId+'&return_url='+encodeURIComponent('https://cobrex.io/app/?paypal=success'),'_blank');
 }
 function pacInitCuenta(){
   var u=window._currentUser;
@@ -3752,8 +3782,8 @@ setTimeout(function(){
       <div class="feat ok">Soporte prioritario</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-4JH161461V818874SNIW7UAA')" data-pxr="PRO.mensual">PRO Mensual $9.99</button>
-      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-2N0098015C849324MNIW7UAI')" data-pxr="PRO.anual">PRO Anual $89.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="cbxBuy('P-4JH161461V818874SNIW7UAA')" data-pxr="PRO.mensual">PRO Mensual $4.99</button>
+      <button class="plan-btn btn-pro" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#7C3AED" onclick="cbxBuy('P-2N0098015C849324MNIW7UAI')" data-pxr="PRO.anual">PRO Anual $47.99</button>
     </div>
   </div>
 
@@ -3782,8 +3812,8 @@ setTimeout(function(){
       <div class="feat ok">Acceso anticipado a funciones</div>
     </div>
     <div style="display:flex;gap:6px;margin-top:12px">
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-0AN884893H6644053NIW7UAQ')" data-pxr="ELITE.mensual">ELITE Mensual $19.99</button>
-      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="window.open('https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-11266502KC039145PNIW7UAQ')" data-pxr="ELITE.anual">ELITE Anual $179.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800" onclick="cbxBuy('P-0AN884893H6644053NIW7UAQ')" data-pxr="ELITE.mensual">ELITE Mensual $9.99</button>
+      <button class="plan-btn btn-elite" style="flex:1;font-size:12px;padding:11px;font-weight:800;background:#8B6208" onclick="cbxBuy('P-11266502KC039145PNIW7UAQ')" data-pxr="ELITE.anual">ELITE Anual $95.99</button>
     </div>
   </div>
 
@@ -4336,6 +4366,24 @@ document.addEventListener("DOMContentLoaded", function(){
   function detectarRetornoPayPal(){
     var q = new URLSearchParams(window.location.search);
     var paypalFlag = q.get('paypal') === 'success' || q.get('subscription_id') || q.get('ba_token');
+    // 03-11-2026: si PayPal devolvio el subscription_id, se CONFIRMA contra el backend en vez de
+    // esperar un webhook que PayPal no genera. El backend verifica status ACTIVE, plan_id conocido
+    // y custom_id == usuario de la sesion antes de activar nada.
+    var subId = q.get('subscription_id');
+    if (subId) {
+       (async function(){
+         try{
+           var tk = await _cbxToken();
+           if(!tk){ console.warn('[CobrexGating] retorno de PayPal sin sesion: no puedo confirmar'); return; }
+           var r = await fetch(CBX_API+'/api/paypal/confirmar',{method:'POST',
+             headers:{'Content-Type':'application/json','Authorization':'Bearer '+tk},
+             body:JSON.stringify({subscriptionID:subId})});
+           var d = await r.json();
+           console.log('[CobrexGating] /api/paypal/confirmar ->', r.status, JSON.stringify(d));
+           if(r.ok && window.loadUserPlan) window.loadUserPlan();
+         }catch(e){ console.error('[CobrexGating] error confirmando con el backend:', e && e.message); }
+       })();
+     }
     var referrerIsPayPal = document.referrer && /paypal\.com/.test(document.referrer);
     if (paypalFlag || referrerIsPayPal) {
       console.log('[CobrexGating] Retorno desde PayPal detectado. Re-leyendo plan en 8 seg para dar tiempo al webhook...');
@@ -4438,8 +4486,11 @@ document.addEventListener("DOMContentLoaded", function(){
       // web-1.7: reemplazar el precio SOLO en los nodos de texto directos (no destruir spans hijos con data-i18n, ej. "/mes")
       var done=false, rx=/\$\s?\d{1,3}([.,]\d{2})?/;
       for(var i=0;i<el.childNodes.length;i++){ var nd=el.childNodes[i];
-        if(nd.nodeType===3 && rx.test(nd.nodeValue)){ var nv=nd.nodeValue.replace(rx,'$'+v); if(nv!==nd.nodeValue){nd.nodeValue=nv; done=true;} } }
-      if(!done){ var nt=el.textContent.replace(rx,'$'+v); if(nt!==el.textContent)el.textContent=nt; }});
+        // el reemplazo va con FUNCION: en String.replace el '$' es especial y '$1' seria una
+      // retrorreferencia al grupo de captura. Con un precio que empiece con 1 (ej. $195.99) el
+      // texto salia corrompido: ".9995.99". Probado el 03-11.
+      if(nd.nodeType===3 && rx.test(nd.nodeValue)){ var nv=nd.nodeValue.replace(rx,function(){return '$'+v;}); if(nv!==nd.nodeValue){nd.nodeValue=nv; done=true;} } }
+      if(!done){ var nt=el.textContent.replace(rx,function(){return '$'+v;}); if(nt!==el.textContent)el.textContent=nt; }});
     trialPass();
     applying=false;
   }
