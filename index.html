@@ -1520,7 +1520,7 @@ footer.site .wrap{position:relative;z-index:2}
           </tr>
           <tr>
             <td class="feature" data-i18n="bench_row_price">Precio plan pago</td>
-            <td class="aurex"><span class="bench-price-aurex">$9.99<span data-i18n="bench_per_month">/mes</span></span></td>
+            <td class="aurex"><span class="bench-price-aurex" data-pxr="ELITE.mensual">$9.99<span data-i18n="bench_per_month">/mes</span></span></td>
             <td><span class="bench-price">$12.95<span data-i18n="bench_per_month">/mes</span></span></td>
             <td><span class="bench-price">$25–50<span data-i18n="bench_per_month">/mes</span></span></td>
             <td><span class="bench-price">$25<span data-i18n="bench_per_month">/mes</span></span></td>
@@ -1613,8 +1613,8 @@ footer.site .wrap{position:relative;z-index:2}
         <div class="plan-badge" data-i18n="plan_badge_popular">MÁS POPULAR</div>
         <div class="plan-icon">🚀</div>
         <div class="plan-name">PRO</div>
-        <div class="plan-price">$4.99<span class="small" data-i18n="plan_per_mo"> /mes</span></div>
-        <div class="plan-period" data-i18n="plan_pro_period">o $47.99 / año</div>
+        <div class="plan-price" data-pxr="PRO.mensual">$4.99<span class="small" data-i18n="plan_per_mo"> /mes</span></div>
+        <div class="plan-period" data-i18n="plan_pro_period" data-pxr="PRO.anual">o $47.99 / año</div>
         <ul class="plan-features-list">
           <li data-i18n="plan_pro_f1">Señales IA ilimitadas</li>
           <li data-i18n="plan_pro_f2">Portfolio ilimitado</li>
@@ -1630,8 +1630,8 @@ footer.site .wrap{position:relative;z-index:2}
       <div class="plan elite reveal reveal-delay-2" data-plan="elite" id="plan-elite-card">
         <div class="plan-icon">💎</div>
         <div class="plan-name">ELITE</div>
-        <div class="plan-price">$9.99<span class="small" data-i18n="plan_per_mo"> /mes</span></div>
-        <div class="plan-period" data-i18n="plan_elite_period">o $95.99 / año</div>
+        <div class="plan-price" data-pxr="ELITE.mensual">$9.99<span class="small" data-i18n="plan_per_mo"> /mes</span></div>
+        <div class="plan-period" data-i18n="plan_elite_period" data-pxr="ELITE.anual">o $95.99 / año</div>
         <ul class="plan-features-list">
           <li data-i18n="plan_elite_f1">Todo lo de PRO incluido</li>
           <li data-i18n="plan_elite_f4">Análisis técnico avanzado (RSI, MACD)</li>
@@ -3010,5 +3010,67 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && ov && ov.classList.contains('active')) closeLegal(); });
 })();
 </script>
+
+<script>
+/* COBREX — precios de la LANDING dinamicos desde /api/plans (05-11-2026).
+   POR QUE: la landing tenia PRO $4.99/$47.99 y ELITE $9.99/$95.99 fijos, que son los GLOBALES.
+   /api/plans con ?country=AR devuelve PRO 2.99/28.99 y ELITE 4.99/47.99, asi que un visitante
+   argentino veia en la landing casi el doble de lo que paga en la app. Medido por Escritorio.
+
+   MISMO CRITERIO QUE app/index.html:4504-4566, copiado tal cual. Son DOS capas, no una:
+     1) geo por IP (get.geojs.io) -> manda si contesta;
+     2) isAR() por zona horaria o idioma -> respaldo si la IP falla.
+   La web no puede leer el pais de la cuenta del store como la nativa, de ahi el geo por IP.
+
+   RESPALDO: el precio fijo que ya esta en el HTML. Solo se reemplaza cuando la API contesta bien,
+   asi que si falla, tarda mas de PLANS_TIMEOUT_MS o devuelve algo raro, queda el global y NUNCA
+   un precio vacio. No se toco assets/i18n.json: data-pxr reemplaza el numero DENTRO del texto
+   traducido y conserva el resto, asi que las 16 cadenas de los 8 idiomas siguen igual y son el
+   respaldo.
+
+   El reemplazo del precio va con FUNCION en String.replace: el '$' es especial y '$1' seria una
+   retrorreferencia. Con un precio que empiece con 1 (ej. $195.99) el texto salia ".9995.99".
+   Mismo bug que se arreglo en la app el 03-11. */
+(function(){
+  var API='https://aurex-app-production.up.railway.app/api/plans';
+  var TIMEOUT_MS=5000;
+  var D=null, applying=false;
+  function isAR(){try{return /Argentina/i.test(Intl.DateTimeFormat().resolvedOptions().timeZone||'')||(navigator.language||'').toLowerCase()==='es-ar';}catch(e){return false;}}
+  function priceOf(key){ if(!D||!D.plans)return null; var a=key.split('.'); var t=D.plans[a[0]]&&D.plans[a[0]][a[1]]; if(!t||!t.price)return null;
+    var v=parseFloat(t.price); if(!isFinite(v)||v<=0) return null;
+    return a[2]==='permes' ? (v/12).toFixed(2) : t.price; }
+  function applyAll(){
+    if(!D)return; applying=true;
+    document.querySelectorAll('[data-pxr]').forEach(function(el){
+      var v=priceOf(el.getAttribute('data-pxr')); if(v==null)return;
+      var done=false, rx=/\$\s?\d{1,3}([.,]\d{2})?/;
+      for(var i=0;i<el.childNodes.length;i++){ var nd=el.childNodes[i];
+        if(nd.nodeType===3 && rx.test(nd.nodeValue)){
+          var nv=nd.nodeValue.replace(rx,function(){return '$'+v;});
+          if(nv!==nd.nodeValue){nd.nodeValue=nv; done=true;} } }
+      if(!done){ var nt=el.textContent.replace(rx,function(){return '$'+v;}); if(nt!==el.textContent)el.textContent=nt; }
+    });
+    applying=false;
+  }
+  function conTope(p){ return new Promise(function(res,rej){ var t=setTimeout(function(){rej(new Error('timeout'));},TIMEOUT_MS);
+    p.then(function(x){clearTimeout(t);res(x);},function(e){clearTimeout(t);rej(e);}); }); }
+  function geoCountry(){ return conTope(fetch('https://get.geojs.io/v1/ip/country.json').then(function(r){return r.json();}))
+    .then(function(d){ return (d&&d.country)?d.country:null; }).catch(function(){return null;}); }
+  function load(){
+    geoCountry().then(function(cc){
+      var ar = (cc!=null) ? (cc==='AR') : isAR();   // IP manda; si falla, fallback al timezone
+      return conTope(fetch(API+(ar?'?country=AR':'')).then(function(r){return r.json();}))
+        .then(function(d){ if(d&&d.plans){ D=d; applyAll(); } });
+    }).catch(function(e){ /* queda el precio fijo del HTML, que es el global */ });
+  }
+  // applyTranslations() del selector de idioma pisa el texto de los data-i18n: hay que re-aplicar.
+  var to=null;
+  function start(){ load();
+    try{ new MutationObserver(function(){ if(applying)return; if(to)clearTimeout(to); to=setTimeout(applyAll,150); }).observe(document.body,{childList:true,subtree:true,characterData:true}); }catch(e){}
+    setTimeout(applyAll,1500); setTimeout(applyAll,3500); }
+  if(document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+</script>
+
 </body>
 </html>
